@@ -3,16 +3,12 @@
 require './config.php';
 
 use Thenbsp\Wechat\Util\Util;
-use Thenbsp\Wechat\Util\Cache;
 
 if( !$request = file_get_contents('php://input') ) {
     exit('Invalid Request');
 }
 
 $request = Util::XML2Array($request);
-
-$cache = new Cache('../Storage');
-$cache->set('payment_notify', $request);
 
 // 微信服务器会在支付成功后该求该 URL，以 XML 的方式提交此次支付信息，具体信息类似：
 // {

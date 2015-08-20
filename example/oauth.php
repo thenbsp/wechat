@@ -2,10 +2,8 @@
 
 require './config.php';
 
-use Thenbsp\Wechat\Util\Util;
-use Thenbsp\Wechat\Util\Cache;
-
 use Thenbsp\Wechat\OAuth;
+use Thenbsp\Wechat\Util\Util;
 use Thenbsp\Wechat\Exception\OAuthException;
 
 /**
@@ -21,6 +19,10 @@ use Thenbsp\Wechat\Exception\OAuthException;
 // 会话标识
 define('TOKEN', 'auth_token');
 
+/**
+ * 示例代码，实际应用请修改为自己的逻辑
+ * START
+ */
 // 是否登录
 function isAuthorize() {
     return isset($_SESSION[TOKEN]);
@@ -42,13 +44,17 @@ function getAuthorize() {
 function clearAuthorize() {
     unset($_SESSION[TOKEN]);
 }
-
-
+/**
+ * END
+ */
 
 $o = new OAuth(APPID, APPSECRET);
 
+/**
+ * 授权流程
+ */
 if( !isAuthorize() ) {
-    // 跳转到授权页
+    // 跳转至授权页
     if( !isset($_GET['code']) ) {
         $o->authorize(Util::currentUrl(), 'snsapi_userinfo');
     }
@@ -69,18 +75,20 @@ if( !isAuthorize() ) {
  */
 $token = getAuthorize();
 
-// 如果 Token 无效（过期了），还需要刷新 Token
-if( !$o->accessTokenIsValid($token) ) {
-    $token = $o->refreshToken($token->refresh_token);
-    setAuthorize($token);
-}
-
 $user = $o->getUser($token);
 
 echo '<pre>';
 var_dump($token);
 var_dump($user);
 echo '</pre>';
+
+/**
+ * 刷新 TOKEN
+ */
+if( !$o->accessTokenIsValid($token) ) {
+    $token = $o->refreshToken($token->refresh_token);
+    setAuthorize($token);
+}
 
 ?>
 

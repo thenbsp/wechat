@@ -7,13 +7,12 @@
 
 require './config.php';
 
-use Thenbsp\Wechat\Util\Util;
 use Thenbsp\Wechat\OAuth;
-use Thenbsp\Wechat\Jssdk;
+use Thenbsp\Wechat\Config;
 use Thenbsp\Wechat\Wechat;
-use Thenbsp\Wechat\Payment\Js;
+use Thenbsp\Wechat\Util\Bag;
+use Thenbsp\Wechat\Util\Util;
 use Thenbsp\Wechat\Payment\Unifiedorder;
-use Thenbsp\Wechat\Exception\PaymentException;
 
 /**
  * 一、以 JSAPI 方式的付款需要获取用户 Openid
@@ -28,39 +27,37 @@ if( !isset($_SESSION['openid']) ) {
     }
 }
 
-// 二、配置公众号（商户）信息
-// $optionsResolver 在实际应用中一般以配置文件的形式存在，因此有必要将这些文件单独分离出来
-// 不必在每次下单时去获取这些参数，并且该方法可满足在多个商户之间切换的需求：
-$optionsResolver = array(
-    'appid' => APPID,
-    'mch_id' => MCHID,
-    'mch_key' => MCHKEY,
-    'notify_url' => 'http://example.com/payment_notify_1.php'
-);
+/**
+ * 二、生成 JSSDK 配置文件
+ */
+$wechat = new Wechat(APPID, APPSECRET);
 
-// 三、配置商品信息
-// 配置商品基本参数，这里如果出现和 $optionsResolver 相同的参数前者将会被覆盖，这种方式在有些情况下很有用
-// 比如有一款特殊的商口需要通知另一个特定接口时，比如示列中的 notify_url 项，
-// 最终请求 unifiedorder 接口会提交 payment_notify.php 而不是 payment_notify_1.php：
-$unifiedorder = new Unifiedorder($optionsResolver);
-$unifiedorder->body('iphone 6 plus');
-$unifiedorder->out_trade_no(date('YmdHis').mt_rand(10000, 99999));
-$unifiedorder->total_fee('1'); // 单位为 “分”
-$unifiedorder->openid($_SESSION['openid']);
+$apis = array('onMenuShareTimeline', 'onMenuShareAppMessage');
+
+$jssdkConfigJSON = Config::getJssdk($wechat, $apis, $debug = true, $asArray = false);
+
 
 /**
- * 四、生成支付配置文件
+ * 三、配置订单信息（参考：https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1）
  */
-$o = new Js($unifiedorder);
-
-$configJSON = $o->getConfigJssdk();
+$bag = new Bag();
+$bag->set('appid', APPID);
+$bag->set('mch_id', MCHID);
+$bag->set('notify_url', NOTIFY_URL);
+$bag->set('body', 'iphone 6 plus');
+$bag->set('out_trade_no', date('YmdHis').mt_rand(10000, 99999));
+$bag->set('total_fee', 1);
+$bag->set('openid', $_SESSION['openid']);
 
 /**
- * 五：获取 JSSDK 配置
+ * 四、统一下单
  */
-$o = new Jssdk(APPID, APPSECRET);
+$unifiedorder = new Unifiedorder($bag, MCHKEY);
 
-$jssdkConfig = $o->getConfig(array('chooseWXPay'), true);
+/**
+ * 五、生成支付配置文件
+ */
+$configJSON = Config::getPaymentJssdkConfig($unifiedorder, $asArray = false);
 
 ?>
 
@@ -76,14 +73,14 @@ $jssdkConfig = $o->getConfig(array('chooseWXPay'), true);
 <h1>微信支付测试&nbsp;&nbsp;<a href="javascript:;" onclick="window.location.reload()">刷新</a></h1>
 
 <h4>Jssdk chooseWXPay 方式：</h4>
-<button type="button" onclick="WXPayment()" style="font-size:16px;height:38px;">支付 ￥<?php echo ($unifiedorder->getParams('total_fee') / 100); ?> 元</button>
+<button type="button" onclick="WXPayment()" style="font-size:16px;height:38px;">支付 ￥<?php echo ($bag->get('total_fee') / 100); ?> 元</button>
 
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
 /**
  * 注入 JSSDK 配置
  */
-wx.config(<?php echo $jssdkConfig; ?>);
+wx.config(<?php echo $jssdkConfigJSON; ?>);
 
 /**
  * 点击支付按款

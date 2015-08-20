@@ -2,6 +2,7 @@
 
 namespace Thenbsp\Wechat\Util;
 
+use Thenbsp\Wechat\Util\Bag;
 use Thenbsp\Wechat\Util\Accessor;
 
 /**
@@ -12,9 +13,9 @@ use Thenbsp\Wechat\Util\Accessor;
 class SignGenerator
 {
     /**
-     * 参与签名的 Key=>Value
+     * 参数包
      */
-    protected $params = array();
+    protected $bag;
 
     /**
      * 加密类型
@@ -27,54 +28,16 @@ class SignGenerator
     protected $isUpper = true;
 
     /**
+     * 排序回调函数
+     */
+    protected $sortAfterCallback;
+
+    /**
      * 构造方法
      */
-    public function __construct(array $params = array())
+    public function __construct(Bag $bag)
     {
-        $this->params = $params;
-    }
-
-    /**
-     * 检测是否包含某项
-     */
-    public function hasParams($key)
-    {
-        return array_key_exists($key, $this->params);
-    }
-
-    /**
-     * 获取参数
-     */
-    public function getParams($key = null, $default = null)
-    {
-        if( !is_null($key) ) {
-            return $this->hasParams($key) ?
-                $this->params[$key] : $default;
-        }
-
-        return $this->params;
-    }
-
-    /**
-     * 添加一项（重复添加前者会被覆盖）
-     */
-    public function addParams($key, $value)
-    {
-        $this->params[$key] = $value;
-
-        return $this;
-    }
-
-    /**
-     * 移除一项
-     */
-    public function removeParams($key)
-    {
-        if( $this->hasParams($key) ) {
-            unset($this->params[$key]);
-        }
-
-        return $this;
+        $this->bag = $bag;
     }
 
     /**
@@ -94,22 +57,25 @@ class SignGenerator
     }
 
     /**
+     * 排序之后调用（事件）
+     */
+    public function onSortAfter(callable $callback)
+    {
+        $this->sortAfterCallback = $callback;
+    }
+
+    /**
      * 获取签结果
      */
     public function getResult()
     {
-        if( $this->hasParams('key') ) {
-            $key = $this->getParams('key');
-            $this->removeParams('key');
+        $this->bag->ksort();
+
+        if( is_callable($this->sortAfterCallback) ) {
+            call_user_func($this->sortAfterCallback, $this->bag);
         }
 
-        ksort($this->params);
-
-        if( isset($key) ) {
-            $this->addParams('key', $key);
-        }
-
-        $query = http_build_query($this->params);
+        $query = http_build_query($this->bag->all());
         $query = urldecode($query);
 
         $result = call_user_func($this->hashType, $query);

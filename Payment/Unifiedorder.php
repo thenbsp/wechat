@@ -2,6 +2,7 @@
 
 namespace Thenbsp\Wechat\Payment;
 
+use Thenbsp\Wechat\Util\Bag;
 use Thenbsp\Wechat\Util\Util;
 use Thenbsp\Wechat\Util\Request;
 use Thenbsp\Wechat\Util\SignGenerator;
@@ -16,9 +17,14 @@ class Unifiedorder
     const UNIFIEDORDER_URL = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
 
     /**
-     * 订单数据
+     * 参数包
      */
-    protected $params;
+    protected $bag;
+
+    /**
+     * 商户 Key
+     */
+    protected $key;
 
     /**
      * 商户证书 cert
@@ -33,113 +39,50 @@ class Unifiedorder
     /**
      * 必填项目
      */
-    protected $required = array('appid', 'mch_id', 'mch_key', 'nonce_str', 'body', 'out_trade_no', 'total_fee', 'notify_url');
+    protected $required = array('appid', 'mch_id', 'nonce_str', 'body',
+        'out_trade_no', 'total_fee', 'notify_url');
 
     /**
      * 选填项目
      */
     protected $optional = array(
-        'device_info', 'detail', 'attach', 'fee_type', 'time_start', 'time_expire', 'goods_tag',
-        'product_id', 'limit_pay', 'nonce_str', 'spbill_create_ip', 'trade_type', 'openid'
-    );
+        'device_info', 'detail', 'attach', 'fee_type', 'time_start',
+        'time_expire', 'goods_tag', 'product_id', 'limit_pay', 'nonce_str',
+        'spbill_create_ip', 'trade_type', 'openid');
 
     /**
      * 构造方法
      */
-    public function __construct(array $optionsResolver = null)
+    public function __construct(Bag $bag, $key)
     {
-        if( !empty($optionsResolver) ) {
-            foreach( $optionsResolver AS $k=>$v ) {
-                $this->addParams($k, $v);
-            }
-        }
-    }
-
-    /**
-     * 魔术方法
-     */
-    public function __call($method, $arguments)
-    {
-        if( !count($arguments) ) {
-            throw new PaymentException(sprintf('Missing argument 1 for %s::%s()',
-                __CLASS__, $method
-            ));
+        if( !$bag->has('trade_type') ) {
+            $bag->set('trade_type', 'JSAPI');
         }
 
-        $override = (isset($arguments[1]) && ($arguments[1] === false)) ? false : true;
-
-        return $this->addParams($method, $arguments[0], $override);
-    }
-
-    /**
-     * 添加参数
-     */
-    public function addParams($key, $value, $override = true)
-    {
-        if( !in_array($key, array_merge($this->required, $this->optional)) ) {
-            throw new PaymentException('Invalid argument: '. $key);
+        if( !$bag->has('nonce_str') ) {
+            $bag->set('nonce_str', Util::randomString());
         }
 
-        if( $override ) {
-            $this->params[$key] = $value;
-        } else {
-            if( !$this->hasParams($key) ) {
-                $this->params[$key] = $value;
-            }
+        if( !$bag->has('spbill_create_ip') ) {
+            $bag->set('spbill_create_ip', Util::getClientIp());
         }
 
-        return $this;
-    }
-
-    /**
-     * 获取参数
-     */
-    public function getParams($paramName = null, $default = null)
-    {
-        if( null !== $paramName ) {
-            return $this->hasParams($paramName) ?
-                $this->params[$paramName] : $default;
-        }
-        return $this->params;
-    }
-
-    /**
-     * 检测是否包含指定参数
-     */
-    public function hasParams($paramName)
-    {
-        return array_key_exists($paramName, $this->params);
-    }
-
-    /**
-     * 验证参数值是否有效
-     */
-    public function validateParams()
-    {
-        if( !$this->hasParams('nonce_str') ) {
-            $this->addParams('nonce_str', Util::randomString());
-        }
-
-        if( !$this->hasParams('spbill_create_ip') ) {
-            $this->addParams('spbill_create_ip', Util::clientIP());
-        }
-            
-        if( !$this->hasParams('trade_type') ) {
-            $this->addParams('trade_type', 'JSAPI');
-        }
-
+        // 检测必填字段
         foreach($this->required AS $paramName) {
-            if( !$this->hasParams($paramName) ) {
+            if( !$bag->has($paramName) ) {
                 throw new PaymentException(sprintf('"%s" is required', $paramName));
             }
         }
 
         // trade_type 为 JSAPI 时，必需包含 Openid
-        if( $this->getParams('trade_type') === 'JSAPI' ) {
-            if( !$this->hasParams('openid') ) {
+        if( $bag->get('trade_type') === 'JSAPI' ) {
+            if( !$bag->has($paramName) ) {
                 throw new PaymentException('"Openid" is required');
             }
         }
+
+        $this->bag = $bag;
+        $this->key = $key;
     }
 
     /**
@@ -181,23 +124,39 @@ class Unifiedorder
     }
 
     /**
+     * 获取参数包
+     */
+    public function getBag()
+    {
+        return $this->bag;
+    }
+
+    /**
+     * 获取商户 Key
+     */
+    public function getKey()
+    {
+        return $this->key;
+    }
+
+    /**
      * 获取统一下单结果
      */
     public function getResponse()
     {
-        $this->validateParams();
+        $signGenerator = new SignGenerator($this->bag);
+        $signGenerator->onSortAfter(function($bag) {
+            $bag->set('key', $this->key);
+        });
 
-        $params = $this->getParams();
+        // 生成签名
+        $sign = $signGenerator->getResult();
+        // 生成签名后移除 Key
+        $this->bag->remove('key');
+        // 调置签名
+        $this->bag->set('sign', $sign);
 
-        // remove mch_key
-        unset($params['mch_key']);
-
-        $signGenerator = new SignGenerator($params);
-        $signGenerator->addParams('key', $this->getParams('mch_key'));
-
-        $params['sign'] = $signGenerator->getResult();
-
-        $body       = Util::array2XML($params);
+        $body       = Util::array2XML($this->bag->all());
         $response   = Request::post(static::UNIFIEDORDER_URL, $body, false);
         $response   = Util::XML2Array($response);
 

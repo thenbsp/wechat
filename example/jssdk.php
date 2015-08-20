@@ -2,7 +2,8 @@
 
 require './config.php';
 
-use Thenbsp\Wechat\Jssdk;
+use Thenbsp\Wechat\Config;
+use Thenbsp\Wechat\Wechat;
 
 /**
  * 只能在微信中打开
@@ -12,12 +13,13 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false) {
 }
 
 /**
- * 配置 JSSDk
+ * 生成 JSSDK 配置文件
  */
-$js = new Jssdk(APPID, APPSECRET);
+$wechat = new Wechat(APPID, APPSECRET);
 
-// 返回 JSON，第二个参数为 “是否开启调试”
-$configJSON = $js->getConfig(array('onMenuShareTimeline', 'onMenuShareAppMessage'), true);
+$apis = array('onMenuShareTimeline', 'onMenuShareAppMessage');
+
+$configJSON = Config::getJssdk($wechat, $apis, $debug = true, $asArray = false);
 
 ?>
 

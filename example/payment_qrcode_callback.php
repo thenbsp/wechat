@@ -2,14 +2,14 @@
 
 require './config.php';
 
+use Thenbsp\Wechat\Util\Bag;
 use Thenbsp\Wechat\Util\Util;
-use Thenbsp\Wechat\Util\Cache;
 use Thenbsp\Wechat\Util\SignGenerator;
 
 use Thenbsp\Wechat\Payment\Unifiedorder;
 use Thenbsp\Wechat\Exception\PaymentException;
 
-if( !$request = @file_get_contents('php://input') ) {
+if( !$request = file_get_contents('php://input') ) {
     exit('Invalid Request');
 }
 
@@ -28,17 +28,21 @@ $request = Util::XML2Array($request);
 // );
 
 /**
+ * 配置订单信息（这一步在实际应用中就是根据 $request 中的 product_id 在应用中获取订单信息）
+ */
+$requestBag = new Bag();
+$requestBag->set('appid', $request['appid']);
+$requestBag->set('mch_id', $request['mch_id']);
+$requestBag->set('notify_url', NOTIFY_URL);
+$requestBag->set('body', 'iphone 6 plus');
+$requestBag->set('out_trade_no', date('YmdHis').mt_rand(10000, 99999));
+$requestBag->set('total_fee', 1); // 单位为 “分”
+$requestBag->set('trade_type', 'NATIVE'); // NATIVE 时不需要 Openid
+
+/**
  * 统一下单
  */
-$unifiedorder = new Unifiedorder();
-$unifiedorder->appid(APPID);
-$unifiedorder->mch_id(MCHID);
-$unifiedorder->mch_key(MCHKEY);
-$unifiedorder->body('iphone 6 plus');
-$unifiedorder->out_trade_no(date('YmdHis').mt_rand(10000, 99999));
-$unifiedorder->total_fee('1');
-$unifiedorder->openid($request['openid']);
-$unifiedorder->notify_url('http://example.com/payment_notify_1.php');
+$unifiedorder = new Unifiedorder($requestBag, MCHKEY);
 
 try {
     $response = $unifiedorder->getResponse();
@@ -47,27 +51,27 @@ try {
 }
 
 /**
- * 响应订单
+ * 响应订单参数包
  */
-$params = array(
-    'return_code' => 'SUCCESS',
-    'result_code' => 'SUCCESS',
-    'return_msg' => 'return message',
-    'appid' => $request['appid'],
-    'err_code_des' => 'err code description',
-    'mch_id' => $request['mch_id'],
-    'nonce_str' => $request['nonce_str'],
-    'prepay_id' => $response['prepay_id']
-);
+$responseBag = new Bag();
+$responseBag->set('appid', $request['appid']);
+$responseBag->set('mch_id', $request['mch_id']);
+$responseBag->set('nonce_str', $request['nonce_str']);
+$responseBag->set('prepay_id', $response['prepay_id']);
+$responseBag->set('return_code', 'SUCCESS');
+$responseBag->set('result_code', 'SUCCESS');
+$responseBag->set('return_msg', 'return message');
+$responseBag->set('err_code_des', 'err code description');
 
-$signGenerator = new SignGenerator($params);
-$signGenerator->addParams('key', MCHKEY);
 
-$params['sign'] = $signGenerator->getResult();
+$signGenerator = new SignGenerator($responseBag);
+$signGenerator->onSortAfter(function($bag) use ($unifiedorder) {
+    $bag->set('key', $unifiedorder->getKey());
+});
 
-$xml = Util::array2XML($params);
+$responseBag->set('sign', $signGenerator->getResult());
+$responseBag->remove('key');
 
-$cache = new Cache('../Storage');
-$cache->set('payment_qrcode_callback', $request);
+$xml = Util::array2XML($responseBag->all());
 
 echo $xml;

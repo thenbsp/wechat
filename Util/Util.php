@@ -39,7 +39,7 @@ class Util
     /**
      * 获取客户端 IP
      */
-    public static function clientIP()
+    public static function getClientIp()
     {
         $ipaddress = '';
         if (getenv('HTTP_CLIENT_IP'))

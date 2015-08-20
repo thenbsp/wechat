@@ -7,19 +7,21 @@
 
 require './config.php';
 
-use Thenbsp\Wechat\Util\Util;
-use Thenbsp\Wechat\Util\SignGenerator;
+use Thenbsp\Wechat\Config;
+use Thenbsp\Wechat\Util\Bag;
 
-use Thenbsp\Wechat\Payment\Qrcode;
+/**
+ * 配置订单参数
+ */
+$bag = new Bag();
+$bag->set('appid', APPID);
+$bag->set('mch_id', MCHID);
+$bag->set('product_id', date('YmdHis').mt_rand(10000, 99999));
 
-$qrcode = new Qrcode(array(
-    'appid' => APPID,
-    'mch_id' => MCHID,
-    'mch_key' => MCHKEY,
-    'product_id' => '123456789'
-));
-
-$payurl = $qrcode->getPayURL();
+/**
+ * 获取支付 URL（模式 1）
+ */
+$payurl = Config::getForeverPayurl($bag, MCHKEY);
 
 ?>
 

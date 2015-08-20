@@ -9,9 +9,9 @@ SDK 包括以下功能：
 - 获取 JSSDK 配置
 - 获取微信服务器 IP
 - 网页授权获取用户信息
-- 微信支付（H5 invoke 方式）
-- 微信支付（H5 chooseWXPay 方式）
-- 微信支付（扫码支付 模式一 未完成，一直提示 package info not match special pay url）
+- 微信支付（JS invoke 方式）
+- 微信支付（JS chooseWXPay 方式）
+- 微信支付（扫码支付 模式一）
 - 微信支付（扫码支付 模式二）
 
 详细示例请看 ``./example`` 目录中的示例！
@@ -26,6 +26,9 @@ define('APPSECRET', 'your appsecret');
 // 商户配置
 define('MCHID', 'your mchid');
 define('MCHKEY', 'your mchkey');
+
+// 支付成功通知 URL
+define('NOTIFY_URL', 'http://example.com/your_are_notify.php');
 ```
 
 ## 一、获取公众号 AccessToken
@@ -75,12 +78,14 @@ JSSDK 配置文件依赖 AccessToken 和 Ticket，因此需要注入 Wechat 实�
 PHP:
 
 ```php
-use Thenbsp\Wechat\Jssdk;
+use Thenbsp\Wechat\Config;
+use Thenbsp\Wechat\Wechat;
 
-$js = new Jssdk(APPID, APPSECRET);
+$wechat = new Wechat(APPID, APPSECRET);
 
-// 返回 JSON，第二个参数为 “是否开启调试”
-$configJSON = $js->getConfig(array('onMenuShareTimeline', 'onMenuShareAppMessage'), true);
+$apis = array('onMenuShareTimeline', 'onMenuShareAppMessage');
+
+$configJSON = Config::getJssdk($wechat, $apis, $debug = true, $asArray = false);
 ```
 
 Javascript:
@@ -177,35 +182,32 @@ PHP:
 
 ```php
 use Thenbsp\Wechat\OAuth;
-use Thenbsp\Wechat\Payment\Js;
+use Thenbsp\Wechat\Config;
+use Thenbsp\Wechat\Util\Bag;
+use Thenbsp\Wechat\Util\Util;
 use Thenbsp\Wechat\Payment\Unifiedorder;
-use Thenbsp\Wechat\Exception\PaymentException;
 
 /**
- * 第 1 步：配置公众号（商户）信息
+ * 第 1 步：配置商品信息
  */
-$optionsResolver = array(
-    'appid' => APPID,
-    'mch_id' => MCHID,
-    'mch_key' => MCHKEY,
-    'notify_url' => 'http://example.com/payment_notify_1.php'
-);
+$bag = new Bag();
+$bag->set('appid', APPID);
+$bag->set('mch_id', MCHID);
+$bag->set('notify_url', NOTIFY_URL);
+$bag->set('body', 'iphone 6 plus');
+$bag->set('out_trade_no', date('YmdHis').mt_rand(10000, 99999));
+$bag->set('total_fee', 1);
+$bag->set('openid', $_SESSION['openid']);
 
 /**
- * 第 2 步：配置商品信息
+ * 第 2 步：统一下单
  */
-$unifiedorder = new Unifiedorder($optionsResolver);
-$unifiedorder->body('iphone 6 plus');
-$unifiedorder->out_trade_no(date('YmdHis').mt_rand(10000, 99999));
-$unifiedorder->total_fee('1'); // 单位为 “分”
-$unifiedorder->openid('oWY-5jjLjo7pYUK86JPpwvcnF2Js');
+$unifiedorder = new Unifiedorder($bag, MCHKEY);
 
 /**
  * 第 3 步：生成支付配置文件
  */
-$o = new Js($unifiedorder);
-
-$configJSON = $o->getConfig();
+$configJSON = Config::getPaymentConfig($unifiedorder, $asArray = false);
 ```
 
 Javascript:
@@ -237,7 +239,7 @@ var WXPayment = function() {
 
 HTML:
 ```html
-<button type="button" onclick="WXPayment()">支付 ￥<?php echo ($unifiedorder->getParams('total_fee') / 100); ?> 元</button>
+<button type="button" onclick="WXPayment()">支付 ￥<?php echo ($bag->get('total_fee') / 100); ?> 元</button>
 ```
 
 详细使用方式请参考 ``./example/payment_js_invoke.php`` 文件
@@ -247,33 +249,31 @@ HTML:
 PHP:
 
 ```php
+use Thenbsp\Wechat\Config;
+use Thenbsp\Wechat\Util\Bag;
 use Thenbsp\Wechat\Payment\Unifiedorder;
-use Thenbsp\Wechat\Exception\PaymentException;
 
 /**
  * 配置订单信息
  */
-$unifiedorder = new Unifiedorder;
-$unifiedorder->appid(APPID);
-$unifiedorder->mch_id(MCHID);
-$unifiedorder->mch_key(MCHKEY);
-$unifiedorder->body('iphone 6 plus');
-$unifiedorder->out_trade_no(date('YmdHis').mt_rand(10000, 99999));
-$unifiedorder->total_fee('1'); // 单位为 “分”
-$unifiedorder->trade_type('NATIVE'); // NATIVE 时不需要 Openid
-$unifiedorder->notify_url('http://code.1999.me/wechat/example/payment_notify.php');
+$bag = new Bag();
+$bag->set('appid', APPID);
+$bag->set('mch_id', MCHID);
+$bag->set('notify_url', NOTIFY_URL);
+$bag->set('body', 'iphone 6 plus');
+$bag->set('out_trade_no', date('YmdHis').mt_rand(10000, 99999));
+$bag->set('total_fee', 1); // 单位为 “分”
+$bag->set('trade_type', 'NATIVE'); // NATIVE 时不需要 Openid
 
 /**
- * 统一下（trade_type 为 NATIVE 时，$response 将包含 code_url 字段，只需将该字段生成二维码即可）
+ * 统一下单
  */
-try {
-    $response = $unifiedorder->getResponse();
-} catch (PaymentException $e) {
-    exit($e->getMessage());
-}
+$unifiedorder = new Unifiedorder($bag, MCHKEY);
 
-// 支付 URL
-$payurl = urlencode($response['code_url']);
+/**
+ * 获取支付 URL（模式 2）
+ */
+$payurl = Config::getTemporaryPayurl($unifiedorder);
 ```
 
 HTML:
