@@ -4,7 +4,7 @@ namespace Thenbsp\Wechat\Payment;
 
 use Thenbsp\Wechat\Util\Bag;
 use Thenbsp\Wechat\Util\Util;
-use Thenbsp\Wechat\Util\Request;
+use Thenbsp\Wechat\Util\Http;
 use Thenbsp\Wechat\Util\SignGenerator;
 use Thenbsp\Wechat\Exception\PaymentException;
 
@@ -157,7 +157,7 @@ class Unifiedorder
         $this->bag->set('sign', $sign);
 
         $body       = Util::array2XML($this->bag->all());
-        $response   = Request::post(static::UNIFIEDORDER_URL, $body, false);
+        $response   = Http::post(static::UNIFIEDORDER_URL, $body, false);
         $response   = Util::XML2Array($response);
 
         if( isset($response['result_code']) &&

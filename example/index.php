@@ -19,7 +19,7 @@
     <li><a href="./oauth.php">网页授权获取用户信息</a></li>
     <li><a href="./payment_js_invoke.php">微信支付（H5 invoke 方式）</a></li>
     <li><a href="./payment_js_choosewxpay.php">微信支付（H5 chooseWXPay 方式）</a></li>
-    <li><a href="./payment_qrcode_1.php">微信支付（扫码支付 模式一 未完成）</a></li>
+    <li><a href="./payment_qrcode_1.php">微信支付（扫码支付 模式一）</a></li>
     <li><a href="./payment_qrcode_2.php">微信支付（扫码支付 模式二）</a></li>
 </ul>
 

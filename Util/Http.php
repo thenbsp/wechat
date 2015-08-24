@@ -5,7 +5,7 @@ namespace Thenbsp\Wechat\Util;
 use Thenbsp\Wechat\Util\Util;
 use Thenbsp\Wechat\Util\JSON;
 
-class Request
+class Http
 {
     /**
      * GET Request

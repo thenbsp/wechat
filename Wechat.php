@@ -2,8 +2,8 @@
 
 namespace Thenbsp\Wechat;
 
+use Thenbsp\Wechat\Util\Http;
 use Thenbsp\Wechat\Util\Cache;
-use Thenbsp\Wechat\Util\Request;
 use Thenbsp\Wechat\Exception\WechatException;
 use Thenbsp\Wechat\Exception\TicketException;
 use Thenbsp\Wechat\Exception\AccessTokenException;
@@ -137,7 +137,7 @@ class Wechat
             'secret'        => $this->appsecret
         );
 
-        $response = Request::get(static::ACCESS_TOKEN_URL, $params);
+        $response = Http::get(static::ACCESS_TOKEN_URL, $params);
 
         if( isset($response->access_token) &&
             isset($response->expires_in) ) {
@@ -163,7 +163,7 @@ class Wechat
             'type'          => $type,
         );
 
-        $response = Request::get(static::TICKET_URL, $params);
+        $response = Http::get(static::TICKET_URL, $params);
 
         if( isset($response->ticket) &&
             isset($response->expires_in) ) {
@@ -185,7 +185,7 @@ class Wechat
         }
 
         $params     = array('access_token' => $accessToken);
-        $response   = Request::get(static::SERVERIP_URL, $params);
+        $response   = Http::get(static::SERVERIP_URL, $params);
 
         if( isset($response->ip_list) ) {
             return $response->ip_list;

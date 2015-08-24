@@ -2,7 +2,7 @@
 
 namespace Thenbsp\Wechat;
 
-use Thenbsp\Wechat\Util\Request;
+use Thenbsp\Wechat\Util\Http;
 use Thenbsp\Wechat\Exception\OAuthException;
 
 /**
@@ -91,7 +91,7 @@ class OAuth
             'grant_type'    => 'authorization_code'
         );
 
-        $response = Request::get(static::GET_TOKEN_URL, $params);
+        $response = Http::get(static::GET_TOKEN_URL, $params);
 
         if( isset($response->access_token) &&
             isset($response->openid) ) {
@@ -113,7 +113,7 @@ class OAuth
             'grant_type'    => 'refresh_token'
         );
 
-        $response = Request::get(static::REFRESH_TOKEN_URL, $params);
+        $response = Http::get(static::REFRESH_TOKEN_URL, $params);
 
         if( isset($response->access_token) &&
             isset($response->openid) ) {
@@ -134,7 +134,7 @@ class OAuth
             'access_token'  => $token->access_token
         );
 
-        $response = Request::get(static::ACCESS_TOKEN_IS_VALID, $params);
+        $response = Http::get(static::ACCESS_TOKEN_IS_VALID, $params);
 
         return isset($response->errmsg) && ($response->errmsg === 'ok');
     }
@@ -149,7 +149,7 @@ class OAuth
             'openid'        => $token->openid
         );
 
-        $response = Request::get(static::USERINFO_URL, $params);
+        $response = Http::get(static::USERINFO_URL, $params);
 
         if( isset($response->openid) &&
             isset($response->nickname) &&
