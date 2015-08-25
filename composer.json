@@ -14,6 +14,7 @@
         "php": ">=5.4"
     },
     "autoload": {
-        "psr-4": { "Thenbsp\\Wechat\\": "./" }
-    }
+        "psr-4": { "Thenbsp\\Wechat\\": "" }
+    },
+    "minimum-stability": "dev"
 }
