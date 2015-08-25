@@ -1,0 +1,20 @@
+{
+    "name": "thenbsp/wechat",
+    "description": "微信第三方 SDK，包含网页授权、微信支付等。",
+    "keywords": [],
+    "homepage": "https://github.com/thenbsp/wechat",
+    "authors": [
+        {
+            "name": "thenbsp",
+            "email": "thenbsp@gamil.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4"
+    },
+    "autoload": {
+        "psr-4": { "Thenbsp\\Wechat\\": "./" }
+    },
+    "minimum-stability": "dev"
+}
