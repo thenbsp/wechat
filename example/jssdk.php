@@ -31,6 +31,9 @@ $configJSON = Config::getJssdk($wechat, $apis, $debug = true, $asArray = false);
 <title>JSSDK DEMO</title>
 </head>
 <body ontouchstart="">
+
+如果弹出 {"errMsg": "config:ok"} 说明配置成功！
+
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
 wx.config(<?php echo $configJSON; ?>);

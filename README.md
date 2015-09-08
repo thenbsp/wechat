@@ -133,7 +133,7 @@ $o = new OAuth(APPID, APPSECRET);
 $callbackUrl = 'Your callback url';
 
 if( !isset($_GET['code']) ) {
-    $o->authorize($$callbackUrl, 'snsapi_userinfo');
+    $o->authorize($callbackUrl, 'snsapi_userinfo');
 } else {
 
     /**

@@ -17,7 +17,7 @@ use Thenbsp\Wechat\Exception\OAuthException;
  */
 
 // 会话标识
-define('TOKEN', 'auth_token');
+define('TOKEN', 'auth_token_key');
 
 /**
  * 示例代码，实际应用请修改为自己的逻辑
@@ -75,10 +75,15 @@ if( !isAuthorize() ) {
  */
 $token = getAuthorize();
 
-$user = $o->getUser($token);
+try {
+    $user = $o->getUser($token);
+} catch (OAuthException $e) {
+    exit($e->getMessage());
+}
+
 
 echo '<pre>';
-var_dump($token);
+// var_dump($token);
 var_dump($user);
 echo '</pre>';
 

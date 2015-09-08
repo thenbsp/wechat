@@ -35,6 +35,7 @@ $payurl = Config::getForeverPayurl($bag, MCHKEY);
 <body ontouchstart="">
 
 <h1>扫描支付模式一</h1>
+<p>请在 PC 端扫描二给码，如果在手机上可长按识别二维码</p>
 
 <img src="https://chart.googleapis.com/chart?cht=qr&chs=220x220&choe=UTF-8&chld=L|2&chl=<?php echo $payurl; ?>" style="border:1px solid #ccc;" />
 
