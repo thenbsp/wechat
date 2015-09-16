@@ -16,6 +16,14 @@ SDK 包括以下功能：
 
 详细示例请看 ``./example`` 目录中的示例！
 
+## 安装
+
+通过 composer 安装：
+
+```php
+composer require thenbsp/wechat
+```
+
 ## 配置公众号 && 商户
 
 ```php
