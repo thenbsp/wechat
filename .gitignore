@@ -1,2 +1,2 @@
-Storage/*
-example/config.php
+vendor/*
+_example/Storage/*

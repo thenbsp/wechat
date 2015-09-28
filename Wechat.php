@@ -2,196 +2,55 @@
 
 namespace Thenbsp\Wechat;
 
-use Thenbsp\Wechat\Util\Http;
-use Thenbsp\Wechat\Util\Cache;
-use Thenbsp\Wechat\Exception\WechatException;
-use Thenbsp\Wechat\Exception\TicketException;
-use Thenbsp\Wechat\Exception\AccessTokenException;
+use Thenbsp\Wechat\Util\Options;
 
-/**
- * 微信 SDK 核心类，提供访问公众号自身数据的能力，比如 AccessToken、Ticket 等
- * Created by thenbsp (thenbsp@gmail.com)
- * Created at 2015/07/23
- */
-class Wechat
+class Wechat extends Options
 {
     /**
-     * 公众号 AccessToken 接口地址
+     * 微信公众号所需参数
      */
-    const ACCESS_TOKEN_URL = 'https://api.weixin.qq.com/cgi-bin/token';
+    protected $options = array();
 
     /**
-     * 公众号 ticket 接口地址
+     * 定义所有选项
      */
-    const TICKET_URL = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket';
+    protected $defined = array('appid', 'appsecret', 'mchid', 'mchkey', 'authenticate_cert');
 
     /**
-     * 获取公众号 IP 地址列表
+     * 定义必填参数
      */
-    const SERVERIP_URL = 'https://api.weixin.qq.com/cgi-bin/getcallbackip';
-
-    /**
-     * Cache 文件缓存
-     */
-    protected $cache;
-
-    /**
-     * 公众号 AppId
-     */
-    protected $appid;
-
-    /**
-     * 公众号 AppSecret
-     */
-    protected $appsecret;
+    protected $required = array('appid', 'appsecret');
 
     /**
      * 构造方法
      */
-    public function __construct($appid, $appsecret, $cacheDir = null)
+    public function __construct(array $options)
     {
-        $this->appid        = $appid;
-        $this->appsecret    = $appsecret;
-
-        try {
-            $this->cache = new Cache($cacheDir ?: __DIR__.DIRECTORY_SEPARATOR.'Storage');
-        } catch (\Exception $e) {
-            exit($e->getMessage()); 
-        }
+        parent::__construct($options);
     }
 
     /**
-     * 获取 Appid
+     * 配置参数
      */
-    public function getAppid()
+    protected function configureOptions($resolver)
     {
-        return $this->appid;
-    }
-
-    /**
-     * 获取 Appsecret
-     */
-    public function getAppsecret()
-    {
-        return $this->appsecret;
-    }
-
-    /**
-     * 获取 AccessToken
-     */
-    public function getAccessToken()
-    {
-        $key    = $this->appid.'_access_token';
-        $cache  = $this->cache->get($key);
-
-        if( $cache && !(empty($cache->access_token) ||
-            empty($cache->expires_in)) ) {
-            if( $cache->expires_in > time() ) {
-                // echo 'from cache';
-                return $cache->access_token;
+        $certNormalizer = function($options, $value) {
+            // authenticate_cert 为一个 包含 cert 和 key 的数组
+            if( !(array_key_exists('cert', $value) &&
+                array_key_exists('key', $value)) ) {
+                throw new \InvalidArgumentException('Authenticate_cert cert/key is required');
             }
-        }
-
-        // echo 'form api';
-        $response = $this->getAccessTokenResponse();
-        $response->expires_in += time();
- 
-        $this->cache->set($key, $response);
-
-        return $response->access_token;
-    }
-
-    /**
-     * 获取 Ticket
-     */
-    public function getTicket($type = 'jsapi')
-    {
-        $key    = $this->appid.'_ticket_'.$type;
-        $cache  = $this->cache->get($key);
-
-        if( $cache && !(empty($cache->ticket) ||
-            empty($cache->expires_in)) ) {
-            if( $cache->expires_in > time() ) {
-                // echo 'from cache';
-                return $cache->ticket;
+            // authenticate_cert 中的 cert 和 key 必需为已存在的文件
+            if( !(file_exists($value['cert']) &&
+                file_exists($value['key'])) ) {
+                throw new \InvalidArgumentException('Authenticate_cert cert/key is invalid file');
             }
-        }
+        };
 
-        // echo 'form api';
-        $response = $this->getTicketResponse($type);
-        $response->expires_in += time();
- 
-        $this->cache->set($key, $response);
-
-        return $response->ticket;
+        $resolver
+            ->setDefined($this->defined)
+            ->setRequired($this->required)
+            ->setAllowedTypes('authenticate_cert', 'array')
+            ->setNormalizer('authenticate_cert', $certNormalizer);
     }
-
-    /**
-     * 获取 AccessToken（从接口获取）
-     */
-    public function getAccessTokenResponse()
-    {
-        $params = array(
-            'grant_type'    => 'client_credential',
-            'appid'         => $this->appid,
-            'secret'        => $this->appsecret
-        );
-
-        $response = Http::get(static::ACCESS_TOKEN_URL, $params);
-
-        if( isset($response->access_token) &&
-            isset($response->expires_in) ) {
-            return $response;
-        }
-
-        throw new AccessTokenException($response->errcode.': '.$response->errmsg);
-    }
-
-    /**
-     * 获取 Ticket（从接口获取）
-     */
-    public function getTicketResponse($type)
-    {
-        try {
-            $accessToken = $this->getAccessToken();
-        } catch (AccessTokenException $e) {
-            throw new TicketException($e->getMessage());
-        }
-
-        $params = array(
-            'access_token'  => $accessToken,
-            'type'          => $type,
-        );
-
-        $response = Http::get(static::TICKET_URL, $params);
-
-        if( isset($response->ticket) &&
-            isset($response->expires_in) ) {
-            return $response;
-        }
-
-        throw new TicketException($response->errcode.': '.$response->errmsg);
-    }
-
-    /**
-     * 获取微信服务器 IP
-     */
-    public function getServerIp()
-    {
-        try {
-            $accessToken = $this->getAccessToken();
-        } catch (AccessTokenException $e) {
-            throw new WechatException($e->getMessage());
-        }
-
-        $params     = array('access_token' => $accessToken);
-        $response   = Http::get(static::SERVERIP_URL, $params);
-
-        if( isset($response->ip_list) ) {
-            return $response->ip_list;
-        }
-
-        throw new WechatException($response->errcode.': '.$response->errmsg);
-    }
-
 }

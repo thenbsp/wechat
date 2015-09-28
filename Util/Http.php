@@ -2,73 +2,80 @@
 
 namespace Thenbsp\Wechat\Util;
 
-use Thenbsp\Wechat\Util\Util;
-use Thenbsp\Wechat\Util\JSON;
+use GuzzleHttp\Client;
 
 class Http
 {
     /**
-     * GET Request
+     *  GuzzleHttp\Client 实例
      */
-    public static function get($url, $params = array(), $jsonDecode = true)
-    {
-        $response = static::doRequest('GET', $url, $params);
+    private static $instance;
 
-        return $jsonDecode ? JSON::decode($response) : $response;
+    /**
+     * 获取实例
+     */
+    public static function getInstance()
+    {
+        if( is_null(self::$instance) ) {
+            self::$instance = new Client;
+        }
+
+        return self::$instance;
     }
 
     /**
-     * POST Request
+     * GET 请求
      */
-    public static function post($url, $params = array(), $jsonDecode = true)
+    public static function get($url, array $options = array())
     {
-        $response = static::doRequest('POST', $url, $params);
-
-        return $jsonDecode ? JSON::decode($response) : $response;
+        return self::getInstance()->get($url, $options);
     }
 
     /**
-     * Request URL Via Curl
+     * HEAD 请求
      */
-    public static function doRequest($method, $url, $params = array())
+    public static function head($url, array $options = array())
     {
-        $request = curl_init($url);
+        return self::getInstance()->head($url, $options);
+    }
 
-        switch (strtoupper($method)) {
-            case 'HEAD':
-                curl_setopt($request, CURLOPT_NOBODY, true);
-                break;
-            case 'GET':
-                curl_setopt($request, CURLOPT_HTTPGET, true);
-                break;
-            case 'POST':
-                curl_setopt($request, CURLOPT_POST, true);
-                break;
-            default:
-                curl_setopt($request, CURLOPT_CUSTOMREQUEST, $method);
-        }
+    /**
+     * DELETE 请求
+     */
+    public static function delete($url, array $options = array())
+    {
+        return self::getInstance()->delete($url, $options);
+    }
 
-        curl_setopt($request, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($request, CURLOPT_RETURNTRANSFER, true);
+    /**
+     * PUT 请求
+     */
+    public static function put($url, array $options = array())
+    {
+        return self::getInstance()->put($url, $options);
+    }
 
-        $response = curl_exec($request);
+    /**
+     * PATCH 请求
+     */
+    public static function patch($url, array $options = array())
+    {
+        return self::getInstance()->put($url, $options);
+    }
 
-        if( empty($response) ) {
-            
-            $errno = curl_errno($request);
-            $error = curl_error($request);
+    /**
+     * POST 请求
+     */
+    public static function post($url, array $options = array())
+    {
+        return self::getInstance()->post($url, $options);
+    }
 
-            $errorMessage = 'Request failure';
-
-            if($error != 0) {
-                $errorMessage .= " ({$errno}: {$error})";
-            }
-
-            throw new \Exception($errorMessage);
-        }
-
-        curl_close($request);
-
-        return $response;
+    /**
+     * OPTIONS 请求
+     */
+    public static function options($url, array $options = array())
+    {
+        return self::getInstance()->options($url, $options);
     }
 }

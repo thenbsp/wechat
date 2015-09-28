@@ -1,24 +1,14 @@
 # 微信 SDK
 
-以一种优雅的方式操作微信各种接口，遵循 [psr4 自动加载标准][1]！
+微信公众平台第三方 SDK 版，简单，优雅、健壮，遵循 psr4 自动加载标准！
 
-SDK 包括以下功能：
+在线演示（请使用微信扫描打开）：
 
-- 获取公众号 AccessToken
-- 获取公众号 Ticket
-- 获取 JSSDK 配置
-- 获取微信服务器 IP
-- 网页授权获取用户信息
-- 微信支付（JS invoke 方式）
-- 微信支付（JS chooseWXPay 方式）
-- 微信支付（扫码支付 模式一）
-- 微信支付（扫码支付 模式二）
+![此处输入图片的描述][1]
 
-详细示例请看 ``./example`` 目录中的示例！
+详细示例请看 ``./_example`` 目录中的示例！
 
 ## 安装
-
-通过 composer 安装：
 
 ```php
 composer require thenbsp/wechat
@@ -27,73 +17,74 @@ composer require thenbsp/wechat
 ## 配置公众号 && 商户
 
 ```php
-// 公众号配置
-define('APPID', 'your appid');
-define('APPSECRET', 'your appsecret');
+use Thenbsp\Wechat\Wechat;
 
-// 商户配置
-define('MCHID', 'your mchid');
-define('MCHKEY', 'your mchkey');
+$options = array(
+    'appid' => 'your appid',
+    'appsecret' => 'your appsecret',
+    'mchid' => 'your mch_id',
+    'mchkey' => 'your mch key'
+);
 
-// 支付成功通知 URL
-define('NOTIFY_URL', 'http://example.com/your_are_notify.php');
+$wechat = new Wechat($options);
 ```
 
-## 一、获取公众号 AccessToken
+## 缓存对象
 
-http://mp.weixin.qq.com/wiki/11/0e4b294685f817b95cbed85ba5e82b8f.html
+```php
+use Thenbsp\Wechat\Util\Cache;
+
+$cache = new Cache('./Storage'); // Storage 需可写权限
+```
+
+## AccessToken 对象
 
 **注意：公众号 AccessToken 需要全局缓存维护，重复获取将导致旧 AccessToken 失效，因此将它存在 ``./Storage`` 目录下，需要设置该目录可写权限（出于安全考虑，请设置禁上浏览器直接访问该目录或将该目录移到处 Web 根目录以外）！**
 
 ```php
-use Thenbsp\Wechat\Wechat;
+use Thenbsp\Wechat\AccessToken;
 
-$o = new Wechat(APPID, APPSECRET);
+$accessToken = new AccessToken($wechat, $cache);
 
-$accessToken = $o->getAccessToken();
-
-var_dump($accessToken);
+var_dump($accessToken->getAccessToken());
 ```
 
-详细使用方式请参考 ``./example/access_token.php`` 文件
+详细使用方式请参考 ``./_example/access_token.php`` 文件
 
-## 二、获取公众号 Ticket
-
-http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html#.E9.99.84.E5.BD.951-JS-SDK.E4.BD.BF.E7.94.A8.E6.9D.83.E9.99.90.E7.AD.BE.E5.90.8D.E7.AE.97.E6.B3.95
+## Ticket 对象
 
 **注意：公众号 Ticket 需要全局缓存维护，重复获取将导致旧 Ticket 失效，因此将它存在 ``./Storage`` 目录下，需要设置该目录可写权限（出于安全考虑，请设置禁上浏览器直接访问该目录或将该目录移到处 Web 根目录以外）！**
 
-公众号 ticket 分为 ``jsapi`` 和 ``wx_card``，getTicket 方法可传入一个可选参数
+Ticket对象依赖于 AccessToken 对象，因此需要注入 AccessToken，公众号 ticket 分为 ``jsapi`` 和 ``wx_card``，getTicket 方法可传入一个可选参数
 
 ```php
-use Thenbsp\Wechat\Wechat;
+use Thenbsp\Wechat\Ticket;
 
-$o = new Wechat(APPID, APPSECRET);
+$ticket = new Ticket($accessToken);
 
-$ticket = $o->getTicket();
+// 获取 Jsapi Ticket
+var_dump('Jsapi Ticket: '.$ticket->getTicket());
 
-var_dump($ticket);
+// 获取 Wxcard Ticket
+var_dump('Wxcard Ticket: '.$ticket->getTicket('wx_card'));
 ```
 
-详细使用方式请参考 ``./example/ticket.php`` 文件
+详细使用方式请参考 ``./_example/ticket.php`` 文件
 
-## 三、获取公众号 JSSDK 配置
-
-http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html#.E9.99.84.E5.BD.951-JS-SDK.E4.BD.BF.E7.94.A8.E6.9D.83.E9.99.90.E7.AD.BE.E5.90.8D.E7.AE.97.E6.B3.95
-
-JSSDK 配置文件依赖 AccessToken 和 Ticket，因此需要注入 Wechat 实例。
+## 获取公众号 JSSDK 配置
 
 PHP:
 
 ```php
-use Thenbsp\Wechat\Config;
-use Thenbsp\Wechat\Wechat;
+use Thenbsp\Wechat\Jssdk;
 
-$wechat = new Wechat(APPID, APPSECRET);
+$jssdk = new Jssdk($accessToken);
+$jssdk
+    ->addApi('onMenuShareAppMessage')
+    ->addApi('onMenuShareTimeline')
+    ->enableDebug();
 
-$apis = array('onMenuShareTimeline', 'onMenuShareAppMessage');
-
-$configJSON = Config::getJssdk($wechat, $apis, $debug = true, $asArray = false);
+$configJSON = $jssdk->getConfig();
 ```
 
 Javascript:
@@ -104,67 +95,45 @@ wx.config(<?php echo $configJSON; ?>);
 </script>
 ```
 
-详细使用方式请参考 ``./example/jssdk.php`` 文件
+详细使用方式请参考 ``./_example/jssdk.php`` 文件
 
-## 四、获取微信服务器 IP
-
-http://mp.weixin.qq.com/wiki/0/2ad4b6bfd29f30f71d39616c2a0fcedc.html
+## 获取微信服务器 IP
 
 ```php
 
-use Thenbsp\Wechat\Wechat;
+use Thenbsp\Wechat\ServerIp;
 
-$o = new Wechat(APPID, APPSECRET);
+$serverIp = new ServerIp($accessToken);
 
-$ip = $o->getServerIp();
-
-var_dump($ip);
+var_dump($serverIp->getServerIp());
 
 ```
 
-详细使用方式请参考 ``./example/server_ip.php`` 文件
+详细使用方式请参考 ``./_example/serverip.php`` 文件
 
-## 五、网页授权获取用户信息
-
-http://mp.weixin.qq.com/wiki/17/c0f37d5704f0b64713d5d2c37b468d75.html
+## 网页授权获取用户信息
 
 网页授权使用标准的 [OAuth2][2] 协议授权，具体流程请看官方文档。
 
 **注意：微信网页授权机制有两种 scope 类型： ``snsapi_base`` 和 ``snsapi_userinfo``，以 ``snsapi_base`` 发起的网页授权，不需要用户手动同意，但只能获取到 Openid，相反，以 ``snsapi_userinfo`` 发起的授权，需要用户后动同意，同意后可获取用户的 Openid, 昵称，头像，性别， 所在的等信息，具体请看官方文档**
 
 ```php
-use Thenbsp\Wechat\OAuth;
-use Thenbsp\Wechat\Exception\OAuthException;
+use Thenbsp\Wechat\OAuth\Client;
 
-$o = new OAuth(APPID, APPSECRET);
-
-$callbackUrl = 'Your callback url';
+$client = new Client($wechat);
 
 if( !isset($_GET['code']) ) {
-    $o->authorize($callbackUrl, 'snsapi_userinfo');
+    header('Location: '.$client->getAuthorizeUrl('Your callback url', 'snsapi_userinfo'));
 } else {
-
-    /**
-     * 根据 code 换取 Token
-     */
-    try {
-        $token = $o->getToken($_GET['code']);
-    } catch (OAuthException $e) {
-        exit($e->getMessage());
-    }
-
-    /**
-     * 根据 Token 获取用户信息
-     */
-    $user = $o->getUser($token);
+    $client->getAccessToken($_GET['code']);
     
-    var_dump($user);
+    var_dump($client->getUser());
 }
 ```
 
-详细使用方式请参考 ``./example/oauth.php`` 文件
+详细使用方式请参考 ``./_example/oauth.php`` 文件
 
-## 六、微信支付
+## 微信支付
 
 微信支付需要配置公众号 ``支付目录`` 和 ``回调地址``，具体查看公众号管理后台 ``微信支付`` ->  ``开发配置``
 
@@ -189,33 +158,19 @@ https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=6_1
 PHP:
 
 ```php
-use Thenbsp\Wechat\OAuth;
-use Thenbsp\Wechat\Config;
-use Thenbsp\Wechat\Util\Bag;
-use Thenbsp\Wechat\Util\Util;
-use Thenbsp\Wechat\Payment\Unifiedorder;
+use Thenbsp\Wechat\Payment\JsBrandWCPayRequest;
 
-/**
- * 第 1 步：配置商品信息
- */
-$bag = new Bag();
-$bag->set('appid', APPID);
-$bag->set('mch_id', MCHID);
-$bag->set('notify_url', NOTIFY_URL);
-$bag->set('body', 'iphone 6 plus');
-$bag->set('out_trade_no', date('YmdHis').mt_rand(10000, 99999));
-$bag->set('total_fee', 1);
-$bag->set('openid', $_SESSION['openid']);
+$options = array(
+    'body'          => 'iphone 6 plus',
+    'total_fee'     => 1,
+    'out_trade_no'  => date('YmdHis').mt_rand(10000, 99999),
+    'notify_url'    => 'your are notify url',
+    'openid'        => $_SESSION['openid']
+);
 
-/**
- * 第 2 步：统一下单
- */
-$unifiedorder = new Unifiedorder($bag, MCHKEY);
+$o = new JsBrandWCPayRequest($wechat, $options);
 
-/**
- * 第 3 步：生成支付配置文件
- */
-$configJSON = Config::getPaymentConfig($unifiedorder, $asArray = false);
+$configJSON = $o->getConfig();
 ```
 
 Javascript:
@@ -247,41 +202,30 @@ var WXPayment = function() {
 
 HTML:
 ```html
-<button type="button" onclick="WXPayment()">支付 ￥<?php echo ($bag->get('total_fee') / 100); ?> 元</button>
+<button type="button" onclick="WXPayment()">支付 ￥<?php echo ($options['total_fee'] / 100); ?> 元</button>
 ```
 
-详细使用方式请参考 ``./example/payment_js_invoke.php`` 文件
+详细使用方式请参考 ``./_example/payment-brandwcpayrequest.php`` 文件
 
 ### 扫码支付示例：
 
 PHP:
 
 ```php
-use Thenbsp\Wechat\Config;
-use Thenbsp\Wechat\Util\Bag;
-use Thenbsp\Wechat\Payment\Unifiedorder;
+use Thenbsp\Wechat\Payment\QrcodeTemporary;
 
-/**
- * 配置订单信息
- */
-$bag = new Bag();
-$bag->set('appid', APPID);
-$bag->set('mch_id', MCHID);
-$bag->set('notify_url', NOTIFY_URL);
-$bag->set('body', 'iphone 6 plus');
-$bag->set('out_trade_no', date('YmdHis').mt_rand(10000, 99999));
-$bag->set('total_fee', 1); // 单位为 “分”
-$bag->set('trade_type', 'NATIVE'); // NATIVE 时不需要 Openid
+$options = array(
+    'body' => 'iphone 6 plus',
+    'total_fee' => 1,
+    'out_trade_no' => date('YmdHis').mt_rand(10000, 99999),
+    'notify_url' => 'your are notify url',
+    'trade_type' => 'NATIVE'
+);
 
-/**
- * 统一下单
- */
-$unifiedorder = new Unifiedorder($bag, MCHKEY);
+$qrcode = new QrcodeTemporary($wechat, $options);
 
-/**
- * 获取支付 URL（模式 2）
- */
-$payurl = Config::getTemporaryPayurl($unifiedorder);
+// 获取支付二维码
+$payurl = $qrcode->getPayurl();
 ```
 
 HTML:
@@ -290,10 +234,100 @@ HTML:
 <img src="https://chart.googleapis.com/chart?cht=qr&chs=220x220&choe=UTF-8&chld=L|2&chl=<?php echo $payurl; ?>" />
 ```
 
-详细使用方式请参考 ``./example/payment_qrcode_2.php`` 文件
+详细使用方式请参考 ``./_example/payment-qrcode-temporary.php`` 文件
+
+## 菜单管理
+
+定义菜单
+
+```php
+use Thenbsp\Wechat\Menu\Button;
+use Thenbsp\Wechat\Menu\ButtonCollection;
+
+// 包含子菜单的按钮
+$button1 = new ButtonCollection('菜单一');
+$button1->addChild(new Button('点击', 'click', 'key_1'));
+$button1->addChild(new Button('打开网页', 'view', 'http://www.163.com/'));
+$button1->addChild(new Button('扫码', 'scancode_push', 'key_2'));
+
+// 包含子菜单的按钮
+$button2 = new ButtonCollection('菜单二');
+$button2->addChild(new Button('系统拍照发图', 'pic_sysphoto', 'key_3'));
+$button2->addChild(new Button('拍照或者相册发图', 'pic_photo_or_album', 'key_4'));
+$button2->addChild(new Button('微信相册发图', 'pic_weixin', 'key_5'));
+
+// 一级菜单
+$button3 = new Button('菜单三', 'location_select', 'key_6');
+```
+
+创建菜单
+
+```php
+use Thenbsp\Wechat\Menu\Create;
+
+$create = new Create($accessToken);
+$create->add($button1);
+$create->add($button2);
+$create->add($button3);
+
+try {
+    $create->doCreate();
+} catch (Exception $e) {
+    exit($e->getMessage());
+}
+
+var_dump('菜单已创建成功');
+
+```
+
+查询菜单
+
+```php
+use Thenbsp\Wechat\Menu\Query;
+
+/**
+ * 查询接口
+ */
+$query = new Query($accessToken);
+
+/**
+ * 获取查询结果
+ */
+try {
+    $result = $query->doQuery();
+} catch (Exception $e) {
+    exit($e->getMessage());
+}
+
+print_r($result);
+```
+
+删除菜单
+
+```php
+use Thenbsp\Wechat\Menu\Delete;
+
+/**
+ * 删除接口
+ */
+$delete = new Delete($accessToken);
+
+/**
+ * 执行删除
+ */
+try {
+    $delete->doDelete();
+} catch (Exception $e) {
+    exit($e->getMessage());
+}
+
+var_dump('菜单删除建成功');
+```
 
 ## 待续...
 
 
   [1]: http://www.php-fig.org/psr/psr-4/
   [2]: http://oauth.net/2/
+
+  [1]: http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=http://code.1999.me/wechat-v2/_example/
