@@ -26,6 +26,11 @@ use Thenbsp\Wechat\AccessToken;
 use Thenbsp\Wechat\Util\Cache;
 
 /**
+ * 演示 URL（请换上相应 URL 地址）
+ */
+define('EXAMPLE_URL', 'http://----------YOUR_BASE_URL----------------------/');
+
+/**
  * 配置公众号信息
  */
 $options = array(

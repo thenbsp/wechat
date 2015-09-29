@@ -29,7 +29,7 @@ const AUTHKEY = 'current_user';
 if( !isset($_SESSION[AUTHKEY]) ) {
 
     // 回调地址，示例中为本页
-    $callback = 'http://----------YOUR CALLBACK URL----------/_example/oauth.php';
+    $callback = EXAMPLE_URL.'_example/oauth.php';
 
     // OAuth 对象，需传入 Wechat 对象
     $client = new \Thenbsp\Wechat\OAuth\Client($wechat);
@@ -44,6 +44,8 @@ if( !isset($_SESSION[AUTHKEY]) ) {
         $token = $client->getAccessToken($_GET['code']);
         // 如果需要，可以用 getUser 方法获了当前用户信息
         $user = $client->getUser();
+
+        $cache->set('oauth_demo_'.$user['openid'], $user->getOptions());
         // 写入会话
         $_SESSION[AUTHKEY] = $user;
     }

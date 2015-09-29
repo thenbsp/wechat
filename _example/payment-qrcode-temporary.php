@@ -11,7 +11,7 @@ $options = array(
     'body' => 'iphone 6 plus',
     'total_fee' => 1,
     'out_trade_no' => date('YmdHis').mt_rand(10000, 99999),
-    'notify_url' => 'http://----------YOUR NOTIFY URL----------/_example/payment-notify.php',
+    'notify_url' => EXAMPLE_URL.'_example/payment-notify.php',
     'trade_type' => 'NATIVE'
 );
 

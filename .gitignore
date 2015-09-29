@@ -1,2 +1,3 @@
 vendor/*
+_example/_example.php
 _example/Storage/*

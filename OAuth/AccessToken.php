@@ -50,7 +50,7 @@ class AccessToken extends Options
 
         if( array_key_exists('access_token', $response) &&
             array_key_exists('openid', $response) ) {
-            $this->setOptions($response);
+            parent::__construct($response);
             return $this;
         }
 

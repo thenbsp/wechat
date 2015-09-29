@@ -22,7 +22,7 @@ if( !isset($_SESSION['openid']) ) {
     $client = new Client($wechat);
 
     if( !isset($_GET['code']) ) {
-        $callback = 'http://----------YOUR CALLBACK URL----------/_example/payment-brandwcpayrequest.php';
+        $callback = EXAMPLE_URL.'_example/payment-brandwcpayrequest.php';
         header('Location: '.$client->getAuthorizeUrl($callback));
     } else {
         $token = $client->getAccessToken($_GET['code']);
@@ -37,7 +37,7 @@ $options = array(
     'body'          => 'iphone 6 plus',
     'total_fee'     => 1,
     'out_trade_no'  => date('YmdHis').mt_rand(10000, 99999),
-    'notify_url'    => 'http://----------YOUR NOTIFY URL----------/_example/payment-notify.php',
+    'notify_url'    => EXAMPLE_URL.'_example/payment-notify.php',
     'openid'        => $_SESSION['openid']
 );
 
