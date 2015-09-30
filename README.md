@@ -6,12 +6,16 @@
 
 ![此处输入图片的描述][1]
 
-详细示例请看 ``./_example`` 目录中的示例！
+详细示例请看 ``/example`` 目录中的示例！
 
 ## 安装
 
 ```php
+// 安装 thenbsp/wechat
 composer require thenbsp/wechat
+
+// 安装依赖
+composer install
 ```
 
 ## 配置公众号 && 商户
@@ -49,7 +53,7 @@ $accessToken = new AccessToken($wechat, $cache);
 var_dump($accessToken->getAccessToken());
 ```
 
-详细使用方式请参考 ``./_example/access_token.php`` 文件
+详细使用方式请参考 ``/example/access_token.php`` 文件
 
 ## Ticket 对象
 
@@ -69,7 +73,7 @@ var_dump('Jsapi Ticket: '.$ticket->getTicket());
 var_dump('Wxcard Ticket: '.$ticket->getTicket('wx_card'));
 ```
 
-详细使用方式请参考 ``./_example/ticket.php`` 文件
+详细使用方式请参考 ``/example/ticket.php`` 文件
 
 ## 获取公众号 JSSDK 配置
 
@@ -95,7 +99,7 @@ wx.config(<?php echo $configJSON; ?>);
 </script>
 ```
 
-详细使用方式请参考 ``./_example/jssdk.php`` 文件
+详细使用方式请参考 ``/example/jssdk.php`` 文件
 
 ## 获取微信服务器 IP
 
@@ -109,7 +113,7 @@ var_dump($serverIp->getServerIp());
 
 ```
 
-详细使用方式请参考 ``./_example/serverip.php`` 文件
+详细使用方式请参考 ``/example/serverip.php`` 文件
 
 ## 网页授权获取用户信息
 
@@ -131,7 +135,7 @@ if( !isset($_GET['code']) ) {
 }
 ```
 
-详细使用方式请参考 ``./_example/oauth.php`` 文件
+详细使用方式请参考 ``/example/oauth.php`` 文件
 
 ## 微信支付
 
@@ -205,7 +209,7 @@ HTML:
 <button type="button" onclick="WXPayment()">支付 ￥<?php echo ($options['total_fee'] / 100); ?> 元</button>
 ```
 
-详细使用方式请参考 ``./_example/payment-brandwcpayrequest.php`` 文件
+详细使用方式请参考 ``/example/payment-brandwcpayrequest.php`` 文件
 
 ### 扫码支付示例：
 
@@ -234,7 +238,7 @@ HTML:
 <img src="https://chart.googleapis.com/chart?cht=qr&chs=220x220&choe=UTF-8&chld=L|2&chl=<?php echo $payurl; ?>" />
 ```
 
-详细使用方式请参考 ``./_example/payment-qrcode-temporary.php`` 文件
+详细使用方式请参考 ``/example/payment-qrcode-temporary.php`` 文件
 
 ## 菜单管理
 
