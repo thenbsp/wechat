@@ -20,10 +20,10 @@ composer require thenbsp/wechat
 use Thenbsp\Wechat\Wechat;
 
 $options = array(
-    'appid' => 'your appid',
+    'appid'     => 'your appid',
     'appsecret' => 'your appsecret',
-    'mchid' => 'your mch_id',
-    'mchkey' => 'your mch key'
+    'mchid'     => 'your mch_id',
+    'mchkey'    => 'your mch key'
 );
 
 $wechat = new Wechat($options);
@@ -215,11 +215,11 @@ PHP:
 use Thenbsp\Wechat\Payment\QrcodeTemporary;
 
 $options = array(
-    'body' => 'iphone 6 plus',
-    'total_fee' => 1,
-    'out_trade_no' => date('YmdHis').mt_rand(10000, 99999),
-    'notify_url' => 'your are notify url',
-    'trade_type' => 'NATIVE'
+    'body'          => 'iphone 6 plus',
+    'total_fee'     => 1,
+    'out_trade_no'  => date('YmdHis').mt_rand(10000, 99999),
+    'notify_url'    => 'your are notify url',
+    'trade_type'    => 'NATIVE'
 );
 
 $qrcode = new QrcodeTemporary($wechat, $options);
@@ -330,4 +330,4 @@ var_dump('菜单删除建成功');
   [1]: http://www.php-fig.org/psr/psr-4/
   [2]: http://oauth.net/2/
 
-  [1]: http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=http://code.1999.me/wechat/_example/
+  [1]: http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=http://code.1999.me/wechat/example/

@@ -19,6 +19,6 @@
         "symfony/options-resolver": "2.7.4"
     },
     "autoload": {
-        "psr-4": { "Thenbsp\\Wechat\\": "" }
+        "psr-4": { "Thenbsp\\Wechat\\": "src/" }
     }
 }
