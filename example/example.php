@@ -29,7 +29,7 @@ use Thenbsp\Wechat\Util\Cache;
 /**
  * 演示 URL（请换上相应 URL 地址）
  */
-define('EXAMPLE_URL', 'http://----------YOUR_BASE_URL-------------/');
+define('EXAMPLE_URL', 'http://---------------YOUR_EXAMPLE_URL---------------------/');
 
 /**
  * 配置公众号信息
@@ -40,7 +40,7 @@ $options = array(
     'appsecret' => 'your appsecret',
     // 商户 ID/key
     'mchid'     => 'your mch_id',
-    'mchkey'    => 'your key',
+    'mchkey'    => 'your mch key',
     // 商户授权证书（退款时必需）
     // 'authenticate_cert' => array(
     //     'cert'  => '/path/to/apiclient_cert.pem',

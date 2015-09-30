@@ -11,11 +11,7 @@
 ## 安装
 
 ```php
-// 安装 thenbsp/wechat
 composer require thenbsp/wechat
-
-// 安装依赖
-composer install
 ```
 
 ## 配置公众号 && 商户
@@ -143,21 +139,10 @@ if( !isset($_GET['code']) ) {
 
 微信支付分以下几种调用方式：
 
-1、WeixinJSBridge invoke 方式
+1、JS 方式（公众号支付，chooseWXPay 和 BrandWCPayRequest）
+2， 扫码支付（模式一 和 模式二）
 
-https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=7_7
-
-2、Jssdk chooseWXPay方式
-
-http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html#.E5.8F.91.E8.B5.B7.E4.B8.80.E4.B8.AA.E5.BE.AE.E4.BF.A1.E6.94.AF.E4.BB.98.E8.AF.B7.E6.B1.82
-
-3， 扫码支付（两种模式）
-
-https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=6_1
-
-以上两种方式都需要用户 openid，获取 Openid 可使用 网页授权 SDK
-
-### WeixinJSBridge invoke 示例：
+### BrandWCPayRequest 示例：
 
 PHP:
 
