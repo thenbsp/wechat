@@ -330,4 +330,4 @@ var_dump('菜单删除建成功');
   [1]: http://www.php-fig.org/psr/psr-4/
   [2]: http://oauth.net/2/
 
-  [1]: http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=http://code.1999.me/wechat-v2/_example/
+  [1]: http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=http://code.1999.me/wechat/_example/
