@@ -39,7 +39,7 @@ $cache = new Cache('./Storage'); // Storage 需可写权限
 
 ## AccessToken 对象
 
-**注意：公众号 AccessToken 需要全局缓存维护，重复获取将导致旧 AccessToken 失效，因此将它存在 ``./Storage`` 目录下，需要设置该目录可写权限（出于安全考虑，请设置禁上浏览器直接访问该目录或将该目录移到处 Web 根目录以外）！**
+**注意：公众号 [AccessToken!](example/access_token.php) 需要全局缓存维护，重复获取将导致旧 AccessToken 失效，因此将它存在 ``./Storage`` 目录下，需要设置该目录可写权限（出于安全考虑，请设置禁上浏览器直接访问该目录或将该目录移到处 Web 根目录以外）！**
 
 ```php
 use Thenbsp\Wechat\AccessToken;
