@@ -1,6 +1,6 @@
 {
     "name": "thenbsp/wechat",
-    "description": "微信开发 PHP 工具包",
+    "description": "微信公众平台第三方 SDK 版，简单，优雅、健壮，遵循 psr4 自动加载标准！",
     "keywords": ["wechat", "weixin", "微信", "微信 SDK", "微信支付"],
     "homepage": "http://github.com/thenbsp/wechat",
     "license": "MIT",
