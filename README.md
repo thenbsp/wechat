@@ -315,8 +315,8 @@ var_dump('菜单删除建成功');
 
 ## 消息管理
 
-- [消息实体!](documentation/message-entity.md)
-- [消息事件管理器!](documentation/message-event.md)
+- [消息实体](documentation/message-entity.md)
+- [消息事件](documentation/message-event.md)
 
 ## 待续...
 

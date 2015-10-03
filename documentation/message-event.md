@@ -127,7 +127,7 @@ $eventManager
 
 ## 被动回复消息
 
-被动回复消息可在 ```eventCallback``` 中返回消息实体，更多消息实体类型请参考 message-entity.md。
+被动回复消息可在回调中返回消息实体即可，更多消息实体类型请参考 message-entity.md。
 
 ```php
 use Thenbsp\Wechat\Message\Entity\Text;
