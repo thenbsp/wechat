@@ -12,11 +12,11 @@ composer require thenbsp/wechat
 
 ## 文档
 
-/documentation 目录
+``/documentation`` 目录
 
 ## 示例
 
-/example 目录
+``/example`` 目录
 
 ## Cache 对象
 
@@ -69,4 +69,4 @@ composer require thenbsp/wechat
 - [消息实体](documentation/message-entity.md)
 - [消息事件](documentation/message-event.md)
 
-## 其它功能开发中...
+## 其它功能开发中，表着急...
