@@ -25,7 +25,7 @@ $apis = array('onMenuShareAppMessage', 'onMenuShareTimeline', 'chooseWXPay')
 $jssdk->addApi($apis);
 ```
 
-链接访问
+链式访问
 
 ```php
 $jssdk

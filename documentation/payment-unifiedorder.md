@@ -8,7 +8,7 @@ $options = array(
     'total_fee'     => 1,
     'openid'        => 'user openid',
     'out_trade_no'  => date('YmdHis').mt_rand(10000, 99999),
-    'notify_url'    => EXAMPLE_URL.'payment-notify.php'
+    'notify_url'    => 'Your notify url'
 );
 ```
 

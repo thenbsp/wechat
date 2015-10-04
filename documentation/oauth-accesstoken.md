@@ -15,7 +15,7 @@ AccessToken 对象需要从网页授权接口获取：
 $accessToken = $client->getAccessToken($_GET['code']);
 ```
 
-详细请查看 [oauth.md](documentation/oauth.md)
+详细请查看 [oauth.md](/documentation/oauth.md)
 
 ### 判断 AccessToken 是否有效
  

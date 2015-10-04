@@ -48,7 +48,7 @@ var_dump($request['openid']);
 var_dump($request['out_trade_no']);
 var_dump($request['cash_fee']);
 
-// 获取到这些参数后，可进行后期业务处理，比如修改订单状态为 ``已付款``，示例：
+// 获取到这些参数后，可进行后期业务处理，比如修改订单状态为 “已付款”，示例：
 // UPDATE order SET status = "SUCCESS" WHERE orderid = $request['out_trade_no']
 
 ```

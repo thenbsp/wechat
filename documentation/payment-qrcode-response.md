@@ -12,7 +12,7 @@
 - product_id
 - sign
 
-## 请求 && 响应对象
+请求 && 响应对象
 
 ```php
 use Thenbsp\Wechat\Payment\QrcodeRequest;
@@ -23,7 +23,7 @@ $response   = new QrcodeResponse('Wechat Object', 'Order Options');
 
 ```
 
-## 接收到请求后，需要先判断本次请深求有否有效，因为是服务器对服务器之间的请求，调试请使用日志。
+接收到请求后，需要先判断本次请深求有否有效，因为是服务器对服务器之间的请求，调试请使用日志。
 
 ```php
 if( !$request->isValid() ) {
@@ -31,7 +31,7 @@ if( !$request->isValid() ) {
 }
 ```
 
-## 根据 Request 中的 product_id 去数据库中查找并返回订单信息。
+根据 Request 中的 product_id 去数据库中查找并返回订单信息。
 
 ```php
 
@@ -47,7 +47,7 @@ $response = new QrcodeResponse($wechat, $options);
 $response->send();
 ```
 
-## 返回错误消息
+返回错误消息
 
 当查找过程中，如果发生异常需要提示用户，可以使用 fail 方法返回错误消息，比如订单没有被找到：
 
