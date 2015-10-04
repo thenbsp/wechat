@@ -13,16 +13,25 @@ $jssdk = new Jssdk($accessToken);
 定义接口
 
 ```php
+$jssdk->addApi('onMenuShareAppMessage');
+$jssdk->addApi('onMenuShareTimeline');
+$jssdk->addApi('chooseWXPay');
+```
+
+使用数组式
+
+```php
+$apis = array('onMenuShareAppMessage', 'onMenuShareTimeline', 'chooseWXPay')
+$jssdk->addApi($apis);
+```
+
+链接访问
+
+```php
 $jssdk
     ->addApi('onMenuShareAppMessage')
     ->addApi('onMenuShareTimeline')
-```
-
-也可以使用数组式
-
-```php
-$apis = array('onMenuShareAppMessage', 'onMenuShareTimeline')
-$jssdk->addApi($apis);
+    ->addApi('chooseWXPay');
 ```
 
 开启调试模式
@@ -31,10 +40,11 @@ $jssdk->addApi($apis);
 $jssdk->enableDebug();
 ```
 
-获取配置
+获取配置，默认返回 JSON
 
 ```php
 $config = $jssdk->getConfig();
+var_dump($config);
 ```
 
 结果
