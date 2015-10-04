@@ -45,8 +45,8 @@ class User extends Option
             ->setDefined($defined)
             ->setRequired($required);
 
-        $options = $validator->validate($response);
+        $validated = $validator->validate($response);
 
-        parent::__construct($options);
+        parent::__construct($validated);
     }
 }

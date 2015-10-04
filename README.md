@@ -53,7 +53,7 @@ composer require thenbsp/wechat
 - [JSAPI BrandWCPayRequest](documentation/payment-brandwcpayrequest.md)
 - [扫码支付 模式一](documentation/payment-qrcode-forever.md)
 - [扫码支付 模式二](documentation/payment-qrcode-temporary.md)
-- [扫码支付 模式二 响应订单](documentation/payment-qrcode-response.md)
+- [扫码支付 响应订单（模式二）](documentation/payment-qrcode-response.md)
 - [支付通知](documentation/payment-notify.md)
 
 ## 自定义菜单

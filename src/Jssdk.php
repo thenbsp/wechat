@@ -94,7 +94,7 @@ class Jssdk
 
         $params = array(
             'jsapi_ticket'  => $ticket,
-            'timestamp'     => time(),
+            'timestamp'     => (string) time(),
             'noncestr'      => uniqid(),
             'url'           => $currentUrl
         );

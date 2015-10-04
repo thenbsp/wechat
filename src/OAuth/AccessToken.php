@@ -39,9 +39,9 @@ class AccessToken extends Option
             ->setDefined($defined)
             ->setRequired($required);
 
-        $options = $validator->validate($options);
+        $validated = $validator->validate($options);
 
-        parent::__construct($options);
+        parent::__construct($validated);
     }
 
     /**

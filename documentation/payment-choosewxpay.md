@@ -1,0 +1,3 @@
+# 微信支付 - JSAPI chooseWXPay
+
+还没来得及写...
