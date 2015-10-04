@@ -15,8 +15,6 @@ ini_set('display_errors', 1);
  */
 require '../vendor/autoload.php';
 
-
-
 /**
  * ====================================================
  * 以下为（_example）示例目录下所需代码
@@ -27,9 +25,14 @@ use Thenbsp\Wechat\AccessToken;
 use Thenbsp\Wechat\Util\Cache;
 
 /**
+ * 演示时输出强制字符集
+ */
+header('Content-Type: text/html; charset=utf-8');
+
+/**
  * 演示 URL（请换上相应 URL 地址）
  */
-define('EXAMPLE_URL', 'http://---------------YOUR_EXAMPLE_URL---------------------/');
+define('EXAMPLE_URL', '-----------YOUR_EXAMPLE_URL----------------');
 
 /**
  * 配置公众号信息
@@ -39,8 +42,8 @@ $options = array(
     'appid'     => 'your appid',
     'appsecret' => 'your appsecret',
     // 商户 ID/key
-    'mchid'     => 'your mch_id',
-    'mchkey'    => 'your mch key',
+    'mchid'     => 'mch_id',
+    'mchkey'    => 'mch key',
     // 商户授权证书（退款时必需）
     // 'authenticate_cert' => array(
     //     'cert'  => '/path/to/apiclient_cert.pem',

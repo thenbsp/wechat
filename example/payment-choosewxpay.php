@@ -29,8 +29,6 @@ if( !isset($_SESSION['openid']) ) {
         $token = $client->getAccessToken($_GET['code']);
         $_SESSION['openid'] = $token['openid'];
     }
-
-    var_dump($_SESSION);
 }
 
 /**
@@ -54,9 +52,9 @@ $options = array(
     'openid'        => $_SESSION['openid']
 );
 
-$chooseWXPay = new JsChooseWXPay($wechat, $options);
+$o = new JsChooseWXPay($wechat, $options);
 
-$paymentConfigJSON = $chooseWXPay->getConfig();
+$paymentConfigJSON = $o->getConfig();
 
 ?>
 <!DOCTYPE html>

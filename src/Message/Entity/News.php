@@ -3,30 +3,22 @@
 namespace Thenbsp\Wechat\Message\Entity;
 
 use Thenbsp\Wechat\Message\Entity;
+use Thenbsp\Wechat\Util\OptionValidator;
 use Symfony\Component\OptionsResolver\Options;
 
 class News extends Entity
 {
     /**
-     * 获取消息类型
+     * 构造方法
      */
-    public function getType()
+    public function __construct(array $options = array())
     {
-        $namespace = explode('\\', __CLASS__);
-        
-        return strtolower(end($namespace));
-    }
+        $required = array('ToUserName', 'FromUserName', 'CreateTime', 'ArticleCount', 'Articles');
 
-    /**
-     * 配置参数
-     */
-    protected function configureOptions($resolver)
-    {
-        $options = array('ToUserName', 'FromUserName', 'CreateTime', 'MsgType', 'ArticleCount', 'Articles');
-
-        $resolver
-            ->setDefined($options)
-            ->setRequired($options)
+        $validator = new OptionValidator();
+        $validator
+            ->setDefined($required)
+            ->setRequired($required)
             ->setAllowedTypes('Articles', array('array'))
             ->setAllowedValues('Articles', function($value) {
                 if( !array_key_exists('item', $value) ) {
@@ -43,5 +35,19 @@ class News extends Entity
             ->setDefault('ArticleCount', function (Options $options) {
                 return count($options['Articles']['item']);
             });
+
+        $validtated = $validator->validate($options);
+
+        parent::__construct($validtated);
+    }
+
+    /**
+     * 获取消息类型
+     */
+    public function getType()
+    {
+        $namespace = explode('\\', __CLASS__);
+        
+        return strtolower(end($namespace));
     }
 }

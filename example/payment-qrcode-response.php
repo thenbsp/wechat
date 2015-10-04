@@ -2,19 +2,19 @@
 
 require './example.php';
 
-use Thenbsp\Wechat\Payment\Qrcode\Request;
-use Thenbsp\Wechat\Payment\Qrcode\Response;
+use Thenbsp\Wechat\Payment\QrcodeRequest;
+use Thenbsp\Wechat\Payment\QrcodeResponse;
 
 /**
  *  第一步：处理请求
  */
-$request = new Request();
+$request = new QrcodeRequest();
 
 if( !$request->isValid() ) {
     // 代码层的错误不要呈现给用户，写到日志中
     $cache->set('payment-qrcode-response-error', $request->getError());
     // 给用户返回个 "Invalid Request"，或者其它的
-    Response::fail('Invalid Request');
+    QrcodeResponse::fail('Invalid Request');
 }
 
 /**
@@ -28,5 +28,5 @@ $options = array(
     'trade_type' => 'NATIVE'
 );
 
-$response = new Response($wechat, $options);
+$response = new QrcodeResponse($wechat, $options);
 $response->send();

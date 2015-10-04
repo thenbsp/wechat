@@ -4,9 +4,10 @@ namespace Thenbsp\Wechat\OAuth;
 
 use Thenbsp\Wechat\OAuth\AccessToken;
 use Thenbsp\Wechat\Util\Http;
-use Thenbsp\Wechat\Util\OptionAccess;
+use Thenbsp\Wechat\Util\Option;
+use Thenbsp\Wechat\Util\OptionValidator;
 
-class User extends OptionAccess
+class User extends Option
 {
     /**
      * 网页授权获取用户信息
@@ -34,21 +35,18 @@ class User extends OptionAccess
         if( array_key_exists('errcode', $response) &&
             array_key_exists('errmsg', $response) ) {
             throw new \Exception($response['errcode'].': '.$response['errmsg']);
-            
         }
 
-        parent::__construct($response);
-    }
+        $required   = array('openid', 'nickname', 'sex', 'language', 'city', 'province', 'country', 'headimgurl');
+        $defined    = array_merge($required, array('privilege', 'unionid'));
 
-    /**
-     * 配置选项
-     */
-    protected function configureOptions($resolver)
-    {
-        $defined = array('openid', 'nickname', 'sex', 'language', 'city', 'province', 'country', 'headimgurl', 'privilege');
-        
-        $resolver
+        $validator = new OptionValidator();
+        $validator
             ->setDefined($defined)
-            ->setRequired($defined);
+            ->setRequired($required);
+
+        $options = $validator->validate($response);
+
+        parent::__construct($options);
     }
 }

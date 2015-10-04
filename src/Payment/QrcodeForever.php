@@ -3,7 +3,7 @@
 namespace Thenbsp\Wechat\Payment;
 
 use Thenbsp\Wechat\Wechat;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Thenbsp\Wechat\Util\OptionValidator;
 
 /**
  * 微信扫码支付之永久模式（模式一）
@@ -14,11 +14,6 @@ class QrcodeForever
      * 支付地址
      */
     const PAYMENT_URL = 'weixin://wxpay/bizpayurl';
-
-    /**
-     * Wechat 对象
-     */
-    protected $wechat;
 
     /**
      * 订单选项
@@ -50,13 +45,13 @@ class QrcodeForever
             'nonce_str'         => uniqid()
         );
 
-        $resolver = new OptionsResolver();
-        $resolver
+        $validator = new OptionValidator();
+        $validator
             ->setDefined($this->required)
             ->setRequired($this->required)
             ->setDefaults($defaults);
 
-        $options = $resolver->resolve($options);
+        $options = $validator->validate($options);
 
         // 按 ASCII 码排序
         ksort($options);

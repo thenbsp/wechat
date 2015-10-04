@@ -4,20 +4,14 @@ namespace Thenbsp\Wechat\Payment;
 
 use Thenbsp\Wechat\Wechat;
 use Thenbsp\Wechat\Util\Serialize;
-use Thenbsp\Wechat\Util\OptionAccess;
 use Thenbsp\Wechat\Payment\Unifiedorder;
 
-class JsBrandWCPayRequest extends OptionAccess
+class JsBrandWCPayRequest extends Unifiedorder
 {
     /**
      * JsBrandWCPayRequest 方式的 trade_type 为 JSAPI
      */
     const TRADE_TYPE = 'JSAPI';
-
-    /**
-     * Wechat 对象
-     */
-    protected $wechat;
 
     /**
      * 构造方法
@@ -27,17 +21,7 @@ class JsBrandWCPayRequest extends OptionAccess
         // 将 trade_type 强制设为 JSAPI
         $optionsForUnifiedorder['trade_type'] = self::TRADE_TYPE;
 
-        // 去统一下单接口下单
-        $unifiedorder = new Unifiedorder($wechat, $optionsForUnifiedorder);
-
-        // 下单结果中的 prepay_id
-        $response = $unifiedorder->getResponse();
-
-        $this->wechat = $wechat;
-
-        parent::__construct(array(
-            'package' => sprintf('prepay_id=%s', $response['prepay_id'])
-        ));
+        parent::__construct($wechat, $optionsForUnifiedorder);
     }
 
     /**
@@ -45,18 +29,20 @@ class JsBrandWCPayRequest extends OptionAccess
      */
     public function getConfig($asArray = false)
     {
-        $options = $this->getOptions();
-        $options['paySign'] = $this->generatePaySign();
+        // 下单结果中的 prepay_id
+        $response = $this->getResponse();
 
-        return $asArray ? $options : Serialize::encode($options, 'json');
-    }
-
-    /**
-     * 生成 paySign
-     */
-    protected function generatePaySign()
-    {
-        $options = $this->getOptions();
+        $options = array(
+            'appId'     => $this->wechat['appid'],
+            /**
+             * 微支支付接口 BUG 说明：
+             * timeStamp 必需为 String 型，否则在 iOS 下会报 “调用支付jsapi缺少参数: $key0$ 错误” 错误
+             */
+            'timeStamp' => (string) time(),
+            'nonceStr'  => uniqid(),
+            'package'   => 'prepay_id='.$response['prepay_id'],
+            'signType'  => 'MD5'
+        );
 
         ksort($options);
 
@@ -64,26 +50,8 @@ class JsBrandWCPayRequest extends OptionAccess
         $signature = urldecode($signature);
         $signature = strtoupper(md5($signature.'&key='.$this->wechat['mchkey']));
 
-        return $signature;
-    }
+        $options['paySign'] = $signature;
 
-    /**
-     * 配置选项
-     */
-    protected function configureOptions($resolver)
-    {
-        $defined = array('appId', 'timeStamp', 'nonceStr', 'package', 'signType');
-
-        $defaults = array(
-            'appId'     => $this->wechat['appid'],
-            'timeStamp' => time(),
-            'nonceStr'  => uniqid(),
-            'signType'  => 'MD5'
-        );
-
-        $resolver
-            ->setDefined($defined)
-            ->setRequired($defined)
-            ->setDefaults($defaults);
+        return $asArray ? $options : Serialize::encode($options, 'json');
     }
 }

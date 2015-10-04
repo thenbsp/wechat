@@ -2,37 +2,15 @@
 
 namespace Thenbsp\Wechat;
 
-use Thenbsp\Wechat\Util\OptionAccess;
+use Thenbsp\Wechat\Util\Option;
+use Thenbsp\Wechat\Util\OptionValidator;
 
-class Wechat extends OptionAccess
+class Wechat extends Option
 {
-    /**
-     * 微信公众号所需参数
-     */
-    protected $options = array();
-
-    /**
-     * 定义所有选项
-     */
-    protected $defined = array('appid', 'appsecret', 'mchid', 'mchkey', 'authenticate_cert');
-
-    /**
-     * 定义必填参数
-     */
-    protected $required = array('appid', 'appsecret');
-
     /**
      * 构造方法
      */
     public function __construct(array $options)
-    {
-        parent::__construct($options);
-    }
-
-    /**
-     * 配置参数
-     */
-    protected function configureOptions($resolver)
     {
         $certNormalizer = function($options, $value) {
             // authenticate_cert 为一个 包含 cert 和 key 的数组
@@ -47,10 +25,15 @@ class Wechat extends OptionAccess
             }
         };
 
-        $resolver
-            ->setDefined($this->defined)
-            ->setRequired($this->required)
+        $validator = new OptionValidator();
+        $validator
+            ->setDefined(array('appid', 'appsecret', 'mchid', 'mchkey', 'authenticate_cert'))
+            ->setRequired(array('appid', 'appsecret'))
             ->setAllowedTypes('authenticate_cert', 'array')
-            ->setNormalizer('authenticate_cert', $certNormalizer);
+            ->setNormalizer('authenticate_cert', $certNormalizer);;
+
+        $options = $validator->validate($options);
+
+        parent::__construct($options);
     }
 }

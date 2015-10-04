@@ -2,11 +2,12 @@
 
 namespace Thenbsp\Wechat\Message;
 
+use Thenbsp\Wechat\Util\Option;
 use Thenbsp\Wechat\Util\Response;
 use Thenbsp\Wechat\Util\Serialize;
-use Thenbsp\Wechat\Util\OptionAccess;
 
-abstract class Entity extends OptionAccess
+
+abstract class Entity extends Option
 {
     /**
      * 构造方法

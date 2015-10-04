@@ -43,7 +43,10 @@ a:hover { color: #d60000; outline: none; }
     <ul>
         <li>Http</li>
         <li>Cache</li>
-        <li>Options</li>
+        <li>Option</li>
+        <li>OptionValidator</li>
+        <li>Request</li>
+        <li>Response</li>
         <li>Serialize</li>
     </ul>
 

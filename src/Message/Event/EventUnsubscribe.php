@@ -3,6 +3,7 @@
 namespace Thenbsp\Wechat\Message\Event;
 
 use Thenbsp\Wechat\Message\Event;
+use Thenbsp\Wechat\Util\OptionValidator;
 
 class EventUnsubscribe extends Event
 {
@@ -11,18 +12,14 @@ class EventUnsubscribe extends Event
      */
     public function __construct(array $options = array())
     {
-        parent::__construct($options);
-    }
+        $required = array('ToUserName', 'FromUserName', 'CreateTime', 'MsgType', 'Event');
 
-    /**
-     * 配置参数
-     */
-    protected function configureOptions($resolver)
-    {
-        $options = array('ToUserName', 'FromUserName', 'CreateTime', 'MsgType', 'Event');
+        $validator = new OptionValidator();
+        $validator
+            ->setRequired($required);
 
-        $resolver
-            ->setDefined($options)
-            ->setRequired($options);
+        $validtated = $validator->validate($options);
+
+        parent::__construct($validtated);
     }
 }

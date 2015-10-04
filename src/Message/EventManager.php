@@ -7,8 +7,13 @@ use Thenbsp\Wechat\Util\Serialize;
 use Thenbsp\Wechat\Message\Event;
 use Thenbsp\Wechat\Message\Entity;
 
-class EventManager extends Request
+class EventManager
 {
+    /**
+     * 请求对象
+     */
+    protected $request;
+
     /**
      * 请求参数
      */
@@ -19,13 +24,28 @@ class EventManager extends Request
      */
     public function __construct()
     {
-        parent::__construct();
-
-        $content = $this->getContent();
+        $request = Request::createFromGlobals();
+        $content = $request->getContent();
 
         if( !empty($content) ) {
             $this->_option = Serialize::decode($content, 'xml');
         }
+    }
+
+    /**
+     * 获取请求对象
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * 获取请求原内容
+     */
+    public function getContent()
+    {
+        return $this->request->getContent();
     }
 
     /**

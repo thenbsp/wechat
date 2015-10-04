@@ -5,6 +5,11 @@ namespace Thenbsp\Wechat\Util;
 class Request
 {
     /**
+     * 请求对像实例
+     */
+    protected static $instance;
+
+    /**
      * 请求内容
      */
     protected $content;
@@ -14,7 +19,21 @@ class Request
      */
     public function __construct()
     {
-        $this->setContent(file_get_contents('php://input'));
+        $postdata = file_get_contents('php://input');
+
+        $this->setContent($postdata);
+    }
+
+    /**
+     * 创建请求对象
+     */
+    public static function createFromGlobals()
+    {
+        if( is_null(self::$instance) ) {
+            self::$instance = new self;
+        }
+
+        return self::$instance;
     }
 
     /**
@@ -35,5 +54,13 @@ class Request
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * 克隆对象
+     */
+    public function __clone()
+    {
+        throw new Exception('Unable to clone Request');
     }
 }

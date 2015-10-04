@@ -4,9 +4,10 @@ namespace Thenbsp\Wechat\OAuth;
 
 use Thenbsp\Wechat\Wechat;
 use Thenbsp\Wechat\Util\Http;
-use Thenbsp\Wechat\Util\OptionAccess;
+use Thenbsp\Wechat\Util\Option;
+use Thenbsp\Wechat\Util\OptionValidator;
 
-class AccessToken extends OptionAccess
+class AccessToken extends Option
 {
     /**
      * 刷新
@@ -29,6 +30,16 @@ class AccessToken extends OptionAccess
     public function __construct(Wechat $wechat, array $options)
     {
         $this->wechat = $wechat;
+
+        $required   = array('access_token', 'expires_in', 'refresh_token', 'openid', 'scope');
+        $defined    = array_merge($required, array('unionid'));
+
+        $validator = new OptionValidator();
+        $validator
+            ->setDefined($defined)
+            ->setRequired($required);
+
+        $options = $validator->validate($options);
 
         parent::__construct($options);
     }
@@ -72,17 +83,5 @@ class AccessToken extends OptionAccess
         $response = $request->json();
 
         return ($response['errmsg'] === 'ok');
-    }
-
-    /**
-     * 配置选项
-     */
-    protected function configureOptions($resolver)
-    {
-        $defined = array('access_token', 'expires_in', 'refresh_token', 'openid', 'scope');
-
-        $resolver
-            ->setDefined($defined)
-            ->setRequired($defined);
     }
 }

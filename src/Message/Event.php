@@ -2,9 +2,9 @@
 
 namespace Thenbsp\Wechat\Message;
 
-use Thenbsp\Wechat\Util\OptionAccess;
+use Thenbsp\Wechat\Util\Option;
 
-abstract class Event extends OptionAccess
+abstract class Event extends Option
 {
     /**
      * 消息事件类型

@@ -1,12 +1,12 @@
 <?php
 
-namespace Thenbsp\Wechat\Payment\Qrcode;
+namespace Thenbsp\Wechat\Payment;
 
 use Thenbsp\Wechat\Wechat;
 use Thenbsp\Wechat\Payment\Unifiedorder;
 use Thenbsp\Wechat\Util\Serialize;
 
-class Response extends Unifiedorder
+class QrcodeResponse extends Unifiedorder
 {
     /**
      * 状态（成功）
@@ -19,22 +19,23 @@ class Response extends Unifiedorder
     const FAILURE = 'FAIL';
 
     /**
-     * 输出选项
-     */
-    protected $options = array();
-
-    /**
      * 构造方法
      */
     public function __construct(Wechat $wechat, array $optionsOfUnifiedorder)
     {
         parent::__construct($wechat, $optionsOfUnifiedorder);
+    }
 
+    /**
+     * 发送响应
+     */
+    public function send()
+    {
         $response = $this->getResponse();
 
         $options = array(
-            'appid'         => $wechat['appid'],
-            'mch_id'        => $wechat['mchid'],
+            'appid'         => $this->wechat['appid'],
+            'mch_id'        => $this->wechat['mchid'],
             'prepay_id'     => $response['prepay_id'],
             'nonce_str'     => uniqid(),
             'return_code'   => self::SUCCESS,
@@ -45,19 +46,11 @@ class Response extends Unifiedorder
 
         $signature = http_build_query($options);
         $signature = urldecode($signature);
-        $signature = strtoupper(md5($signature.'&key='.$wechat['mchkey']));
+        $signature = strtoupper(md5($signature.'&key='.$this->wechat['mchkey']));
 
         $options['sign'] = $signature;
 
-        $this->options = $options;
-    }
-
-    /**
-     * 发送响应
-     */
-    public function send()
-    {
-        self::_finalOutput($this->options);
+        self::_finalOutput($options);
     }
 
     /**

@@ -23,7 +23,7 @@ if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false) {
 session_start();
 
 // 认证用户 Session key
-const AUTHKEY = 'current_user';
+const AUTHKEY = 'current_user_1';
 
 // 如果没有登录，则去授权
 if( !isset($_SESSION[AUTHKEY]) ) {

@@ -39,13 +39,16 @@ require './example.php';
  */
 
 // Notify 请求对象
-$request = new \Thenbsp\Wechat\Payment\Notify\Request();
+$request = new \Thenbsp\Wechat\Payment\NotifyRequest();
 
 // 验证本次请是否有效（只验证数据结构，不验证公众号 ID）
 if (!$request->isValid()) {
+    var_dump($request->getError());
     $cache->set('payment-notify-error', $request->getError());
     exit;
 }
+
+var_dump($request->getOptions());
 
 // 获取获部内容（数组）
 $cache->set('payment-notify-options', $request->getOptions());
@@ -54,4 +57,4 @@ $cache->set('payment-notify-options', $request->getOptions());
 $cache->set('payment-notify-orderid', $request['out_trade_no']);
 
 // 获取原始内容
-$cache->set('payment-notify-rawcontent', $request->getContent());
+$cache->set('payment-notify-content', $request->getContent());

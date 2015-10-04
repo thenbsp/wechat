@@ -4,7 +4,11 @@ require './example.php';
 
 use Thenbsp\Wechat\Message\Event;
 use Thenbsp\Wechat\Message\EventManager;
+
 use Thenbsp\Wechat\Message\Entity\Text;
+use Thenbsp\Wechat\Message\Entity\Image;
+use Thenbsp\Wechat\Message\Entity\Video;
+
 
 class Demo
 {

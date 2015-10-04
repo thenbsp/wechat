@@ -5,9 +5,9 @@ namespace Thenbsp\Wechat\Payment;
 use Thenbsp\Wechat\Wechat;
 use Thenbsp\Wechat\Util\Http;
 use Thenbsp\Wechat\Util\Serialize;
-use Thenbsp\Wechat\Util\OptionAccess;
+use Thenbsp\Wechat\Util\OptionValidator;
 
-class Unifiedorder extends OptionAccess
+class Unifiedorder
 {
     /**
      * 统一下单接口
@@ -19,6 +19,11 @@ class Unifiedorder extends OptionAccess
      * Wechat 对象
      */
     protected $wechat;
+
+    /**
+     * 订单选项
+     */
+    protected $options;
 
     /**
      * 全部选项（不包括 sign）
@@ -56,8 +61,48 @@ class Unifiedorder extends OptionAccess
             throw new \InvalidArgumentException('The required options "mch_key" are missing.');
         }
 
-        $this->wechat = $wechat;
-        parent::__construct($options);
+
+        $normalizer = function($options, $value) {
+            if( ($value === 'JSAPI') && !isset($options['openid']) ) {
+                throw new \InvalidArgumentException('The required options "openid" are missing.');
+            }
+            return $value;
+        };
+
+        $defaults = array(
+            'appid'             => $wechat['appid'],
+            'mch_id'            => $wechat['mchid'],
+            'spbill_create_ip'  => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0',
+            'trade_type'        => current($this->tradeType),
+            'nonce_str'         => uniqid(),
+        );
+
+        $validator = new OptionValidator();
+        $validator
+            ->setDefined($this->defined)
+            ->setRequired($this->required)
+            ->setAllowedValues('trade_type', $this->tradeType)
+            ->setNormalizer('trade_type', $normalizer)
+            ->setDefaults($defaults);
+
+        $this->wechat   = $wechat;
+        $this->options  = $validator->validate($options);
+    }
+
+    /**
+     * 获取 Wechat 对象
+     */
+    public function getWechat()
+    {
+        return $this->wechat;
+    }
+
+    /**
+     * 获取订单选项
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 
     /**
@@ -65,19 +110,16 @@ class Unifiedorder extends OptionAccess
      */
     public function getResponse()
     {
-        // 生成签名
-        $options = $this->getOptions();
+        ksort($this->options);
 
-        ksort($options);
-
-        $signature = http_build_query($options);
+        $signature = http_build_query($this->options);
         $signature = urldecode($signature);
         $signature = strtoupper(md5($signature.'&key='.$this->wechat['mchkey']));
 
-        $options['sign'] = $signature;
+        $this->options['sign'] = $signature;
 
         $request = Http::post(self::UNIFIEDORDER_URL, array(
-            'body' => Serialize::encode($options, 'xml')
+            'body' => Serialize::encode($this->options, 'xml')
         ));
 
         $response = (array) $request->xml(array(
@@ -95,38 +137,5 @@ class Unifiedorder extends OptionAccess
         }
 
         return $response;
-    }
-
-    /**
-     * 配置选项
-     */
-    protected function configureOptions($resolver)
-    {
-        $normalizer = function($options, $value) {
-            // trade_type 为 JSAPI 时，openid 必填
-            if( ($value === 'JSAPI') && !isset($options['openid']) ) {
-                throw new \InvalidArgumentException('The required options "openid" are missing.');
-            }
-            // trade_type 为 NATIVE 时，product_id 必填
-            // if( ($value === 'NATIVE') && !isset($options['product_id']) ) {
-            //     throw new MissingOptionsException('The required options "product_id" are missing.');
-            // }
-            return $value;
-        };
-
-        $defaults = array(
-            'appid'             => $this->wechat['appid'],
-            'mch_id'            => $this->wechat['mchid'],
-            'spbill_create_ip'  => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0',
-            'trade_type'        => current($this->tradeType),
-            'nonce_str'         => uniqid(),
-        );
-
-        $resolver
-            ->setDefined($this->defined)
-            ->setRequired($this->required)
-            ->setAllowedValues('trade_type', $this->tradeType)
-            ->setNormalizer('trade_type', $normalizer)
-            ->setDefaults($defaults);
     }
 }
