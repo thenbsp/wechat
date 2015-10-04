@@ -4,7 +4,7 @@
 
 ## 菜单定义
 
-菜单类型包括：
+菜单的值因菜单类型不同而不同，具体分为 key/url/media_id，菜单类型包括：
 
 - view
 - click
@@ -17,17 +17,11 @@
 - media_id
 - view_limited
 
-菜单的值因菜单类型不同而不同，具体分为 key/url/media_id。
-
-定义菜单（一级菜单）
-
 ```php
-use Thenbsp\Wechat\Menu\Button;
-
-$button3 = new Button('菜单名称', '菜单类型', 'key/url/media_id');
+$button = new \Thenbsp\Wechat\Menu\Button('菜单名称', '菜单类型', 'key/url/media_id');
 ```
 
-定义菜单集合（二级菜单）
+一级菜单不能超过 3 个，子菜单不能超过 5 个。
 
 ```php
 use Thenbsp\Wechat\Menu\Button;
