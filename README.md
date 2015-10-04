@@ -8,6 +8,14 @@
 composer require thenbsp/wechat
 ```
 
+## 文档
+
+/documentation 目录
+
+## 示例
+
+/example 目录
+
 ## Cache 对象
 
 - [Cache](documentation/cache.md)
