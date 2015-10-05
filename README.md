@@ -16,20 +16,11 @@ composer require thenbsp/wechat
 
 ``/example`` 目录
 
-## Cache 对象
+## 基础对象
 
 - [Cache](/documentation/cache.md)
-
-## Wechat 对象
-
 - [Wechat](/documentation/wechat.md)
-
-## AccessToken 对象
-
 - [AccessToken](/documentation/accesstoken.md)
-
-## Ticket 对象
-
 - [Ticket](/documentation/ticket.md)
 
 ## JSSDK 配置
