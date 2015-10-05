@@ -8,11 +8,12 @@
 use Thenbsp\Wechat\Menu\Button;
 use Thenbsp\Wechat\Menu\ButtonCollection;
 
-// 菜单集合
-$buttonCollection   = new ButtonCollection('菜单名称');
-
 // 一级菜单
-$button = new \Thenbsp\Wechat\Menu\Button('菜单名称', '菜单类型', '菜单值');
+$button = new Button('菜单名称', '菜单类型', '菜单值');
+
+// 菜单集合
+$buttonCollection = new ButtonCollection('菜单名称');
+$buttonCollection->addChild($button);
 ```
 
 菜单的值因菜单类型不同而不同，具体分为 key/url/media_id，菜单类型包括：
