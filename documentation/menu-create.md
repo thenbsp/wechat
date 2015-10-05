@@ -2,7 +2,18 @@
 
 创建自定义菜单需要注入 AccessToken，创建菜单前需要先定义菜单。
 
-## 菜单定义
+## 定义菜单
+
+```php
+use Thenbsp\Wechat\Menu\Button;
+use Thenbsp\Wechat\Menu\ButtonCollection;
+
+// 菜单集合
+$buttonCollection   = new ButtonCollection('菜单名称');
+
+// 一级菜单
+$button = new \Thenbsp\Wechat\Menu\Button('菜单名称', '菜单类型', '菜单值');
+```
 
 菜单的值因菜单类型不同而不同，具体分为 key/url/media_id，菜单类型包括：
 
@@ -16,10 +27,6 @@
 - location_select
 - media_id
 - view_limited
-
-```php
-$button = new \Thenbsp\Wechat\Menu\Button('菜单名称', '菜单类型', 'key/url/media_id');
-```
 
 一级菜单不能超过 3 个，子菜单不能超过 5 个。
 
