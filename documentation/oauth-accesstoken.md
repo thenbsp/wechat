@@ -21,7 +21,9 @@ $accessToken = $client->getAccessToken($_GET['code']);
  
 ```php
 
-var_dump($accessToken->isValid());
+if( !$accessToken->isValid() ) {
+    exit('Invalid AccessToken');
+}
 
 ```
 
