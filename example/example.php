@@ -32,16 +32,16 @@ header('Content-Type: text/html; charset=utf-8');
 /**
  * 演示 URL（请换上相应 URL 地址）
  */
-define('EXAMPLE_URL', 'http://---------------YOUR_EXAMPLE_URL---------------------/');
+define('EXAMPLE_URL', '----------------YOUR_BASE_URL------------------');
 /**
  * 配置公众号信息
  */
 $options = array(
-    // 公众号 appid/appsecret
+     // 公众号 appid/appsecret
     'appid'     => 'your appid',
     'appsecret' => 'your appsecret',
     // 商户 ID/key
-    'mchid'     => 'your mch_id',
+    'mchid'     => 'your mchid',
     'mchkey'    => 'your mch key',
     // 商户授权证书（退款时必需）
     // 'authenticate_cert' => array(

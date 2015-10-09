@@ -85,8 +85,10 @@ class Unifiedorder
             ->setNormalizer('trade_type', $normalizer)
             ->setDefaults($defaults);
 
+        $validated = $validator->validate($options);
+
         $this->wechat   = $wechat;
-        $this->options  = $validator->validate($options);
+        $this->options  = $validated;
     }
 
     /**
