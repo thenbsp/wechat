@@ -61,10 +61,6 @@ class Cache
 
         @file_put_contents($fileName, serialize($value));
 
-        // if( !$this->has($key) ) {
-        //     throw new \RuntimeException(sprintf('Unable to set cache: %s', $key));
-        // }
-
         return true;
     }
 
@@ -84,6 +80,10 @@ class Cache
         }
 
         $value = unserialize($value);
+
+        if( $value['_ttl_'] === 0 ) {
+            return $value['_value_'];
+        }
 
         if( $value['_ttl_'] < time() ) {
             $this->delete($key);
