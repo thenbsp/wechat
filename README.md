@@ -39,6 +39,7 @@ composer require thenbsp/wechat
     - [扫码支付 模式二](/documentation/payment-qrcode-temporary.md)
     - [扫码支付 响应订单（模式二）](/documentation/payment-qrcode-response.md)
     - [支付通知](/documentation/payment-notify.md)
+    - [共享收货地址](/documentation/payment-address.md)
 - 自定义菜单
     - [创建菜单](/documentation/menu-create.md)
     - [查询菜单](/documentation/menu-query.md)

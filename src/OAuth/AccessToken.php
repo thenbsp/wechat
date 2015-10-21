@@ -45,6 +45,14 @@ class AccessToken extends Option
     }
 
     /**
+     * 获取 Wechat 对象
+     */
+    public function getWechat()
+    {
+        return $this->wechat;
+    }
+
+    /**
      * 刷新
      */
     public function refresh()
