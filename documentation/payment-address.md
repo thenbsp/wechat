@@ -58,4 +58,4 @@ var getAddress = function() {
 <button type="button" onclick="getAddress()">选择收货地址</button>
 ```
 
-详细用法请查看 [/documentation/payment-address.md](/documentation/payment-address.md)
+详细用法请查看 [/example/payment-address.php](/example/payment-address.php)
