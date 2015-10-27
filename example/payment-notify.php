@@ -37,18 +37,16 @@ require './example.php';
 /**
  * 服务器端对服务器端的请求，示例中使用日志（文件缓存）查看
  */
+use Thenbsp\Wechat\Payment\NotifyRequest;
 
 // Notify 请求对象
-$request = new \Thenbsp\Wechat\Payment\NotifyRequest();
+$request = new NotifyRequest();
 
 // 验证本次请是否有效（只验证数据结构，不验证公众号 ID）
 if (!$request->isValid()) {
-    var_dump($request->getError());
     $cache->set('payment-notify-error', $request->getError());
-    exit;
+    NotifyRequest::fail();
 }
-
-var_dump($request->getOptions());
 
 // 获取获部内容（数组）
 $cache->set('payment-notify-options', $request->getOptions());
@@ -58,3 +56,9 @@ $cache->set('payment-notify-orderid', $request['out_trade_no']);
 
 // 获取原始内容
 $cache->set('payment-notify-content', $request->getContent());
+
+// 处理业务逻辑
+// ...
+
+// 响应给微信服务器成功标识，避免重复请求
+NotifyRequest::success();

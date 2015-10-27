@@ -23,13 +23,15 @@
 
 通知请求为服务端对服务器端，因些调试请使用日志。
 
+## 接收到请求之后，如果发生异常，可命名用 NotifyRequest::fail() 方法响应本次请求。
+
 ```php
 use Thenbsp\Wechat\Payment\NotifyRequest;
 
 $request = new NotifyRequest();
 
 if ( !$request->isValid() ) {
-    exit('Invalid Request');
+    NotifyRequest::fail('Invalid Request');
 }
 ```
 
@@ -51,4 +53,6 @@ var_dump($request['cash_fee']);
 // 获取到这些参数后，可进行后期业务处理，比如修改订单状态为 “已付款”，示例：
 // UPDATE order SET status = "SUCCESS" WHERE orderid = $request['out_trade_no']
 
+// 内容业务处理完后，不要忘了返回给微信服务器，避免重复请求
+NotifyRequest::success('OK');
 ```

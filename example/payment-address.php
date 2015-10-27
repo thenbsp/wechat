@@ -7,9 +7,9 @@ session_start();
 use Thenbsp\Wechat\OAuth\Client;
 use Thenbsp\Wechat\Payment\Address;
 
-if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false) {
-    exit('请在微信中打开');
-}
+// if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false) {
+//     exit('请在微信中打开');
+// }
 
 define('AUTHKEY', 'user');
 
@@ -22,7 +22,7 @@ if( !isset($_SESSION[AUTHKEY]) ) {
 
     if( !isset($_GET['code']) ) {
         $callback = EXAMPLE_URL.'payment-address.php';
-        header('Location: '.$client->getAuthorizeUrl($callback));
+        header('Location: '.$client->getAuthorizeUrl($callback, 'snsapi_userinfo'));
     } else {
         $token = $client->getAccessToken($_GET['code']);
         $_SESSION[AUTHKEY] = $token;
