@@ -4,6 +4,7 @@ namespace Thenbsp\Wechat\Payment;
 
 use Thenbsp\Wechat\Wechat;
 use Thenbsp\Wechat\Payment\Unifiedorder;
+use Thenbsp\Wechat\Util\Response;
 use Thenbsp\Wechat\Util\Serialize;
 
 class QrcodeResponse extends Unifiedorder
@@ -50,13 +51,13 @@ class QrcodeResponse extends Unifiedorder
 
         $options['sign'] = $signature;
 
-        self::_finalOutput($options);
+        self::_finalResponse($options);
     }
 
     /**
-     * 
+     * 失败响应
      */
-    public static function fail($errorMessage)
+    public static function fail($errorMessage = null)
     {
         $response = array('return_code' => self::FAILURE);
 
@@ -64,16 +65,22 @@ class QrcodeResponse extends Unifiedorder
             $response['return_msg'] = $errorMessage;
         }
 
-        self::_finalOutput($response);
+        self::_finalResponse($response);
     }
 
     /**
      * 最终输出
      */
-    private static function _finalOutput(array $arrayResponse)
+    private static function _finalResponse(array $arrayResponse)
     {
-        header("Content-Type: application/xml; charset=utf-8");
-        echo Serialize::encode($arrayResponse, 'xml');
+        $headers = array(
+            'Content-Type' => 'application/xml'
+        );
+
+        $response = new Response();
+        $response->setHeaders($headers);
+        $response->setContent(Serialize::encode($arrayResponse, 'xml'));
+        $response->send();
         exit;
     }
 }

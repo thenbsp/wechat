@@ -3,12 +3,23 @@
 namespace Thenbsp\Wechat\Payment;
 
 use Thenbsp\Wechat\Util\Request;
+use Thenbsp\Wechat\Util\Response;
 use Thenbsp\Wechat\Util\Serialize;
 use Thenbsp\Wechat\Util\Option;
 use Thenbsp\Wechat\Util\OptionValidator;
 
 class NotifyRequest extends Option
 {
+    /**
+     * 状态（成功）
+     */
+    const SUCCESS = 'SUCCESS';
+
+    /**
+     * 状态（失败）
+     */
+    const FAILURE = 'FAIL';
+
     /**
      * 请求对象
      */
@@ -87,5 +98,49 @@ class NotifyRequest extends Option
         }
 
         return true;
+    }
+
+    /**
+     * 成功响应
+     */
+    public static function success($errorMessage = null)
+    {
+        $response = array('return_code' => self::SUCCESS);
+
+        if( !is_null($errorMessage) ) {
+            $response['return_msg'] = $errorMessage;
+        }
+
+        self::_finalResponse($response);
+    }
+
+    /**
+     * 失败响应
+     */
+    public static function fail($errorMessage = null)
+    {
+        $response = array('return_code' => self::FAILURE);
+
+        if( !is_null($errorMessage) ) {
+            $response['return_msg'] = $errorMessage;
+        }
+
+        self::_finalResponse($response);
+    }
+
+    /**
+     * 最终输出
+     */
+    private static function _finalResponse(array $arrayResponse)
+    {
+        $headers = array(
+            'Content-Type' => 'application/xml'
+        );
+
+        $response = new Response();
+        $response->setHeaders($headers);
+        $response->setContent(Serialize::encode($arrayResponse, 'xml'));
+        $response->send();
+        exit;
     }
 }
