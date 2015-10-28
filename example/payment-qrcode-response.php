@@ -28,5 +28,7 @@ $options = array(
     'trade_type' => 'NATIVE'
 );
 
+$cache->set('payment-qrcode-response-success-product-id', $request['product_id']);
+
 $response = new QrcodeResponse($wechat, $options);
 $response->send();
