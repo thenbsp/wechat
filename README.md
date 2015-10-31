@@ -48,5 +48,6 @@ composer require thenbsp/wechat
 - 消息管理
     - [消息实体](/documentation/message-entity.md)
     - [消息事件](/documentation/message-event.md)
+    - [模板消息](/documentation/message-template.md)
 
 _其它功能开发中，表着急 ..._
