@@ -63,14 +63,14 @@ class EventManager
 
         switch( true ) {
             case ($this->_option['Event'] === 'subscribe') :
-                return array_key_exists('EventKey', $this->_option) ?
-                    Event::EVENT_QRCODE_UNSUBSCRIBE : Event::EVENT_SUBSCRIBE;
+                return array_key_exists('Ticket', $this->_option) ?
+                    Event::EVENT_QRCODE_SUBSCRIBE : Event::EVENT_SUBSCRIBE;
                 break;
             case ($this->_option['Event'] === 'unsubscribe') :
                 return Event::EVENT_UNSUBSCRIBE;
                 break;
             case ($this->_option['Event'] === 'SCAN') :
-                return Event::EVENT_QRCODE_SUBSCRIBE;
+                return Event::EVENT_QRCODE_SUBSCRIBED;
                 break;
             case ($this->_option['Event'] === 'LOCATION') :
                 return Event::EVENT_LOCATION;

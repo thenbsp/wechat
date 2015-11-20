@@ -61,6 +61,6 @@ class Request
      */
     public function __clone()
     {
-        throw new Exception('Unable to clone Request');
+        throw new \Exception('Unable to clone Request');
     }
 }

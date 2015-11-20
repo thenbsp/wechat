@@ -5,7 +5,7 @@ namespace Thenbsp\Wechat\Message\Event;
 use Thenbsp\Wechat\Message\Event;
 use Thenbsp\Wechat\Util\OptionValidator;
 
-class EventQrcodeUnsubscribe extends Event
+class EventQrcodeSubscribed extends Event
 {
     /**
      * 构造方法
@@ -20,6 +20,6 @@ class EventQrcodeUnsubscribe extends Event
 
         $validtated = $validator->validate($options);
 
-        parent::__construct($validtated);
+        $this->setOptions($validtated);
     }
 }

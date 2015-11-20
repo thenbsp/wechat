@@ -36,7 +36,7 @@ class Unifiedorder
     );
 
     /**
-     * 必填项目（不包括 sign）
+     * 必填选项（不包括 sign）
      */
     protected $required = array(
         'appid', 'mch_id', 'nonce_str', 'body', 'out_trade_no',
@@ -60,7 +60,6 @@ class Unifiedorder
         if( !$wechat->offsetExists('mchkey') ) {
             throw new \InvalidArgumentException('The required options "mch_key" are missing.');
         }
-
 
         $normalizer = function($options, $value) {
             if( ($value === 'JSAPI') && !isset($options['openid']) ) {

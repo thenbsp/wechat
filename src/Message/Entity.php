@@ -16,7 +16,7 @@ abstract class Entity extends Option
     {
         $options['MsgType'] = $this->getType();
 
-        parent::__construct($options);
+        $this->setOptions($options);
     }
 
     /**

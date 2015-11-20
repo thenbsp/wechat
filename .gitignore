@@ -1,3 +1,4 @@
 vendor/*
 example/Storage/*
+example/example.php
 composer.lock

@@ -20,6 +20,6 @@ class EventClick extends Event
 
         $validtated = $validator->validate($options);
 
-        parent::__construct($validtated);
+        $this->setOptions($validtated);
     }
 }

@@ -33,6 +33,7 @@ header('Content-Type: text/html; charset=utf-8');
  * 演示 URL（请换上相应 URL 地址）
  */
 define('EXAMPLE_URL', '----------------YOUR_BASE_URL------------------');
+
 /**
  * 配置公众号信息
  */

@@ -28,4 +28,9 @@ interface TemplateOptionInterface
      * 转为 JSON
      */
     public function toJSON();
+
+    /**
+     * 检测选项上否为空
+     */
+    public function isEmpty();
 }

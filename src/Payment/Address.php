@@ -46,10 +46,6 @@ class Address
         $params = array(
             'appid'         => $wechat['appid'],
             'url'           => $currentUrl,
-            /**
-             * 微支支付接口 BUG 说明：
-             * timeStamp 必需为 String 型，否则在 iOS 下会报 “调用支付jsapi缺少参数: $key0$ 错误” 错误
-             */
             'timestamp'     => (string) time(),
             'noncestr'      => uniqid(),
             'accesstoken'   => $this->accessToken['access_token']

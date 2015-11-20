@@ -19,7 +19,7 @@ abstract class Event extends Option
     const EVENT_SUBSCRIBE           = 'EventSubscribe';
     const EVENT_UNSUBSCRIBE         = 'EventUnsubscribe';  
     const EVENT_QRCODE_SUBSCRIBE    = 'EventQrcodeSubscribe';
-    const EVENT_QRCODE_UNSUBSCRIBE  = 'EventQrcodeUnsubscribe';
+    const EVENT_QRCODE_SUBSCRIBED   = 'EventQrcodeSubscribed';
     const EVENT_LOCATION            = 'EventLocation';
     const EVENT_CLICK               = 'EventClick';
     const EVENT_VIEW                = 'EventView';

@@ -73,9 +73,7 @@ class QrcodeResponse extends Unifiedorder
      */
     private static function _finalResponse(array $arrayResponse)
     {
-        $headers = array(
-            'Content-Type' => 'application/xml'
-        );
+        $headers = array('Content-Type'=>'application/xml');
 
         $response = new Response();
         $response->setHeaders($headers);

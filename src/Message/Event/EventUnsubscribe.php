@@ -13,13 +13,15 @@ class EventUnsubscribe extends Event
     public function __construct(array $options = array())
     {
         $required = array('ToUserName', 'FromUserName', 'CreateTime', 'MsgType', 'Event');
+        $defined    = array_merge($required, array('EventKey'));
 
         $validator = new OptionValidator();
         $validator
-            ->setRequired($required);
+            ->setRequired($required)
+            ->setDefined($defined);
 
         $validtated = $validator->validate($options);
 
-        parent::__construct($validtated);
+        $this->setOptions($validtated);
     }
 }
