@@ -23,6 +23,7 @@ class Wechat extends Option
                 file_exists($value['key'])) ) {
                 throw new \InvalidArgumentException('Authenticate_cert cert/key is invalid file');
             }
+            return $value;
         };
 
         $validator = new OptionValidator();
