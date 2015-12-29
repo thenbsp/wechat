@@ -1,6 +1,6 @@
 # 微信支付 - 现金红包
 
-现金红包需要配置商户 mchid、mchkey 和 证书：
+现金红包需要配置 mchid、mchkey 和 商户证书：
 
 ```php
 use Thenbsp\Wechat\Wechat;
@@ -67,4 +67,4 @@ Array
 )
 ```
 
-详细示例：[/documentation/payment-coupon-cash.md](/documentation/payment-coupon-cash.md)
+详细示例：[/example/payment-coupon-cash.php](/example/payment-coupon-cash.php)
