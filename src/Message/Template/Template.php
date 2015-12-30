@@ -5,7 +5,7 @@ namespace Thenbsp\Wechat\Message\Template;
 use Thenbsp\Wechat\Util\Http;
 use Thenbsp\Wechat\Util\Serialize;
 use Thenbsp\Wechat\AccessToken;
-use Thenbsp\Wechat\Message\Template\TemplateOption;
+use Thenbsp\Wechat\Message\Template\TemplateOptionInterface;
 
 class Template
 {
@@ -36,7 +36,6 @@ class Template
 
     /**
      * 选项参数
-     * Thenbsp\Wechat\Message\TemplateOption
      */
     protected $options;
 
@@ -99,7 +98,7 @@ class Template
     /**
      * 设置选项参数
      */
-    public function setOptions(TemplateOption $options)
+    public function setOptions(TemplateOptionInterface $options)
     {
         $this->options = $options;
     }
