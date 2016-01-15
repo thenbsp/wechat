@@ -69,6 +69,16 @@ class AccessToken
 
         return $value['access_token'];
     }
+    
+    /**
+     * 从缓存中清除 AccessToken
+     */
+    public function removeAccessToken()
+    {
+        $key = $this->_getCacheName();
+        
+        return $this->cache->delete($key);
+    }
 
     /**
      * 获取 AccessToken（从 API 获取）
