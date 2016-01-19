@@ -30,6 +30,8 @@ class EventManager
         if( !empty($content) ) {
             $this->_option = Serialize::decode($content, 'xml');
         }
+        
+        $this->request = $request;
     }
 
     /**
