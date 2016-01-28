@@ -163,6 +163,6 @@ class Qrcode implements CacheBridgeInterface
      */
     public function getCacheId()
     {
-        return implode('_', array($this->type, $this->getSceneKey(), $this->scene));
+        return implode('_', array($this->accessToken['appid'], $this->type, $this->getSceneKey(), $this->scene));
     }
 }

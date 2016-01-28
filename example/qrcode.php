@@ -9,11 +9,12 @@ $qrcode1 = new Qrcode($accessToken, 'QR_SCENE', 111);
 $qrcode2 = new Qrcode($accessToken, 'QR_LIMIT_SCENE', 111);
 $qrcode3 = new Qrcode($accessToken, 'QR_LIMIT_STR_SCENE', 'thenbsp');
 
-// 推荐使用缓存
-// $qrcode1->setCacheDriver($cacheDriver);
-// $qrcode2->setCacheDriver($cacheDriver);
-// $qrcode3->setCacheDriver($cacheDriver);
+// 推荐使用缓存（可选）
+$qrcode1->setCacheDriver($cacheDriver);
+$qrcode2->setCacheDriver($cacheDriver);
+$qrcode3->setCacheDriver($cacheDriver);
 
+// 失败时抛出 QrcodeException
 try {
     echo sprintf('<h1>临时二维码</h1><img src="%s" />', $qrcode1->getResourceUrl());
     echo '<br />';
