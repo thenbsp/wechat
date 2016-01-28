@@ -1,4 +1,3 @@
 vendor/*
-example/Storage/*
-example/example.php
+example/cache/*
 composer.lock
