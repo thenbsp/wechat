@@ -84,7 +84,7 @@ class Http
     }
 
     /**
-     * Request Body
+     * Request Json Body
      */
     public function withBody(array $body)
     {
@@ -93,6 +93,9 @@ class Http
         return $this;
     }
 
+    /**
+     * Request Xml Body
+     */
     public function withXmlBody(array $body)
     {
         $this->body = $this->serializer->xmlEncode($body);

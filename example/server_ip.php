@@ -7,7 +7,7 @@ use Thenbsp\Wechat\Wechat\Exception\ServerIpException;
 
 $serverIp = new ServerIp($accessToken);
 
-// 如果需要缓存数据，可调置缓存驱动
+// 推荐使用缓存
 // $serverIp->setCacheDriver($cacheDriver);
 
 try {

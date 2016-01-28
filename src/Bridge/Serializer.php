@@ -18,7 +18,7 @@ class Serializer
     protected $jsonEncoder;
 
     /**
-     * __construct
+     * initialize
      */
     public function __construct()
     {

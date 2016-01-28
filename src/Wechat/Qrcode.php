@@ -2,7 +2,6 @@
 
 namespace Thenbsp\Wechat\Wechat;
 
-use Doctrine\Common\Cache\Cache;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Bridge\CacheBridgeTrait;
 use Thenbsp\Wechat\Bridge\CacheBridgeInterface;
@@ -27,16 +26,11 @@ class Qrcode implements CacheBridgeInterface
     const QRCODE_URL = 'https://mp.weixin.qq.com/cgi-bin/showqrcode';
 
     /**
-     * list of type
+     * 二维码类型
      */
     const QR_SCENE              = 'QR_SCENE';
     const QR_LIMIT_SCENE        = 'QR_LIMIT_SCENE';
     const QR_LIMIT_STR_SCENE    = 'QR_LIMIT_STR_SCENE';
-
-    /**
-     * 默认过期时间
-     */
-    const DEFAULT_EXPIRES = 2592000;
 
     /**
      * Thenbsp\Wechat\AccessToken\AccessToken
@@ -44,29 +38,24 @@ class Qrcode implements CacheBridgeInterface
     protected $accessToken;
 
     /**
-     * Type of Qrcode
+     * 二维码类型
      */
     protected $type;
 
     /**
-     * Qrcode scene value
+     * 二维码场景值
      */
     protected $scene;
 
     /**
-     * Qrcode scene key
-     */
-    protected $sceneKey;
-
-    /**
-     * Qrcode scene expire of seconds
+     * 二维码有效期（临时二维码可用）
      */
     protected $expireSeconds;
 
     /**
      * 构造方法
      */
-    public function __construct(AccessToken $accessToken, $type, $scene, $expire = self::DEFAULT_EXPIRES)
+    public function __construct(AccessToken $accessToken, $type, $scene, $expire = 2592000)
     {
         $constraint = array(
             static::QR_SCENE            => 'integer',
@@ -89,7 +78,6 @@ class Qrcode implements CacheBridgeInterface
 
         $this->type         = $type;
         $this->scene        = $scene;
-        $this->sceneKey     = (is_int($scene) ? 'scene_id' : 'scene_str');
         $this->expireSeconds= $expire;
         $this->accessToken  = $accessToken;
     }
@@ -133,15 +121,23 @@ class Qrcode implements CacheBridgeInterface
         $options = array(
             'action_name'   => $this->type,
             'action_info'   => array(
-                'scene'     => array($this->sceneKey => $this->scene)
+                'scene'     => array($this->getSceneKey()=>$this->scene)
             )
         );
 
         if( $options['action_name'] === static::QR_SCENE ) {
-            $options['expire_seconds'] = (int) $this->expireSeconds;
+            $options['expire_seconds'] = $this->expireSeconds;
         }
 
         return $options;
+    }
+
+    /**
+     * 永久二维码因场景值类型不同，发送的 Key 也不同
+     */
+    public function getSceneKey()
+    {
+        return  (is_int($this->scene) ? 'scene_id' : 'scene_str');
     }
 
     /**
@@ -167,6 +163,6 @@ class Qrcode implements CacheBridgeInterface
      */
     public function getCacheId()
     {
-        return implode('_', array($this->type, $this->sceneKey, $this->scene));
+        return implode('_', array($this->type, $this->getSceneKey(), $this->scene));
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Thenbsp\Wechat\Wechat;
 
-use Doctrine\Common\Cache\Cache;
 use Doctrine\Common\Collections\ArrayCollection;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Bridge\CacheBridgeTrait;
