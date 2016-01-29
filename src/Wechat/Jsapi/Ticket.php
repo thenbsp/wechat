@@ -23,7 +23,7 @@ class Ticket implements CacheBridgeInterface
     /**
      * Jsapi 票据类型
      */
-    const JSAPI_TICKET_TYPE = 'jsapi';
+    const TICKET_TYPE = 'jsapi';
 
     /**
      * Thenbsp\Wechat\AccessToken\AccessToken
@@ -72,7 +72,7 @@ class Ticket implements CacheBridgeInterface
      */
     public function getTicketResponse()
     {
-        $query = array('type' => static::JSAPI_TICKET_TYPE);
+        $query = array('type' => static::TICKET_TYPE);
 
         $response = Http::request('GET', static::JSAPI_TICKET)
             ->withAccessToken($this->accessToken)

@@ -9,11 +9,6 @@ use Thenbsp\Wechat\Wechat\Jsapi\Ticket;
 class Jsapi
 {
     /**
-     * Thenbsp\Wechat\Bridge\Serializer
-     */
-    protected $serializer;
-
-    /**
      * Thenbsp\Wechat\Wechat\Jsapi\Ticket
      */
     protected $ticket;
@@ -46,8 +41,7 @@ class Jsapi
      */
     public function __construct(Ticket $ticket)
     {
-        $this->ticket       = $ticket;
-        $this->serializer   = new Serializer;
+        $this->ticket = $ticket;
     }
 
     /**
@@ -84,10 +78,10 @@ class Jsapi
      */
     public function getConfig($asArray = false)
     {
-        $ticket         = $this->ticket->getTicketString();
         $accessToken    = $this->ticket->getAccessToken();
+        $ticket         = $this->ticket->getTicketString();
 
-        $query = array(
+        $options = array(
             'jsapi_ticket'  => $ticket,
             'timestamp'     => Util::getTimestamp(),
             'url'           => Util::getCurrentUrl(),
@@ -95,24 +89,26 @@ class Jsapi
         );
 
         // 按 ASCII 码排序
-        ksort($query);
+        ksort($options);
 
-        $signature = http_build_query($query);
-        $signature = urldecode($signature);
-        $signature = sha1($signature);
-
-        $config = array(
+        $signature = sha1(urldecode(http_build_query($options)));
+        $configize = array(
             'appId'     => $accessToken['appid'],
-            'nonceStr'  => $query['noncestr'],
-            'timestamp' => $query['timestamp'],
+            'nonceStr'  => $options['noncestr'],
+            'timestamp' => $options['timestamp'],
             'signature' => $signature,
-            'jsApiList' => $this->api
+            'jsApiList' => $this->api,
+            'debug'     => (bool) $this->debug
         );
 
-        if( $this->debug ) {
-            $config['debug'] = true;
-        }
+        return $asArray ? $configize : (new Serializer)->jsonEncode($configize);
+    }
 
-        return $asArray ? $config : $this->serializer->jsonEncode($config);
+    /**
+     * 输出对象
+     */
+    public function __toString()
+    {
+        return $this->getConfig();
     }
 }

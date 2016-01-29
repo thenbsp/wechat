@@ -2,13 +2,14 @@
 
 require './example.php';
 
+use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Wechat\Jsapi;
 use Thenbsp\Wechat\Wechat\Jsapi\Ticket;
 
 /**
  * 只能在微信中打开
  */
-if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') === false) {
+if ( Util::isWechat() ) {
     exit('请在微信中打开');
 }
 
@@ -31,8 +32,6 @@ $jsapi
     ->addApi('onMenuShareAppMessage');
 // 调试模式
 $jsapi->enableDebug();
-// 生成 JSON
-$configJSON = $jsapi->getConfig();
 
 ?>
 <!DOCTYPE html>
@@ -48,7 +47,7 @@ $configJSON = $jsapi->getConfig();
 
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
-wx.config(<?php echo $configJSON; ?>);
+wx.config(<?php echo $jsapi; ?>);
 </script>
 </body>
 </html>
