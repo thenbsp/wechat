@@ -92,7 +92,7 @@ class Jsapi
         ksort($options);
 
         $signature = sha1(urldecode(http_build_query($options)));
-        $configize = array(
+        $configure = array(
             'appId'     => $accessToken['appid'],
             'nonceStr'  => $options['noncestr'],
             'timestamp' => $options['timestamp'],
@@ -101,7 +101,7 @@ class Jsapi
             'debug'     => (bool) $this->debug
         );
 
-        return $asArray ? $configize : (new Serializer)->jsonEncode($configize);
+        return $asArray ? $configure : (new Serializer)->jsonEncode($configure);
     }
 
     /**
