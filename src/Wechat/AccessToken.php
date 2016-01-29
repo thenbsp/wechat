@@ -30,7 +30,7 @@ class AccessToken extends ArrayCollection implements CacheBridgeInterface
     }
 
     /**
-     * 获取 AccessToken（调用缓存，返回 Token String）
+     * 获取 AccessToken（调用缓存，返回 String）
      */
     public function getTokenString()
     {
