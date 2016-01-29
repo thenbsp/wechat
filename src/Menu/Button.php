@@ -54,11 +54,11 @@ class Button implements ButtonInterface
      */
     public function getData()
     {
-        $data = array_merge(array(
+        $data = array(
             'name'  => $this->name,
             'type'  => $this->type
-        ), $this->value);
+        );
 
-        return $data;
+        return array_merge($data, $this->value);
     }
 }
