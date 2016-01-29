@@ -2,9 +2,8 @@
 
 namespace Thenbsp\Wechat\Wechat;
 
-use Doctrine\Common\Cache\Cache;
 use Thenbsp\Wechat\Bridge\Http;
-use Thenbsp\Wechat\Bridge\CacheBridgeTrait;
+use Thenbsp\Wechat\Bridge\CacheBridge;
 use Thenbsp\Wechat\Bridge\CacheBridgeInterface;
 use Thenbsp\Wechat\Wechat\AccessToken;
 use Thenbsp\Wechat\Wechat\Exception\ServerIpException;
@@ -14,7 +13,7 @@ class ServerIp implements CacheBridgeInterface
     /**
      * Cache Bridge
      */
-    use CacheBridgeTrait;
+    use CacheBridge;
     
     /**
      * http://mp.weixin.qq.com/wiki/4/41ef0843d6e108cf6b5649480207561c.html
@@ -39,9 +38,7 @@ class ServerIp implements CacheBridgeInterface
      */
     public function getIps($cacheLifeTime = 86400)
     {
-        $cacheId = $this->getCacheId();
-
-        if( $this->cacheDriver && $data = $this->cacheDriver->fetch($cacheId)) {
+        if( $data = $this->getFromCache() ) {
             return $data['ip_list'];
         }
 
@@ -53,9 +50,7 @@ class ServerIp implements CacheBridgeInterface
             throw new ServerIpException($response['errmsg'], $response['errcode']);
         }
 
-        if( $this->cacheDriver ) {
-            $this->cacheDriver->save($cacheId, $response, $cacheLifeTime);
-        }
+        $this->saveToCache($response, $cacheLifeTime);
 
         return $response['ip_list'];
     }

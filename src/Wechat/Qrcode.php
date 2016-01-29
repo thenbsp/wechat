@@ -3,7 +3,7 @@
 namespace Thenbsp\Wechat\Wechat;
 
 use Thenbsp\Wechat\Bridge\Http;
-use Thenbsp\Wechat\Bridge\CacheBridgeTrait;
+use Thenbsp\Wechat\Bridge\CacheBridge;
 use Thenbsp\Wechat\Bridge\CacheBridgeInterface;
 use Thenbsp\Wechat\Wechat\AccessToken;
 use Thenbsp\Wechat\Wechat\Exception\QrcodeException;
@@ -13,7 +13,7 @@ class Qrcode implements CacheBridgeInterface
     /**
      * Cache Bridge
      */
-    use CacheBridgeTrait;
+    use CacheBridge;
 
     /**
      * http://mp.weixin.qq.com/wiki/18/167e7d94df85d8389df6c94a7a8f78ba.html
@@ -50,7 +50,7 @@ class Qrcode implements CacheBridgeInterface
     /**
      * 二维码有效期（临时二维码可用）
      */
-    protected $expireSeconds;
+    protected $expire;
 
     /**
      * 构造方法
@@ -78,7 +78,7 @@ class Qrcode implements CacheBridgeInterface
 
         $this->type         = $type;
         $this->scene        = $scene;
-        $this->expireSeconds= $expire;
+        $this->expire       = $expire;
         $this->accessToken  = $accessToken;
     }
 
@@ -87,9 +87,7 @@ class Qrcode implements CacheBridgeInterface
      */
     public function getTicket()
     {
-        $cacheId = $this->getCacheId();
-
-        if( $this->cacheDriver && $data = $this->cacheDriver->fetch($cacheId) ) {
+        if( $data = $this->getFromCache() ) {
             return $data;
         }
 
@@ -102,13 +100,11 @@ class Qrcode implements CacheBridgeInterface
             throw new QrcodeException($response['errmsg'], $response['errcode']);
         }
 
-        $lifeTime = array_key_exists('expire_seconds', $response)
+        $expire = array_key_exists('expire_seconds', $response)
             ? $response['expire_seconds']
             : 0;
 
-        if( $this->cacheDriver ) {
-            $this->cacheDriver->save($cacheId, $response, $lifeTime);
-        }
+        $this->saveToCache($response, $expire);
 
         return $response;
     }
@@ -126,7 +122,7 @@ class Qrcode implements CacheBridgeInterface
         );
 
         if( $options['action_name'] === static::QR_SCENE ) {
-            $options['expire_seconds'] = $this->expireSeconds;
+            $options['expire_seconds'] = $this->expire;
         }
 
         return $options;

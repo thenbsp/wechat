@@ -46,7 +46,7 @@ class Serializer
     public function jsonDecode($data, array $context = array())
     {
         $defaults = array(
-             'json_decode_associative'      => true,
+            'json_decode_associative'       => true,
             'json_decode_recursion_depth'   => 512,
             'json_decode_options'           => 0,
         );

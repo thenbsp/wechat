@@ -10,9 +10,9 @@ $qrcode2 = new Qrcode($accessToken, 'QR_LIMIT_SCENE', 111);
 $qrcode3 = new Qrcode($accessToken, 'QR_LIMIT_STR_SCENE', 'thenbsp');
 
 // 推荐使用缓存（可选）
-$qrcode1->setCacheDriver($cacheDriver);
-$qrcode2->setCacheDriver($cacheDriver);
-$qrcode3->setCacheDriver($cacheDriver);
+$qrcode1->setCacheBridge($cache);
+$qrcode2->setCacheBridge($cache);
+$qrcode3->setCacheBridge($cache);
 
 // 失败时抛出 QrcodeException
 try {

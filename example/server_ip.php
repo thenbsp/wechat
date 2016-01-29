@@ -6,9 +6,8 @@ use Thenbsp\Wechat\Wechat\ServerIp;
 use Thenbsp\Wechat\Wechat\Exception\ServerIpException;
 
 $serverIp = new ServerIp($accessToken);
-
 // 推荐使用缓存（可选）
-$serverIp->setCacheDriver($cacheDriver);
+$serverIp->setCacheBridge($cache);
 
 // 失败时抛出 ServerIpException
 try {
