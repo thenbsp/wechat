@@ -69,7 +69,7 @@ class Client
     }
 
     /**
-     * 获取授权 URL（不知道为啥，response_type 如果放在 redirect_uri 前面就授权页面就会不显示）
+     * 获取授权 URL（不知道为啥，response_type 如果放在 redirect_uri 前面授权页面就显示空白）
      */
     public function getAuthorizeUrl()
     {

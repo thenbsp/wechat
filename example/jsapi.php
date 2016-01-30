@@ -20,7 +20,7 @@ if ( Util::isWechat() ) {
  */
 $ticket = new Ticket($accessToken);
 // 推荐使用缓存（可选）
-$ticket->setCacheBridge($cache);
+$ticket->setCache($cache);
 
 /**
  * 第二步：生成 Jsapi 配置文件

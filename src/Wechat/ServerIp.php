@@ -3,17 +3,16 @@
 namespace Thenbsp\Wechat\Wechat;
 
 use Thenbsp\Wechat\Bridge\Http;
-use Thenbsp\Wechat\Bridge\CacheBridge;
-use Thenbsp\Wechat\Bridge\CacheBridgeInterface;
+use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Wechat\AccessToken;
 use Thenbsp\Wechat\Wechat\Exception\ServerIpException;
 
-class ServerIp implements CacheBridgeInterface
+class ServerIp
 {
     /**
-     * Cache Bridge
+     * Cache Trait
      */
-    use CacheBridge;
+    use CacheTrait;
     
     /**
      * http://mp.weixin.qq.com/wiki/4/41ef0843d6e108cf6b5649480207561c.html
@@ -38,7 +37,9 @@ class ServerIp implements CacheBridgeInterface
      */
     public function getIps($cacheLifeTime = 86400)
     {
-        if( $data = $this->getFromCache() ) {
+        $cacheId = $this->getCacheId();
+
+        if( $this->cache && $data = $this->cache->fetch($cacheId) ) {
             return $data['ip_list'];
         }
 
@@ -50,9 +51,21 @@ class ServerIp implements CacheBridgeInterface
             throw new ServerIpException($response['errmsg'], $response['errcode']);
         }
 
-        $this->saveToCache($response, $cacheLifeTime);
+        if( $this->cache ) {
+            $this->cache->save($cacheId, $response, $cacheLifeTime);
+        }
 
         return $response['ip_list'];
+    }
+
+    /**
+     * 从缓存中清除
+     */
+    public function clearFromCache()
+    {
+        return $this->cache
+            ? $this->cache->delete($this->getCacheId())
+            : false;
     }
 
     /**

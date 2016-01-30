@@ -5,15 +5,14 @@ namespace Thenbsp\Wechat\Wechat\Jsapi;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Wechat\AccessToken;
 use Thenbsp\Wechat\Wechat\Exception\JsapiTicketException;
-use Thenbsp\Wechat\Bridge\CacheBridge;
-use Thenbsp\Wechat\Bridge\CacheBridgeInterface;
+use Thenbsp\Wechat\Bridge\CacheTrait;
 
-class Ticket implements CacheBridgeInterface
+class Ticket
 {
     /**
-     * Cache Bridge
+     * Cache Trait
      */
-    use CacheBridge;
+    use CacheTrait;
 
     /**
      * http://mp.weixin.qq.com/wiki/11/74ad127cc054f6b80759c40f77ec03db.html（附录 1）
@@ -51,7 +50,9 @@ class Ticket implements CacheBridgeInterface
      */
     public function getTicketString()
     {
-        if( $data = $this->getFromCache() ) {
+        $cacheId = $this->getCacheId();
+
+        if( $this->cache && $data = $this->cache->fetch($cacheId) ) {
             return $data['ticket'];
         }
 
@@ -62,7 +63,9 @@ class Ticket implements CacheBridgeInterface
             throw new JsapiTicketException($response['errmsg'], $response['errcode']);
         }
 
-        $this->saveToCache($response, $response['expires_in']);
+        if( $this->cache ) {
+            $this->cache->save($cacheId, $response, $response['expires_in']);
+        }
 
         return $response['ticket'];
     }
@@ -80,6 +83,16 @@ class Ticket implements CacheBridgeInterface
             ->send();
 
         return $response;
+    }
+
+    /**
+     * 从缓存中清除
+     */
+    public function clearFromCache()
+    {
+        return $this->cache
+            ? $this->cache->delete($this->getCacheId())
+            : false;
     }
 
     /**

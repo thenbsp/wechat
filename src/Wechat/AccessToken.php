@@ -2,18 +2,17 @@
 
 namespace Thenbsp\Wechat\Wechat;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Thenbsp\Wechat\Bridge\Http;
-use Thenbsp\Wechat\Bridge\CacheBridge;
-use Thenbsp\Wechat\Bridge\CacheBridgeInterface;
+use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Wechat\Exception\AccessTokenException;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class AccessToken extends ArrayCollection implements CacheBridgeInterface
+class AccessToken extends ArrayCollection
 {
     /**
-     * Cache Bridge
+     * Cache Trait
      */
-    use CacheBridge;
+    use CacheTrait;
 
     /**
      * http://mp.weixin.qq.com/wiki/14/9f9c82c1af308e3b14ba9b973f99a8ba.html
@@ -34,7 +33,9 @@ class AccessToken extends ArrayCollection implements CacheBridgeInterface
      */
     public function getTokenString()
     {
-        if( $data = $this->getFromCache() ) {
+        $cacheId = $this->getCacheId();
+
+        if( $this->cache && $data = $this->cache->fetch($cacheId) ) {
             return $data['access_token'];
         }
 
@@ -44,7 +45,9 @@ class AccessToken extends ArrayCollection implements CacheBridgeInterface
             throw new AccessTokenException($response['errmsg'], $response['errcode']);
         }
 
-        $this->saveToCache($response, $response['expires_in']);
+        if( $this->cache ) {
+            $this->cache->save($cacheId, $response, $response['expires_in']);
+        }
 
         return $response['access_token'];
     }
@@ -65,6 +68,16 @@ class AccessToken extends ArrayCollection implements CacheBridgeInterface
             ->send();
 
         return $response;
+    }
+
+    /**
+     * 从缓存中清除
+     */
+    public function clearFromCache()
+    {
+        return $this->cache
+            ? $this->cache->delete($this->getCacheId())
+            : false;
     }
 
     /**
