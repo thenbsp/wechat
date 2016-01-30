@@ -4,7 +4,6 @@ require './example.php';
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Wechat\Jsapi;
-use Thenbsp\Wechat\Wechat\Jsapi\Ticket;
 
 /**
  * 只能在微信中打开

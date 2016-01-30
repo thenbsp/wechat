@@ -2,7 +2,7 @@
 
 namespace Thenbsp\Wechat\Menu;
 
-class ButtonCollection implements ButtonCollectionInterface
+class ButtonCollection implements ButtonInterface, ButtonCollectionInterface
 {
     /**
      * 子菜单不能超过 5 个

@@ -2,7 +2,7 @@
 
 namespace Thenbsp\Wechat\Menu;
 
-interface ButtonCollectionInterface extends ButtonInterface
+interface ButtonCollectionInterface
 {
     /**
      * 添加子菜单
