@@ -83,7 +83,7 @@ class Ticket
     }
 
     /**
-     * 获取 Jsapi 票据（调用缓存，返回 String）
+     * 获取 Qrcode 票据（调用缓存，返回 String）
      */
     public function getTicketString()
     {
@@ -111,7 +111,7 @@ class Ticket
     }
 
     /**
-     * 获取 Jsapi 票据（不缓存，返回原始数据）
+     * 获取 Qrcode 票据（不缓存，返回原始数据）
      */
     public function getTicketResponse()
     {
@@ -140,6 +140,16 @@ class Ticket
         }
 
         return $options;
+    }
+
+    /**
+     * 从缓存中清除
+     */
+    public function clearFromCache()
+    {
+        return $this->cache
+            ? $this->cache->delete($this->getCacheId())
+            : false;
     }
 
     /**

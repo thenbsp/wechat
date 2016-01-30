@@ -15,17 +15,11 @@ if ( Util::isWechat() ) {
 
 // 提示：使用前必需登录微信公众平台->公众号设置->功能设置->JS接口安全域名 里设置当前域名
 
-/**
- * 第一步：定义 Jsapi Ticket 对象
- */
-$ticket = new Ticket($accessToken);
+// 生成 Jsapi 配置文件
+$jsapi = new Jsapi($accessToken);
 // 推荐使用缓存（可选）
-$ticket->setCache($cache);
+$jsapi->setCache($cache);
 
-/**
- * 第二步：生成 Jsapi 配置文件
- */
-$jsapi = new Jsapi($ticket);
 // 注入接口
 $jsapi
     ->addApi('onMenuShareTimeline')

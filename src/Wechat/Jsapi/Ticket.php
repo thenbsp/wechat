@@ -3,9 +3,9 @@
 namespace Thenbsp\Wechat\Wechat\Jsapi;
 
 use Thenbsp\Wechat\Bridge\Http;
+use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Wechat\AccessToken;
 use Thenbsp\Wechat\Wechat\Exception\JsapiTicketException;
-use Thenbsp\Wechat\Bridge\CacheTrait;
 
 class Ticket
 {
@@ -25,7 +25,7 @@ class Ticket
     const TICKET_TYPE = 'jsapi';
 
     /**
-     * Thenbsp\Wechat\AccessToken\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
 

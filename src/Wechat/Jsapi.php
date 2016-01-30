@@ -3,11 +3,23 @@
 namespace Thenbsp\Wechat\Wechat;
 
 use Thenbsp\Wechat\Bridge\Util;
+use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Bridge\Serializer;
 use Thenbsp\Wechat\Wechat\Jsapi\Ticket;
+use Thenbsp\Wechat\Wechat\AccessToken;
 
 class Jsapi
 {
+    /**
+     * Cache Trait
+     */
+    use CacheTrait;
+
+    /**
+     * Thenbsp\Wechat\Wechat\AccessToken
+     */
+    protected $accessToken;
+
     /**
      * Thenbsp\Wechat\Wechat\Jsapi\Ticket
      */
@@ -39,9 +51,16 @@ class Jsapi
     /**
      * 构造方法
      */
-    public function __construct(Ticket $ticket)
+    public function __construct(AccessToken $accessToken)
     {
-        $this->ticket = $ticket;
+        $ticket = new Ticket($accessToken);
+
+        if( $this->cache ) {
+            $ticket->setCache($this->cache);
+        }
+
+        $this->ticket       = $ticket;
+        $this->accessToken  = $accessToken;
     }
 
     /**
@@ -53,12 +72,15 @@ class Jsapi
             foreach( $apis AS $api ) {
                 $this->addApi($api);
             }
-        } else {
-            if( !in_array($apis, $this->apiValids, true) ) {
-                throw new \InvalidArgumentException(sprintf('Invalid Api: %s', $apis));
-            }
-            array_push($this->api, $apis);
         }
+
+        $apiName = (string) $apis;
+
+        if( !in_array($apiName, $this->apiValids, true) ) {
+            throw new \InvalidArgumentException(sprintf('Invalid Api: %s', $apiName));
+        }
+
+        array_push($this->api, $apiName);
 
         return $this;
     }
@@ -78,11 +100,8 @@ class Jsapi
      */
     public function getConfig($asArray = false)
     {
-        $accessToken    = $this->ticket->getAccessToken();
-        $ticket         = $this->ticket->getTicketString();
-
         $options = array(
-            'jsapi_ticket'  => $ticket,
+            'jsapi_ticket'  => $this->ticket->getTicketString(),
             'timestamp'     => Util::getTimestamp(),
             'url'           => Util::getCurrentUrl(),
             'noncestr'      => uniqid()
@@ -93,7 +112,7 @@ class Jsapi
 
         $signature = sha1(urldecode(http_build_query($options)));
         $configure = array(
-            'appId'     => $accessToken['appid'],
+            'appId'     => $this->accessToken['appid'],
             'nonceStr'  => $options['noncestr'],
             'timestamp' => $options['timestamp'],
             'signature' => $signature,
@@ -102,6 +121,14 @@ class Jsapi
         );
 
         return $asArray ? $configure : (new Serializer)->jsonEncode($configure);
+    }
+
+    /**
+     * Jsapi Ticket 对象
+     */
+    public function getTicket()
+    {
+        return $this->ticket;
     }
 
     /**
