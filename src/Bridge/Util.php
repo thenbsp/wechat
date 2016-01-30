@@ -30,4 +30,26 @@ class Util
 
         return $protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     }
+
+    /**
+     * 获取客户端 IP
+     */
+    public static function getClientIp()
+    {
+        $headers = function_exists('apache_request_headers')
+            ? apache_request_headers()
+            : $_SERVER;
+
+        return isset($headers['REMOTE_ADDR']) ? $headers['REMOTE_ADDR'] : '0.0.0.0';
+    }
+
+    /**
+     * 获取随机字符
+     */
+    public static function getRandomString($length = 16)
+    {
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        return substr(str_shuffle(str_repeat($pool, ceil($length / strlen($pool)))), 0, $length);
+    }
 }

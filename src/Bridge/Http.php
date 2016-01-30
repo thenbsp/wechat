@@ -149,6 +149,6 @@ class Http
     {
         $xml = @simplexml_load_string($data);
 
-        return ($xml instanceof SimpleXmlElement) ? $xml : false;
+        return ($xml instanceof \SimpleXmlElement);
     }
 }
