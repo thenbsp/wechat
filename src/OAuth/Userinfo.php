@@ -5,8 +5,9 @@ namespace Thenbsp\Wechat\OAuth;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\OAuth\AccessToken;
 use Thenbsp\Wechat\OAuth\Exception\OAuthUserException;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class User
+class Userinfo extends ArrayCollection
 {
     /**
      * 网页授权获取用户信息
@@ -14,30 +15,17 @@ class User
     const USERINFO = 'https://api.weixin.qq.com/sns/userinfo';
 
     /**
-     * Thenbsp\Wechat\OAuth\AccessToken
-     */
-    protected $accessToken;
-
-    /**
      * 构造方法
      */
-    public function __construct(AccessToken $accessToken)
+    public function __construct(AccessToken $accessToken, $lang = 'zh_CN')
     {
-        $this->accessToken = $accessToken;
-    }
-
-    /**
-     * 获取用户信息
-     */
-    public function getProfile($lang = 'zh_CN')
-    {
-        if( !$this->accessToken->isValid() ) {
-            $this->accessToken->refresh();
+        if( !$accessToken->isValid() ) {
+            $accessToken->refresh();
         }
 
         $query = array(
-            'access_token'  => $this->accessToken['access_token'],
-            'openid'        => $this->accessToken['openid'],
+            'access_token'  => $accessToken['access_token'],
+            'openid'        => $accessToken['openid'],
             'lang'          => $lang
         );
 
@@ -50,6 +38,6 @@ class User
             throw new OAuthUserException($response['errmsg'], $response['errcode']);
         }
 
-        return $response;
+        parent::__construct($response);
     }
 }

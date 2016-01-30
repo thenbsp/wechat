@@ -4,6 +4,7 @@ namespace Thenbsp\Wechat\OAuth;
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\Http;
+use Thenbsp\Wechat\OAuth\Exception\OAuthUserException;
 use Thenbsp\Wechat\OAuth\Exception\AccessTokenException;
 
 class Client
@@ -34,9 +35,25 @@ class Client
      */
     protected $appsecret;
 
+    /**
+     * scope
+     */
     protected $scope;
+
+    /**
+     * state
+     */
     protected $state;
+
+    /**
+     * redirect url
+     */
     protected $redirectUri;
+
+    /**
+     * 当前已授权 AccessToken
+     */
+    protected $accessToken;
 
     /**
      * 构造方法
@@ -55,6 +72,9 @@ class Client
         $this->scope = $scope;
     }
 
+    /**
+     * 设置 state
+     */
     public function setState($state)
     {
         $this->state = $state;
@@ -105,6 +125,18 @@ class Client
             throw new AccessTokenException($response['errmsg'], $response['errcode']);
         }
 
-        return new AccessToken($this->appid, $response);
+        return ($this->accessToken = new AccessToken($this->appid, $response));
+    }
+
+    /**
+     * 获取已授权用户信息
+     */
+    public function getUserinfo()
+    {
+        if( !$this->accessToken ) {
+            throw new OAuthUserException('Invalid User AccessToken');
+        }
+
+        return new Userinfo($this->accessToken);
     }
 }
