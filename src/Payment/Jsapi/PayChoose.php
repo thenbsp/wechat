@@ -4,7 +4,7 @@ namespace Thenbsp\Wechat\Payment\Jsapi;
 
 use Thenbsp\Wechat\Bridge\Util;
 
-class PayChoose
+class PayChoose extends ConfigGenerator
 {
     /**
      * 生成配置文件
