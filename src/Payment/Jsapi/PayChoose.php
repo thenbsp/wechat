@@ -9,7 +9,7 @@ class PayChoose
     /**
      * 生成配置文件
      */
-    public function generateConfig($asArray = false)
+    public function generateConfig()
     {
         $response   = $this->unifiedorder->getResponse();
         $key        = $this->unifiedorder->getKey();

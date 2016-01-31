@@ -21,7 +21,7 @@ abstract class ConfigGenerator
     }
 
     /**
-     * 生成配置文件
+     * 获取配置文件
      */
     public function getConfig($asArray = false)
     {
