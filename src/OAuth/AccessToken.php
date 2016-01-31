@@ -48,8 +48,7 @@ class AccessToken extends ArrayCollection
             ->withQuery($query)
             ->send();
 
-        if( array_key_exists('errcode', $response)
-            && ($response['errcode'] != 0) ) {
+        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
             throw new AccessTokenException($response['errmsg'], $response['errcode']);
         }
 

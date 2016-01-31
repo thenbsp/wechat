@@ -41,8 +41,7 @@ class ShortUrl
             ->withBody($options)
             ->send();
 
-        if( array_key_exists('errcode', $response)
-            && ($response['errcode'] != 0) ) {
+        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
             throw new ShortUrlException($response['errmsg'], $response['errcode']);
         }
 

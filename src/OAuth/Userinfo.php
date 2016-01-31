@@ -33,8 +33,7 @@ class Userinfo extends ArrayCollection
             ->withQuery($query)
             ->send();
 
-        if( array_key_exists('errcode', $response)
-            && ($response['errcode'] != 0) ) {
+        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
             throw new OAuthUserException($response['errmsg'], $response['errcode']);
         }
 

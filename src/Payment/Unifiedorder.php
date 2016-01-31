@@ -80,13 +80,11 @@ class Unifiedorder extends ArrayCollection
             ->withXmlBody($options)
             ->send();
 
-        if( array_key_exists('result_code', $response)
-            && ($response['result_code'] === 'FAIL') ) {
+        if( $response['result_code'] === 'FAIL' ) {
             throw new \Exception($response['err_code'].': '.$response['err_code_des']);
         }
 
-        if( array_key_exists('return_code', $response)
-            && $response['return_code'] === 'FAIL' ) {
+        if( $response['return_code'] === 'FAIL' ) {
             throw new \Exception($response['return_code'].': '.$response['return_msg']);
         }
 
