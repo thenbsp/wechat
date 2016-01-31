@@ -2,22 +2,40 @@
 
 namespace Thenbsp\Wechat\Payment\Jsapi;
 
+use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\Serializer;
 use Thenbsp\Wechat\Payment\Unifiedorder;
+use Doctrine\Common\Collections\ArrayCollection;
 
-abstract class ConfigGenerator
+abstract class ConfigGenerator extends ArrayCollection
 {
-    /**
-     * Thenbsp\Wechat\Payment\Unifiedorder
-     */
-    protected $unifiedorder;
-
     /**
      * 构造方法
      */
-    public function __construct(Unifiedorder $unifiedorder)
+    public function __construct(Unifiedorder $unifiedorder, array $defaults = array())
     {
-        $this->unifiedorder = $unifiedorder;
+        $res = $unifiedorder->getResponse();
+        $key = $unifiedorder->getKey();
+
+        $config = array(
+            'appId'     => $unifiedorder['appid'],
+            'timeStamp' => Util::getTimestamp(),
+            'nonceStr'  => Util::getRandomString(),
+            'package'   => 'prepay_id='.$res['prepay_id'],
+            'signType'  => 'MD5'
+        );
+
+        // 如果需要指定以上参数，可以通过 $defaults 变量传入
+        $options = array_replace($config, $defaults);
+
+        ksort($options);
+
+        $queryString    = urldecode(http_build_query($options));
+        $paySign        = strtoupper(md5($queryString.'&key='.$key));
+
+        $options['paySign'] = $paySign;
+
+        parent::__construct($options);
     }
 
     /**
@@ -25,7 +43,7 @@ abstract class ConfigGenerator
      */
     public function getConfig($asArray = false)
     {
-        $config = $this->generateConfig();
+        $config = $this->resolveConfig();
 
         return $asArray ? $config : Serializer::jsonEncode($config);
     }
@@ -39,7 +57,7 @@ abstract class ConfigGenerator
     }
 
     /**
-     * 生成配置文件
+     * 分解配置文件
      */
-    abstract function generateConfig();
+    abstract function resolveConfig();
 }

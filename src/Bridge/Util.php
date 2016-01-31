@@ -13,7 +13,7 @@ class Util
     }
 
     /**
-     * 获取当前时间缀（微信很变态，必需为字符型）
+     * 获取当前时间缀
      */
     public static function getTimestamp()
     {

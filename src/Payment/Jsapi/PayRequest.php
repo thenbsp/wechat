@@ -2,34 +2,13 @@
 
 namespace Thenbsp\Wechat\Payment\Jsapi;
 
-use Thenbsp\Wechat\Bridge\Util;
-
 class PayRequest extends ConfigGenerator
 {
     /**
-     * 生成配置文件
+     * 分解配置文件
      */
-    public function generateConfig()
+    public function resolveConfig()
     {
-        $response   = $this->unifiedorder->getResponse();
-        $key        = $this->unifiedorder->getKey();
-
-        $options = array(
-            'appId'     => $this->unifiedorder['appid'],
-            'timeStamp' => Util::getTimestamp(),
-            'nonceStr'  => Util::getRandomString(),
-            'package'   => 'prepay_id='.$response['prepay_id'],
-            'signType'  => 'MD5'
-        );
-
-        // 按 ASCII 码排序
-        ksort($options);
-
-        $signature = urldecode(http_build_query($options));
-        $signature = strtoupper(md5($signature.'&key='.$key));
-
-        $options['paySign'] = $signature;
-
-        return $options;
+        return $this->toArray();
     }
 }
