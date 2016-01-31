@@ -3,19 +3,13 @@
 namespace Thenbsp\Wechat\Payment\Jsapi;
 
 use Thenbsp\Wechat\Bridge\Util;
-use Thenbsp\Wechat\Bridge\Serializer;
-use Thenbsp\Wechat\Payment\Unifiedorder;
 
 class PayChoose
 {
-    protected $unifiedorder;
-
-    public function __construct(Unifiedorder $unifiedorder)
-    {
-        $this->unifiedorder = $unifiedorder;
-    }
-
-    public function getConfig($asArray = false)
+    /**
+     * 生成配置文件
+     */
+    public function generateConfig($asArray = false)
     {
         $response   = $this->unifiedorder->getResponse();
         $key        = $this->unifiedorder->getKey();
@@ -35,14 +29,6 @@ class PayChoose
 
         $options['paySign'] = $signature;
 
-        return $asArray ? $options : (new Serializer)->jsonEncode($options);
-    }
-
-    /**
-     * 输出对象
-     */
-    public function __toString()
-    {
-        return $this->getConfig();
+        return $options;
     }
 }

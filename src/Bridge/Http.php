@@ -9,16 +9,6 @@ use Thenbsp\Wechat\Wechat\AccessToken;
 class Http
 {
     /**
-     * GuzzleHttp\Client
-     */
-    protected $client;
-
-    /**
-     * Thenbsp\Wechat\Bridge\Serializer
-     */
-    protected $serializer;
-
-    /**
      * Request Url
      */
     protected $uri;
@@ -50,9 +40,6 @@ class Http
     {
         $this->uri      = $uri;
         $this->method   = strtoupper($method);
-
-        $this->client       = new Client;
-        $this->serializer   = new Serializer;
     }
 
     /**
@@ -88,7 +75,7 @@ class Http
      */
     public function withBody(array $body)
     {
-        $this->body = $this->serializer->jsonEncode($body);
+        $this->body = Serializer::jsonEncode($body);
 
         return $this;
     }
@@ -98,7 +85,7 @@ class Http
      */
     public function withXmlBody(array $body)
     {
-        $this->body = $this->serializer->xmlEncode($body);
+        $this->body = Serializer::xmlEncode($body);
 
         return $this;
     }
@@ -118,7 +105,7 @@ class Http
             $options['body'] = $this->body;
         }
 
-        $response = $this->client->request($this->method, $this->uri, $options);
+        $response = (new Client)->request($this->method, $this->uri, $options);
         $contents = $response->getBody()->getContents();
 
         if( !$asArray ) {
@@ -126,9 +113,9 @@ class Http
         }
 
         if( $this->isJSON($contents) ) {
-            return $this->serializer->jsonDecode($contents);
+            return Serializer::jsonDecode($contents);
         } elseif( $this->isXML($contents) ) {
-            return $this->serializer->xmlDecode($contents);
+            return Serializer::xmlDecode($contents);
         } else {
             throw new \InvalidArgumentException(sprintf('Unable to parse: %s', (string) $contents));
         }

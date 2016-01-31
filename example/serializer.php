@@ -2,7 +2,7 @@
 
 require './example.php';
 
-$serializer = new Thenbsp\Wechat\Bridge\Serializer;
+use Thenbsp\Wechat\Bridge\Serializer;
 
 // array
 $array = array(
@@ -31,23 +31,23 @@ $xmlstring = <<<EOF
 EOF;
 
 // array to json
-var_dump($serializer->jsonEncode($array));
+var_dump(Serializer::jsonEncode($array));
 
 // array to xml
-var_dump($serializer->xmlEncode($array));
+var_dump(Serializer::xmlEncode($array));
 
 // json to array
-var_dump($serializer->jsonDecode($jsonString));
+var_dump(Serializer::jsonDecode($jsonString));
 
 // xml to array
-var_dump($serializer->xmlEncode($xmlstring));
+var_dump(Serializer::xmlEncode($xmlstring));
 
 // object to json
-$json = $serializer->jsonEncode($object);
+$json = Serializer::jsonEncode($object);
 
 var_dump($json);
 
 // json to object
-$object = $serializer->jsonDecode($json, array('json_decode_associative'=>false));
+$object = Serializer::jsonDecode($json, array('json_decode_associative'=>false));
 
 var_dump($object);

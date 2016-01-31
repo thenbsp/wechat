@@ -120,7 +120,7 @@ class Jsapi
             'debug'     => (bool) $this->debug
         );
 
-        return $asArray ? $configure : (new Serializer)->jsonEncode($configure);
+        return $asArray ? $configure : Serializer::jsonEncode($configure);
     }
 
     /**
