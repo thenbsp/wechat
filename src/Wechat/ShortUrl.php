@@ -31,14 +31,14 @@ class ShortUrl
      */
     public function getShortUrl($longUrl)
     {
-        $options = array(
+        $body = array(
             'action'    => 'long2short',
-            'long_url'  => (string) $longUrl
+            'long_url'  =>  $longUrl
         );
 
         $response = Http::request('POST', static::SHORT_URL)
             ->withAccessToken($this->accessToken)
-            ->withBody($options)
+            ->withBody($body)
             ->send();
 
         if( isset($response['errcode']) && ($response['errcode'] != 0) ) {

@@ -2,11 +2,9 @@
 
 namespace Thenbsp\Wechat\Wechat;
 
-use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Bridge\CacheTrait;
-use Thenbsp\Wechat\Wechat\Qrcode\Ticket;
 use Thenbsp\Wechat\Wechat\AccessToken;
-use Thenbsp\Wechat\Wechat\Exception\QrcodeException;
+use Thenbsp\Wechat\Wechat\Qrcode\Ticket;
 
 class Qrcode
 {
