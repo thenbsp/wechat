@@ -57,11 +57,6 @@ class Client
     protected $redirectUri;
 
     /**
-     * 当前已授权 AccessToken
-     */
-    protected $accessToken;
-
-    /**
      * 构造方法
      */
     public function __construct($appid, $appsecret)
@@ -130,7 +125,7 @@ class Client
             throw new AccessTokenException($response['errmsg'], $response['errcode']);
         }
 
-        return ($this->accessToken = new AccessToken($this->appid, $response));
+        return new AccessToken($this->appid, $response);
     }
 
     /**
