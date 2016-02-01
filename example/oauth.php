@@ -22,9 +22,12 @@ if( !isset($_GET['code']) ) {
     header('Location: '.$client->getAuthorizeUrl());
 }
 
-// 获取用户 AccessToken
+// 以 code 方式认证
+$client->authenticate($_GET['code']);
+
+// 认证过后就可以获取 AccessToken 和 Userinfo 了
 try {
-    $accessToken    = $client->getAccessToken($_GET['code']);
+    $accessToken    = $client->getAccessToken();
     $userinfo       = $client->getUserinfo();
 } catch (AccessTokenException $e) {
     exit($e->getMessage());

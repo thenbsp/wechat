@@ -107,7 +107,7 @@ class Client
     /**
      * 通过 code 换取 AccessToken
      */
-    public function getAccessToken($code)
+    public function authenticate($code)
     {
         $query = array(
             'appid'         => $this->appid,
@@ -128,12 +128,24 @@ class Client
     }
 
     /**
+     * 通过 code 换取 AccessToken
+     */
+    public function getAccessToken($code)
+    {
+        if( !$this->accessToken ) {
+            throw new OAuthUserException('Invalid AccessToken');
+        }
+
+        return $this->accessToken;
+    }
+
+    /**
      * 获取已授权用户信息
      */
     public function getUserinfo()
     {
         if( !$this->accessToken ) {
-            throw new OAuthUserException('Invalid User AccessToken');
+            throw new OAuthUserException('Invalid AccessToken');
         }
 
         return new Userinfo($this->accessToken);

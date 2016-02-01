@@ -6,7 +6,7 @@ use Thenbsp\Wechat\Bridge\Serializer;
 
 // array
 $array = array(
-    'name' => '冯特罗',
+    'name' => '中文测试',
     'email' => 'thenbsp@gmail.com',
     'posotion' => 'Web Developer',
     'age' => 28,
@@ -18,16 +18,18 @@ $object = (object) $array;
 
 // json
 $jsonString = <<<EOF
-{"name":"冯特罗","email":"thenbsp@gmail.com","posotion":"Web Developer","age":28,"gender":"M"}
+{"name":"中文测试","email":"thenbsp@gmail.com","posotion":"Web Developer","age":28,"gender":"M"}
 EOF;
 
 // xml
 $xmlstring = <<<EOF
-<person>
-    <name>foo</name>
-    <age>99</age>
-    <sportsman>false</sportsman>
-</person>
+<response>
+    <name>中文测试</name>
+    <email>thenbsp@gmail.com</email>
+    <posotion>Web Developer</posotion>
+    <age>28</age>
+    <gender>M</gender>
+</response>
 EOF;
 
 // array to json

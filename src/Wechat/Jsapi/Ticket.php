@@ -20,11 +20,6 @@ class Ticket
     const JSAPI_TICKET = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket';
 
     /**
-     * Jsapi 票据类型
-     */
-    const TICKET_TYPE = 'jsapi';
-
-    /**
      * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
@@ -74,11 +69,9 @@ class Ticket
      */
     public function getTicketResponse()
     {
-        $query = array('type' => static::TICKET_TYPE);
-
         $response = Http::request('GET', static::JSAPI_TICKET)
             ->withAccessToken($this->accessToken)
-            ->withQuery($query)
+            ->withQuery(array('type'=>'jsapi'))
             ->send();
 
         return $response;
