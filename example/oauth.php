@@ -15,20 +15,16 @@ if ( Util::isWechat() ) {
 }
 
 $client = new Client(APPID, APPSECRET);
-// $client->setScope('snsapi_userinfo');
-// $client->setRedirectUri('current url');
+$client->setScope('snsapi_userinfo');
 
 if( !isset($_GET['code']) ) {
     header('Location: '.$client->getAuthorizeUrl());
 }
 
-// 以 code 方式认证
-$client->authenticate($_GET['code']);
-
-// 认证过后就可以获取 AccessToken 和 Userinfo 了
+// 通换 code 换取 AccessToken，通过 AccessToken 获取用户信息
 try {
-    $accessToken    = $client->getAccessToken();
-    $userinfo       = $client->getUserinfo();
+    $accessToken    = $client->getAccessToken($_GET['code']);
+    $userinfo       = $client->getUserinfo($accessToken);
 } catch (AccessTokenException $e) {
     exit($e->getMessage());
 } catch (OAuthUserException $e) {

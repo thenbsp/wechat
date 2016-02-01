@@ -41,10 +41,6 @@ class AccessToken extends ArrayCollection
 
         $response = $this->getTokenResponse();
 
-        if( array_key_exists('errcode', $response) ) {
-            throw new AccessTokenException($response['errmsg'], $response['errcode']);
-        }
-
         if( $this->cache ) {
             $this->cache->save($cacheId, $response, $response['expires_in']);
         }
@@ -66,6 +62,10 @@ class AccessToken extends ArrayCollection
         $response = Http::request('GET', static::ACCESS_TOKEN)
             ->withQuery($query)
             ->send();
+
+        if( array_key_exists('errcode', $response) ) {
+            throw new AccessTokenException($response['errmsg'], $response['errcode']);
+        }
 
         return $response;
     }

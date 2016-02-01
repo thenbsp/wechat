@@ -11,7 +11,7 @@ $qrcode->setCache($cache);
 
 try {
     // 临时二维码
-    $url1 = $qrcode->getTemporary(1113, 3600);
+    $url1 = $qrcode->getTemporary(1113);
     // 永久二维码（int 参数）
     $url2 = $qrcode->getForever(1113);
     // 永久二维码（str 参数）

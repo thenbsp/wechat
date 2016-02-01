@@ -6,6 +6,7 @@ use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\OAuth\Exception\OAuthUserException;
 use Thenbsp\Wechat\OAuth\Exception\AccessTokenException;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Client
 {
@@ -18,6 +19,11 @@ class Client
      * AccessToken URL
      */
     const ACCESS_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/access_token';
+
+    /**
+     * 网页授权获取用户信息
+     */
+    const USERINFO = 'https://api.weixin.qq.com/sns/userinfo';
 
     /**
      * scope
@@ -107,7 +113,7 @@ class Client
     /**
      * 通过 code 换取 AccessToken
      */
-    public function authenticate($code)
+    public function getAccessToken($code)
     {
         $query = array(
             'appid'         => $this->appid,
@@ -128,26 +134,28 @@ class Client
     }
 
     /**
-     * 通过 code 换取 AccessToken
+     * 通过网页授权获取的 AccessToken 获取用户信息
      */
-    public function getAccessToken($code)
+    public function getUserinfo(AccessToken $accessToken, $lang = 'zh_CN')
     {
-        if( !$this->accessToken ) {
-            throw new OAuthUserException('Invalid AccessToken');
+        if( !$accessToken->isValid() ) {
+            $accessToken->refresh();
         }
 
-        return $this->accessToken;
-    }
+        $query = array(
+            'access_token'  => $accessToken['access_token'],
+            'openid'        => $accessToken['openid'],
+            'lang'          => $lang
+        );
 
-    /**
-     * 获取已授权用户信息
-     */
-    public function getUserinfo()
-    {
-        if( !$this->accessToken ) {
-            throw new OAuthUserException('Invalid AccessToken');
+        $response = Http::request('GET', static::USERINFO)
+            ->withQuery($query)
+            ->send();
+
+        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
+            throw new OAuthUserException($response['errmsg'], $response['errcode']);
         }
 
-        return new Userinfo($this->accessToken);
+        return new ArrayCollection($response);
     }
 }
