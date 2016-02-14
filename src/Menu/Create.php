@@ -66,7 +66,7 @@ class Create
             ->withBody($this->getRequestBody())
             ->send();
 
-        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
+        if( $response['errcode'] != 0 ) {
             throw new MenuException($response['errmsg'], $response['errcode']);
         }
 

@@ -53,7 +53,7 @@ class ShortUrl
             ->withBody($body)
             ->send();
 
-        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
+        if( $response['errcode'] != 0 ) {
             throw new ShortUrlException($response['errmsg'], $response['errcode']);
         }
 

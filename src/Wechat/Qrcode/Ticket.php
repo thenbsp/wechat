@@ -95,15 +95,8 @@ class Ticket
 
         $response = $this->getTicketResponse();
 
-        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
-            throw new QrcodeTicketException($response['errmsg'], $response['errcode']);
-        }
-
         if( $this->cache ) {
-            $expire = array_key_exists('expire_seconds', $response)
-                ? $response['expire_seconds']
-                : 0;
-            $this->cache->save($cacheId, $response, $expire);
+            $this->cache->save($cacheId, $response, $response['expire_seconds'] ?: 0);
         }
 
         return $response['ticket'];
@@ -118,6 +111,10 @@ class Ticket
             ->withAccessToken($this->accessToken)
             ->withBody($this->getRequestBody())
             ->send();
+
+        if( $response['errcode'] != 0 ) {
+            throw new QrcodeTicketException($response['errmsg'], $response['errcode']);
+        }
 
         return $response;
     }

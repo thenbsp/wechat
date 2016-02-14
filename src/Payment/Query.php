@@ -25,15 +25,18 @@ class Query extends ArrayCollection
     {
         $this->key = $key;
 
-        $this->set('appid', $appid);
-        $this->set('mch_id', $mchid);
+        $this->set('appid',     $appid);
+        $this->set('mch_id',    $mchid);
     }
 
+    /**
+     * 查询订单
+     */
     public function doQuery()
     {
         $options = $this->toArray();
 
-        $options['nonce_str'] == Util::getRandomString();
+        $options['nonce_str'] = Util::getRandomString();
 
         // 按 ASCII 码排序
         ksort($options);

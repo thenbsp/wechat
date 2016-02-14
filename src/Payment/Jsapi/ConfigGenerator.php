@@ -39,7 +39,7 @@ abstract class ConfigGenerator extends ArrayCollection
     }
 
     /**
-     * 获取配置文件
+     * 获取配置
      */
     public function getConfig($asArray = false)
     {
@@ -57,7 +57,7 @@ abstract class ConfigGenerator extends ArrayCollection
     }
 
     /**
-     * 分解配置文件
+     * 分解配置
      */
     abstract function resolveConfig();
 }

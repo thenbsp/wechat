@@ -5,6 +5,7 @@ namespace Thenbsp\Wechat\Bridge;
 use GuzzleHttp\Client;
 use Thenbsp\Wechat\Bridge\Serializer;
 use Thenbsp\Wechat\Wechat\AccessToken;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Http
 {
@@ -113,12 +114,14 @@ class Http
         }
 
         if( $this->isJSON($contents) ) {
-            return Serializer::jsonDecode($contents);
+            $result = Serializer::jsonDecode($contents);
         } elseif( $this->isXML($contents) ) {
-            return Serializer::xmlDecode($contents);
+            $result = Serializer::xmlDecode($contents);
         } else {
             throw new \InvalidArgumentException(sprintf('Unable to parse: %s', (string) $contents));
         }
+
+        return new ArrayCollection($result);
     }
 
     /**

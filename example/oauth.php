@@ -4,7 +4,7 @@ require './example.php';
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\OAuth\Client;
-use Thenbsp\Wechat\OAuth\Exception\OAuthUserException;
+use Thenbsp\Wechat\OAuth\Exception\UserinfoException;
 use Thenbsp\Wechat\OAuth\Exception\AccessTokenException;
 
 /**
@@ -27,7 +27,7 @@ try {
     $userinfo       = $client->getUserinfo($accessToken);
 } catch (AccessTokenException $e) {
     exit($e->getMessage());
-} catch (OAuthUserException $e) {
+} catch (UserinfoException $e) {
     exit($e->getMessage());
 }
 

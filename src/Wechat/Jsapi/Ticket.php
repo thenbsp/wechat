@@ -53,10 +53,6 @@ class Ticket
 
         $response = $this->getTicketResponse();
 
-        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
-            throw new JsapiTicketException($response['errmsg'], $response['errcode']);
-        }
-
         if( $this->cache ) {
             $this->cache->save($cacheId, $response, $response['expires_in']);
         }
@@ -73,6 +69,10 @@ class Ticket
             ->withAccessToken($this->accessToken)
             ->withQuery(array('type'=>'jsapi'))
             ->send();
+
+        if( $response['errcode'] != 0 ) {
+            throw new JsapiTicketException($response['errmsg'], $response['errcode']);
+        }
 
         return $response;
     }

@@ -5,7 +5,7 @@ namespace Thenbsp\Wechat\Payment\Jsapi;
 class PayRequest extends ConfigGenerator
 {
     /**
-     * 分解配置文件
+     * 分解配置
      */
     public function resolveConfig()
     {

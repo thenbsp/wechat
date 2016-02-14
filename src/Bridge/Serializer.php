@@ -41,7 +41,7 @@ class Serializer
     public static function xmlEncode($data, array $context = array())
     {
         $defaults = array(
-            'xml_root_node_name'    => 'response',
+            'xml_root_node_name'    => 'xml',
             'xml_format_output'     => 'formatOutput',
             'xml_version'           => 'xmlVersion',
             'xml_encoding'          => 'utf-8',

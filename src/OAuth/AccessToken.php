@@ -26,11 +26,11 @@ class AccessToken extends ArrayCollection
     /**
      * 构造方法
      */
-    public function __construct($appid, array $options)
+    public function __construct($appid, ArrayCollection $options)
     {
         $this->appid = $appid;
 
-        parent::__construct($options);
+        parent::__construct($options->toArray());
     }
 
     /**
@@ -48,12 +48,12 @@ class AccessToken extends ArrayCollection
             ->withQuery($query)
             ->send();
 
-        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
+        if( $response['errcode'] != 0 ) {
             throw new AccessTokenException($response['errmsg'], $response['errcode']);
         }
 
         // refresh new access_token from ArrayCollection
-        parent::__construct($response);
+        parent::__construct($response->toArray());
 
         return $this;
     }
@@ -72,6 +72,6 @@ class AccessToken extends ArrayCollection
             ->withQuery($query)
             ->send();
 
-        return array_key_exists('errmsg', $response) && ($response['errmsg'] === 'ok');
+        return ($response['errmsg'] === 'ok');
     }
 }

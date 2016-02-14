@@ -121,7 +121,7 @@ class Client
             ->withQuery($query)
             ->send();
 
-        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
+        if( $response['errcode'] != 0 ) {
             throw new AccessTokenException($response['errmsg'], $response['errcode']);
         }
 
@@ -147,10 +147,10 @@ class Client
             ->withQuery($query)
             ->send();
 
-        if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
+        if( $response['errcode'] != 0 ) {
             throw new UserinfoException($response['errmsg'], $response['errcode']);
         }
 
-        return new ArrayCollection($response);
+        return $response;
     }
 }

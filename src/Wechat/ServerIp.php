@@ -47,7 +47,7 @@ class ServerIp
             ->withAccessToken($this->accessToken)
             ->send();
 
-        if( array_key_exists('errcode', $response) ) {
+        if( $response->containsKey('errcode') ) {
             throw new ServerIpException($response['errmsg'], $response['errcode']);
         }
 
