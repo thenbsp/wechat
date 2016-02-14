@@ -4,7 +4,7 @@ namespace Thenbsp\Wechat\OAuth;
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\Http;
-use Thenbsp\Wechat\OAuth\Exception\OAuthUserException;
+use Thenbsp\Wechat\OAuth\Exception\UserinfoException;
 use Thenbsp\Wechat\OAuth\Exception\AccessTokenException;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -148,7 +148,7 @@ class Client
             ->send();
 
         if( isset($response['errcode']) && ($response['errcode'] != 0) ) {
-            throw new OAuthUserException($response['errmsg'], $response['errcode']);
+            throw new UserinfoException($response['errmsg'], $response['errcode']);
         }
 
         return new ArrayCollection($response);
