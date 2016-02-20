@@ -15,4 +15,6 @@ try {
     exit($e->getMessage());
 }
 
+echo '<pre>';
 var_dump($ips);
+echo '</pre>';

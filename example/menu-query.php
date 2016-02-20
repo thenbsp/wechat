@@ -13,9 +13,11 @@ $query = new Query($accessToken);
  * 获取查询结果
  */
 try {
-    $result = $query->doQuery();
+    $response = $query->doQuery();
 } catch (\Exception $e) {
     exit($e->getMessage());
 }
 
-print_r($result);
+echo '<pre>';
+var_dump($response->toArray());
+echo '</pre>';

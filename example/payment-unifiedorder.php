@@ -42,5 +42,5 @@ try {
 }
 
 echo '<pre>';
-print_r($response);
+var_dump($response->toArray());
 echo '</pre>';

@@ -9,11 +9,13 @@ $query = new Query(APPID, MCHID, MCHKEY);
 
 try {
     // 根据 transaction_id 查询
-    $result = $query->fromTransactionId('1005130236201511211701198549');
+    $response = $query->fromTransactionId('1005130236201511211701198549');
     // 根据 out_trade_no 查询
-    // $result = $query->fromOutTradeNo('1511210818846691');
+    // $response = $query->fromOutTradeNo('1511210818846691');
 } catch (\Exception $e) {
     exit($e->getMessage());
 }
 
-var_dump($result->toArray());
+echo '<pre>';
+var_dump($response->toArray());
+echo '</pre>';
