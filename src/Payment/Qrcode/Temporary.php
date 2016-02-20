@@ -4,7 +4,7 @@ namespace Thenbsp\Wechat\Payment\Qrcode;
 
 use Thenbsp\Wechat\Payment\Unifiedorder;
 
-class Temporary implements PayurlInterface
+class Temporary
 {
     /**
      * Thenbsp\Wechat\Payment\Unifiedorder
@@ -29,17 +29,9 @@ class Temporary implements PayurlInterface
         $response = $this->unifiedorder->getResponse();
 
         if( !$response->containsKey('code_url') ) {
-            throw new \InvalidArgumentException('Invalid Unifiedorder Response');
+            throw new \Exception('Invalid Unifiedorder Response');
         }
 
         return $response['code_url'];
-    }
-
-    /**
-     * 输出对象
-     */
-    public function __toString()
-    {
-        return $this->getPayurl();
     }
 }

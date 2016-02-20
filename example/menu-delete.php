@@ -14,7 +14,7 @@ $delete = new Delete($accessToken);
  */
 try {
     $delete->doDelete();
-} catch (Exception $e) {
+} catch (\Exception $e) {
     exit($e->getMessage());
 }
 

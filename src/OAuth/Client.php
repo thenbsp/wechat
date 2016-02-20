@@ -4,8 +4,6 @@ namespace Thenbsp\Wechat\OAuth;
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\Http;
-use Thenbsp\Wechat\OAuth\Exception\UserinfoException;
-use Thenbsp\Wechat\OAuth\Exception\AccessTokenException;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Client
@@ -122,7 +120,7 @@ class Client
             ->send();
 
         if( $response['errcode'] != 0 ) {
-            throw new AccessTokenException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         return new AccessToken($this->appid, $response);
@@ -148,7 +146,7 @@ class Client
             ->send();
 
         if( $response['errcode'] != 0 ) {
-            throw new UserinfoException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         return $response;

@@ -5,7 +5,6 @@ require './example.php';
 use Thenbsp\Wechat\Menu\Create;
 use Thenbsp\Wechat\Menu\Button;
 use Thenbsp\Wechat\Menu\ButtonCollection;
-use Thenbsp\Wechat\Menu\Exception\MenuException;
 
 // new Button("菜单名称", "菜单类型", "key/url/media_id");
 
@@ -31,7 +30,7 @@ $create->add($button3);
 
 try {
     $create->doCreate();
-} catch (MenuException $e) {
+} catch (\Exception $e) {
     exit($e->getMessage());
 }
 

@@ -5,7 +5,6 @@ namespace Thenbsp\Wechat\Wechat;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Wechat\AccessToken;
-use Thenbsp\Wechat\Wechat\Exception\ShortUrlException;
 
 class ShortUrl
 {
@@ -54,7 +53,7 @@ class ShortUrl
             ->send();
 
         if( $response['errcode'] != 0 ) {
-            throw new ShortUrlException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         if( $this->cache ) {

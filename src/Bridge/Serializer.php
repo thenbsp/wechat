@@ -42,10 +42,10 @@ class Serializer
     {
         $defaults = array(
             'xml_root_node_name'    => 'xml',
-            'xml_format_output'     => 'formatOutput',
-            'xml_version'           => 'xmlVersion',
+            'xml_format_output'     => true,
+            'xml_version'           => '1.0',
             'xml_encoding'          => 'utf-8',
-            'xml_standalone'        => 'xmlStandalone',
+            'xml_standalone'        => false,
         );
 
         return (new XmlEncoder)->encode($data, 'xml', array_replace($defaults, $context));
@@ -57,5 +57,23 @@ class Serializer
     public static function xmlDecode($data, array $context = array())
     {
         return (new XmlEncoder)->decode($data, 'xml', $context);
+    }
+
+    /**
+     * check is json string
+     */
+    public static function isJSON($data)
+    {
+        return (@json_decode($data) !== null);
+    }
+
+    /**
+     * check is xml string
+     */
+    public static function isXML($data)
+    {
+        $xml = @simplexml_load_string($data);
+
+        return ($xml instanceof \SimpleXmlElement);
     }
 }

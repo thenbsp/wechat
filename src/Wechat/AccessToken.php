@@ -4,7 +4,6 @@ namespace Thenbsp\Wechat\Wechat;
 
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Bridge\CacheTrait;
-use Thenbsp\Wechat\Wechat\Exception\AccessTokenException;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class AccessToken extends ArrayCollection
@@ -64,7 +63,7 @@ class AccessToken extends ArrayCollection
             ->send();
 
         if( $response->containsKey('errcode') ) {
-            throw new AccessTokenException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         return $response;

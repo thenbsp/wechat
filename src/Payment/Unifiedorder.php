@@ -4,7 +4,6 @@ namespace Thenbsp\Wechat\Payment;
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\Http;
-use Thenbsp\Wechat\Payment\Exception\UnifiedorderException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -82,11 +81,11 @@ class Unifiedorder extends ArrayCollection
             ->send();
 
         if( $response['return_code'] === 'FAIL' ) {
-            throw new UnifiedorderException($response['return_code'].': '.$response['return_msg']);
+            throw new \Exception($response['return_code'].': '.$response['return_msg']);
         }
 
         if( $response['result_code'] === 'FAIL' ) {
-            throw new UnifiedorderException($response['err_code'].': '.$response['err_code_des']);
+            throw new \Exception($response['err_code'].': '.$response['err_code_des']);
         }
 
         return $response;

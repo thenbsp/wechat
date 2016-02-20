@@ -4,28 +4,26 @@ require './example.php';
 
 use Thenbsp\Wechat\Payment\Unifiedorder;
 use Thenbsp\Wechat\Payment\Qrcode\RequestContext;
-use Thenbsp\Wechat\Payment\Qrcode\ResponseContext;
 
 /**
- * 验证请求（正常情部下请求中包含 appid, openid, mch_id, is_subscribe, nonce_str, product_id, sign）
+ * 一、验证请求：正常情部下请求中包含 appid, openid, mch_id, is_subscribe, nonce_str, product_id, sign
  */
-try {
-    $context = new RequestContext();
-} catch (\InvalidArgumentException $e) {
-    ResponseContext::fail($e->getMessage());
+$request = new RequestContext();
+
+if( !$request->isValid() ) {
+    $request->fail('Invalid Request');
 }
 
 /**
- * 统一下单（根据第一步中的 product_id 去数据库查找订单信息并下单）
- * For example: SELECT * FROM product WHERE id = $context['product_id'];
+ * 二、统一下单：根据请求中的 $request['product_id'] 去数据库查找订单信息并下单
  */
 $unifiedorder = new Unifiedorder(APPID, MCHID, MCHKEY);
-$unifiedorder->set('body',          'iphone 6 plus');
+$unifiedorder->set('body',          '微信支付测试商品');
 $unifiedorder->set('total_fee',     1);
 $unifiedorder->set('out_trade_no',  date('YmdHis').mt_rand(10000, 99999));
 $unifiedorder->set('notify_url',    'http://dev.funxdata.com/wechat/example/payment-unifiedorder.php');
 
 /**
- * 响应订单
+ * 三、响应订单：将订单响应至微信客户端（XML 格式）
  */
-ResponseContext::success($unifiedorder);
+$request->success($unifiedorder);

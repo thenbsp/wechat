@@ -4,8 +4,6 @@ require './example.php';
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\OAuth\Client;
-use Thenbsp\Wechat\OAuth\Exception\UserinfoException;
-use Thenbsp\Wechat\OAuth\Exception\AccessTokenException;
 
 /**
  * 只能在微信中打开
@@ -23,16 +21,14 @@ if( !isset($_GET['code']) ) {
 
 // 通换 code 换取 AccessToken，通过 AccessToken 获取用户信息
 try {
-    $accessToken    = $client->getAccessToken($_GET['code']);
-    $userinfo       = $client->getUserinfo($accessToken);
-} catch (AccessTokenException $e) {
-    exit($e->getMessage());
-} catch (UserinfoException $e) {
+    $token    = $client->getAccessToken($_GET['code']);
+    $userinfo = $client->getUserinfo($token);
+} catch (\Exception $e) {
     exit($e->getMessage());
 }
 
 echo '<pre>';
-var_dump($accessToken->toArray());
+var_dump($token->toArray());
 var_dump($userinfo->toArray());
 echo '</pre>';
 

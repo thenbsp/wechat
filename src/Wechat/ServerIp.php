@@ -5,7 +5,6 @@ namespace Thenbsp\Wechat\Wechat;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Wechat\AccessToken;
-use Thenbsp\Wechat\Wechat\Exception\ServerIpException;
 
 class ServerIp
 {
@@ -48,7 +47,7 @@ class ServerIp
             ->send();
 
         if( $response->containsKey('errcode') ) {
-            throw new ServerIpException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         if( $this->cache ) {

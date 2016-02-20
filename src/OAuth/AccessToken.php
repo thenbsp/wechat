@@ -3,7 +3,6 @@
 namespace Thenbsp\Wechat\OAuth;
 
 use Thenbsp\Wechat\Bridge\Http;
-use Thenbsp\Wechat\OAuth\Exception\AccessTokenException;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class AccessToken extends ArrayCollection
@@ -49,7 +48,7 @@ class AccessToken extends ArrayCollection
             ->send();
 
         if( $response['errcode'] != 0 ) {
-            throw new AccessTokenException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         // refresh new access_token from ArrayCollection

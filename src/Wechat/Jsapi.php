@@ -104,7 +104,7 @@ class Jsapi
             'jsapi_ticket'  => $this->ticket->getTicketString(),
             'timestamp'     => Util::getTimestamp(),
             'url'           => Util::getCurrentUrl(),
-            'noncestr'      => uniqid()
+            'noncestr'      => Util::getRandomString(),
         );
 
         // 按 ASCII 码排序

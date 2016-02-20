@@ -113,32 +113,14 @@ class Http
             return $contents;
         }
 
-        if( $this->isJSON($contents) ) {
+        if( Serializer::isJSON($contents) ) {
             $result = Serializer::jsonDecode($contents);
-        } elseif( $this->isXML($contents) ) {
+        } elseif( Serializer::isXML($contents) ) {
             $result = Serializer::xmlDecode($contents);
         } else {
-            throw new \InvalidArgumentException(sprintf('Unable to parse: %s', (string) $contents));
+            throw new \Exception(sprintf('Unable to parse: %s', (string) $contents));
         }
 
         return new ArrayCollection($result);
-    }
-
-    /**
-     * check is json string
-     */
-    public function isJSON($data)
-    {
-        return (@json_decode($data) !== null);
-    }
-
-    /**
-     * check is xml string
-     */
-    public function isXML($data)
-    {
-        $xml = @simplexml_load_string($data);
-
-        return ($xml instanceof \SimpleXmlElement);
     }
 }

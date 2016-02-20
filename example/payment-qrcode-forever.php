@@ -4,11 +4,12 @@ require './example.php';
 
 use Thenbsp\Wechat\Payment\Qrcode\Forever;
 
-/**
- * 生成二维码
- */
+// 产品（或订单）ID
+$productId = date('YmdHis').mt_rand(10000, 99999);
+
+// 获取支付链接
 $qrcode = new Forever(APPID, MCHID, MCHKEY);
-$qrcode->set('product_id', date('YmdHis').mt_rand(10000, 99999));
+$payurl = $qrcode->getPayurl($productId);
 
 ?>
 
@@ -24,7 +25,7 @@ $qrcode->set('product_id', date('YmdHis').mt_rand(10000, 99999));
 <h1>扫描支付模式一</h1>
 <p>请在 PC 端扫描二给码，如果在手机上可长按识别二维码</p>
 
-<img src="http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=<?php echo $qrcode; ?>" style="border:1px solid #ccc;" />
+<img src="http://qr.liantu.com/api.php?&bg=ffffff&fg=000000&text=<?php echo $payurl; ?>" style="border:1px solid #ccc;" />
 
 </script>
 </body>

@@ -4,7 +4,6 @@ namespace Thenbsp\Wechat\Menu;
 
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Wechat\AccessToken;
-use Thenbsp\Wechat\Menu\Exception\MenuException;
 
 class Create
 {
@@ -67,7 +66,7 @@ class Create
             ->send();
 
         if( $response['errcode'] != 0 ) {
-            throw new MenuException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         return true;

@@ -30,13 +30,28 @@ class Query extends ArrayCollection
     }
 
     /**
+     * 根据 transaction_id 查询
+     */
+    public function fromTransactionId($transactionId)
+    {
+        return $this->doQuery(array('transaction_id'=>$transactionId));
+    }
+
+    /**
+     * 根据 out_trade_no 查询
+     */
+    public function fromOutTradeNo($outTradeNo)
+    {
+        return $this->doQuery(array('out_trade_no'=>$outTradeNo));
+    }
+
+    /**
      * 查询订单
      */
-    public function doQuery()
+    public function doQuery(array $by)
     {
-        $options = $this->toArray();
-
-        $options['nonce_str'] = Util::getRandomString();
+        $options                = array_merge($this->toArray(), $by);
+        $options['nonce_str']   = Util::getRandomString();
 
         // 按 ASCII 码排序
         ksort($options);
@@ -57,5 +72,7 @@ class Query extends ArrayCollection
         if( $response['return_code'] === 'FAIL' ) {
             throw new \Exception($response['return_code'].': '.$response['return_msg']);
         }
+
+        return $response;
     }
 }

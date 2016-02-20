@@ -3,7 +3,6 @@
 require './example.php';
 
 use Thenbsp\Wechat\Wechat\Qrcode;
-use Thenbsp\Wechat\Wechat\Exception\QrcodeTicketException;
 
 $qrcode = new Qrcode($accessToken);
 // 推荐使用缓存（可选）
@@ -16,7 +15,7 @@ try {
     $url2 = $qrcode->getForever(1113);
     // 永久二维码（str 参数）
     $url3 = $qrcode->getForever('thenbsp');
-} catch (QrcodeTicketException $e) {
+} catch (\Exception $e) {
     exit($e->getMessage());
 }
 

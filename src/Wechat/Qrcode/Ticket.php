@@ -5,7 +5,6 @@ namespace Thenbsp\Wechat\Wechat\Qrcode;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Wechat\AccessToken;
-use Thenbsp\Wechat\Wechat\Exception\QrcodeTicketException;
 
 class Ticket
 {
@@ -113,7 +112,7 @@ class Ticket
             ->send();
 
         if( $response['errcode'] != 0 ) {
-            throw new QrcodeTicketException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         return $response;

@@ -5,7 +5,6 @@ namespace Thenbsp\Wechat\Wechat\Jsapi;
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Wechat\AccessToken;
-use Thenbsp\Wechat\Wechat\Exception\JsapiTicketException;
 
 class Ticket
 {
@@ -71,7 +70,7 @@ class Ticket
             ->send();
 
         if( $response['errcode'] != 0 ) {
-            throw new JsapiTicketException($response['errmsg'], $response['errcode']);
+            throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
         return $response;

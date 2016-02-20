@@ -3,7 +3,7 @@
 $files  = scandir('./');
 $ignore = array('index.php', 'example.php');
 
-echo '<ul>';
+echo '<meta name="viewport" content="width=device-width, initial-scale=1.0"><ul>';
 
 foreach( $files AS $file ) {
 

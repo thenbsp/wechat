@@ -2,10 +2,8 @@
 
 require './example.php';
 
-use Thenbsp\Wechat\Payment\Unifiedorder;
-use Thenbsp\Wechat\Payment\Exception\UnifiedorderException;
 use Thenbsp\Wechat\OAuth\Client;
-use Thenbsp\Wechat\OAuth\Exception\AccessTokenException;
+use Thenbsp\Wechat\Payment\Unifiedorder;
 
 /**
  * 获取用户 openid
@@ -20,7 +18,7 @@ if( !isset($_SESSION['openid']) ) {
 
     try {
         $accessToken = $client->getAccessToken($_GET['code']);
-    } catch (AccessTokenException $e) {
+    } catch (\Exception $e) {
         exit($e->getMessage());
     }
 
@@ -31,7 +29,7 @@ if( !isset($_SESSION['openid']) ) {
  * 统一下单
  */
 $unifiedorder = new Unifiedorder(APPID, MCHID, MCHKEY);
-$unifiedorder->set('body',          'iphone 6 plus');
+$unifiedorder->set('body',          '微信支付测试商品');
 $unifiedorder->set('total_fee',     1);
 $unifiedorder->set('openid',        $_SESSION['openid']); // oWY-5jjLjo7pYUK86JPpwvcnF2Js
 $unifiedorder->set('out_trade_no',  date('YmdHis').mt_rand(10000, 99999));

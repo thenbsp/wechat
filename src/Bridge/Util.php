@@ -46,7 +46,7 @@ class Util
     /**
      * 获取随机字符
      */
-    public static function getRandomString($length = 16)
+    public static function getRandomString($length = 10)
     {
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
