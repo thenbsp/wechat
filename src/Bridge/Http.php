@@ -35,6 +35,12 @@ class Http
     protected $accessToken;
 
     /**
+     * SSL 证书
+     */
+    protected $sslCert;
+    protected $sslKey;
+
+    /**
      * initialize
      */
     public function __construct($method, $uri)
@@ -49,16 +55,6 @@ class Http
     public static function request($method, $uri)
     {
         return new static($method, $uri);
-    }
-
-    /**
-     * Query With AccessToken
-     */
-    public function withAccessToken(AccessToken $accessToken)
-    {
-        $this->query['access_token'] = $accessToken->getTokenString();
-
-        return $this;
     }
 
     /**
@@ -92,18 +88,47 @@ class Http
     }
 
     /**
+     * Query With AccessToken
+     */
+    public function withAccessToken(AccessToken $accessToken)
+    {
+        $this->query['access_token'] = $accessToken->getTokenString();
+
+        return $this;
+    }
+
+    /**
+     * Request SSL Cert
+     */
+    public function withSSLCert($sslCert, $sslKey)
+    {
+        $this->sslCert = $sslCert;
+        $this->sslKey  = $sslKey;
+
+        return $this;
+    }
+
+    /**
      * Send Request
      */
     public function send($asArray = true)
     {
         $options = array();
 
+        // query
         if( !empty($this->query) ) {
             $options['query'] = $this->query;
         }
 
+        // body
         if( !empty($this->body) ) {
             $options['body'] = $this->body;
+        }
+
+        // ssl cert
+        if( $this->sslCert && $this->sslKey ) {
+            $options['cert']    = $this->sslCert;
+            $options['ssl_key'] = $this->sslKey;
         }
 
         $response = (new Client)->request($this->method, $this->uri, $options);

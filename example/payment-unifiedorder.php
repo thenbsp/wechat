@@ -37,7 +37,7 @@ $unifiedorder->set('notify_url',    'http://dev.funxdata.com/wechat/example/paym
 
 try {
     $response = $unifiedorder->getResponse();
-} catch (UnifiedorderException $e) {
+} catch (\Exception $e) {
     exit($e->getMessage());
 }
 

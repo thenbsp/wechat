@@ -66,11 +66,11 @@ class Query extends ArrayCollection
             ->send();
 
         if( $response['result_code'] === 'FAIL' ) {
-            throw new \Exception($response['err_code'].': '.$response['err_code_des']);
+            throw new \Exception($response['err_code_des']);
         }
 
         if( $response['return_code'] === 'FAIL' ) {
-            throw new \Exception($response['return_code'].': '.$response['return_msg']);
+            throw new \Exception($response['return_msg']);
         }
 
         return $response;

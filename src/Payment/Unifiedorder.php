@@ -62,7 +62,7 @@ class Unifiedorder extends ArrayCollection
     }
 
     /**
-     * 获取下单响应结果
+     * 获取响应结果
      */
     public function getResponse()
     {
@@ -81,11 +81,11 @@ class Unifiedorder extends ArrayCollection
             ->send();
 
         if( $response['return_code'] === 'FAIL' ) {
-            throw new \Exception($response['return_code'].': '.$response['return_msg']);
+            throw new \Exception($response['return_msg']);
         }
 
         if( $response['result_code'] === 'FAIL' ) {
-            throw new \Exception($response['err_code'].': '.$response['err_code_des']);
+            throw new \Exception($response['err_code_des']);
         }
 
         return $response;
