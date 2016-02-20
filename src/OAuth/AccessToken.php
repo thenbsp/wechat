@@ -59,7 +59,7 @@ class AccessToken extends ArrayCollection
             throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
-        // refresh new access_token from ArrayCollection
+        // update new access_token from ArrayCollection
         parent::__construct($response->toArray());
 
         return $this;
