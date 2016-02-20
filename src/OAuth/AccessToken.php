@@ -33,6 +33,14 @@ class AccessToken extends ArrayCollection
     }
 
     /**
+     * 公众号 appid
+     */
+    public function getAppid()
+    {
+        return $this->appid;
+    }
+
+    /**
      * 刷新用户 access_token
      */
     public function refresh()
