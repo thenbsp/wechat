@@ -1,7 +1,7 @@
 <?php
 
 $files  = scandir('./');
-$ignore = array('index.php', 'api.php', 'example.php');
+$ignore = array('index.php', 'api.php', 'example.php', 'payment-qrcode-response.php');
 
 echo '<meta name="viewport" content="width=device-width, initial-scale=1.0"><ul>';
 

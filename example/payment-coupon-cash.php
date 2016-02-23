@@ -57,4 +57,6 @@ try {
     exit($e->getMessage());
 }
 
-// var_dump($response);
+echo '<pre>';
+print_r($response->toArray());
+echo '</pre>';

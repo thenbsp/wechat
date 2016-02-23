@@ -2,8 +2,37 @@
 
 require './example.php';
 
+use Thenbsp\Wechat\Bridge\Util;
+use Thenbsp\Wechat\OAuth\Client;
 use Thenbsp\Wechat\Payment\Unifiedorder;
 use Thenbsp\Wechat\Payment\Qrcode\Temporary;
+
+/**
+ * 只能在微信中打开
+ */
+if ( Util::isWechat() ) {
+    exit('请在微信中打开');
+}
+
+/**
+ * 获取用户 openid
+ */
+if( !isset($_SESSION['openid']) ) {
+
+    $client = new Client(APPID, APPSECRET);
+
+    if( !isset($_GET['code']) ) {
+        header('Location: '.$client->getAuthorizeUrl());
+    }
+
+    try {
+        $token = $client->getAccessToken($_GET['code']);
+    } catch (\Exception $e) {
+        exit($e->getMessage());
+    }
+
+    $_SESSION['openid'] = $token['openid'];
+}
 
 /**
  * 统一下单
@@ -11,7 +40,7 @@ use Thenbsp\Wechat\Payment\Qrcode\Temporary;
 $unifiedorder = new Unifiedorder(APPID, MCHID, MCHKEY);
 $unifiedorder->set('body',          '微信支付测试商品');
 $unifiedorder->set('total_fee',     1);
-$unifiedorder->set('openid',        'oWY-5jjLjo7pYUK86JPpwvcnF2Js');
+$unifiedorder->set('openid',        $_SESSION['openid']);
 $unifiedorder->set('out_trade_no',  date('YmdHis').mt_rand(10000, 99999));
 $unifiedorder->set('notify_url',    'http://dev.funxdata.com/wechat/example/payment-unifiedorder.php');
 

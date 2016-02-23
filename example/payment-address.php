@@ -16,27 +16,22 @@ if ( Util::isWechat() ) {
 /**
  * 获取用户 AccessToken
  */
-if( !isset($_SESSION['token']) ) {
+$client = new Client(APPID, APPSECRET);
 
-    $client = new Client(APPID, APPSECRET);
+if( !isset($_GET['code']) ) {
+    header('Location: '.$client->getAuthorizeUrl());
+}
 
-    if( !isset($_GET['code']) ) {
-        header('Location: '.$client->getAuthorizeUrl());
-    }
-
-    try {
-        $token = $client->getAccessToken($_GET['code']);
-    } catch (\Exception $e) {
-        exit($e->getMessage());
-    }
-
-    $_SESSION['token'] = $token;
+try {
+    $token = $client->getAccessToken($_GET['code']);
+} catch (\Exception $e) {
+    exit($e->getMessage());
 }
 
 /**
  * 生成收货地址共享组件配置
  */
-$config = new ConfigGenerator($_SESSION['token']);
+$config = new ConfigGenerator($token);
 
 ?>
 <!DOCTYPE html>

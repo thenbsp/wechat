@@ -19,5 +19,5 @@ try {
 }
 
 echo '<pre>';
-var_dump($response->toArray());
+print_r($response->toArray());
 echo '</pre>';

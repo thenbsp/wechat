@@ -89,7 +89,7 @@ class Cash extends ArrayCollection
             throw new \Exception($response['err_code_des']);
         }
 
-        var_dump($response);
+        return $response;
     }
 
     /**
