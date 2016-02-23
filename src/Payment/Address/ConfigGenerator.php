@@ -18,7 +18,7 @@ class ConfigGenerator
      */
     public function __construct(AccessToken $accessToken)
     {
-        $this->accessToken = $accessToken;
+        $this->setAccessToken($accessToken);
     }
 
     /**
