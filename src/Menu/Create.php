@@ -18,7 +18,7 @@ class Create
     const MAX_COUNT = 3;
 
     /**
-     * AccessToken 对象
+     * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
 

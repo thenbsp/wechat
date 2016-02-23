@@ -19,7 +19,7 @@ class ServerIp
     const SERVER_IP = 'https://api.weixin.qq.com/cgi-bin/getcallbackip';
 
     /**
-     * Thenbsp\Wechat\AccessToken\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
 

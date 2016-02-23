@@ -13,7 +13,7 @@ class Query
     const QUERY_URL = 'https://api.weixin.qq.com/cgi-bin/menu/get';
 
     /**
-     * AccessToken 对象
+     * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
 

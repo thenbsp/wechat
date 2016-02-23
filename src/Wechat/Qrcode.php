@@ -19,7 +19,7 @@ class Qrcode
     const QRCODE_URL = 'https://mp.weixin.qq.com/cgi-bin/showqrcode';
 
     /**
-     * Thenbsp\Wechat\AccessToken\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
 

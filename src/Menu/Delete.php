@@ -13,7 +13,7 @@ class Delete
     const DELETE_URL = 'https://api.weixin.qq.com/cgi-bin/menu/delete';
 
     /**
-     * AccessToken 对象
+     * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
 

@@ -19,7 +19,7 @@ class ShortUrl
     const SHORT_URL = 'https://api.weixin.qq.com/cgi-bin/shorturl';
 
     /**
-     * Thenbsp\Wechat\AccessToken\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
 

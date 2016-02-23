@@ -26,7 +26,7 @@ class Ticket
     const QR_LIMIT_STR_SCENE    = 'QR_LIMIT_STR_SCENE';
 
     /**
-     * Thenbsp\Wechat\AccessToken\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
 
