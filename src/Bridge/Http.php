@@ -138,14 +138,8 @@ class Http
             return $contents;
         }
 
-        if( Serializer::isJSON($contents) ) {
-            $result = Serializer::jsonDecode($contents);
-        } elseif( Serializer::isXML($contents) ) {
-            $result = Serializer::xmlDecode($contents);
-        } else {
-            throw new \Exception(sprintf('Unable to parse: %s', (string) $contents));
-        }
+        $array = Serializer::parse($contents);
 
-        return new ArrayCollection($result);
+        return new ArrayCollection($array);
     }
 }

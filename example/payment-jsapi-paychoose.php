@@ -52,7 +52,7 @@ $unifiedorder->set('body',          '微信支付测试商品');
 $unifiedorder->set('total_fee',     1);
 $unifiedorder->set('openid',        $_SESSION['openid']); // oWY-5jjLjo7pYUK86JPpwvcnF2Js
 $unifiedorder->set('out_trade_no',  date('YmdHis').mt_rand(10000, 99999));
-$unifiedorder->set('notify_url',    'http://dev.funxdata.com/wechat/example/payment-unifiedorder.php');
+$unifiedorder->set('notify_url',    EXAMPLE_URL.'payment-notify.php');
 
 /**
  * 生成 ChooseWXPay 配置文件

@@ -42,7 +42,7 @@ $unifiedorder->set('body',          '微信支付测试商品');
 $unifiedorder->set('total_fee',     1);
 $unifiedorder->set('openid',        $_SESSION['openid']);
 $unifiedorder->set('out_trade_no',  date('YmdHis').mt_rand(10000, 99999));
-$unifiedorder->set('notify_url',    'http://dev.funxdata.com/wechat/example/payment-unifiedorder.php');
+$unifiedorder->set('notify_url',    EXAMPLE_URL.'payment-notify.php');
 
 // 获取支付链接
 $qrcode = new Temporary($unifiedorder);

@@ -39,15 +39,15 @@ if( !isset($_SESSION['openid']) ) {
  */
 $template = new Template('zJ_a1LjbkZrHc9YaWeV7tmuUtI7LvlNvRPFdcmsprr4');
 $template
-    ->add('result',         '恭喜您，中奖啦！', '#ff0000')
-    ->add('totalWinMoney',  '中奖 5 元')
+    ->add('result',         '恭喜您，中奖啦！')
+    ->add('totalWinMoney',  '中奖 5,000,000.00 元')
     ->add('issueInfo',      '双色球2013023期')
     ->add('fee',            '39.8 元')
     ->add('betTime',        '2013-10-10 21:30')
-    ->add('remark',         '奖金将于 01:00 前到账，请稍候领取');
+    ->add('remark',         '测试模板消息呢，别当真！', '#ff0000');
 
-$template->setUrl('http://github.com/');                // 跳转链接
-$template->setOpenid($_SESSION['openid']);   // 发给谁
+$template->setUrl('http://github.com/');        // 跳转链接
+$template->setOpenid($_SESSION['openid']);      // 发给谁
 
 /**
  * 发送消息模板

@@ -4,27 +4,22 @@ namespace Thenbsp\Wechat\Payment\Qrcode;
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\Serializer;
-use Thenbsp\Wechat\Bridge\XmlResponse;
 use Thenbsp\Wechat\Payment\Unifiedorder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class RequestContext extends ArrayCollection
+class ForeverCallback extends ArrayCollection
 {
     /**
-     * 状态（成功）
+     * 成功
      */
     const SUCCESS = 'SUCCESS';
 
     /**
-     * 状态（失败）
+     * 失败
      */
     const FAIL = 'FAIL';
-
-    /**
-     * Symfony\Component\HttpFoundation\Request
-     */
-    protected $request;
 
     /**
      * 构造方法
@@ -32,52 +27,26 @@ class RequestContext extends ArrayCollection
     public function __construct(Request $request = null)
     {
         $request = $request ?: Request::createFromGlobals();
-
-        $this->setRequest($request);
-    }
-
-    /**
-     * 设置请求对象
-     */
-    public function setRequest(Request $request)
-    {
         $content = $request->getContent();
 
-        $options = ($content && Serializer::isXML($content))
-            ? Serializer::xmlDecode($content)
-            : array();
+        try {
+            $options = Serializer::parse($content);
+        } catch (\InvalidArgumentException $e) {
+            $options = array();
+        }
 
-        // update ArrayCollection options
         parent::__construct($options);
-
-        $this->request = $request;
-    }
-
-    /**
-     * 获取请求对象
-     */
-    public function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-     * 检测本次请求是否有效
-     */
-    public function isValid()
-    {
-        return $this->containsKey('product_id');
     }
 
     /**
      * 错误响应
      */
-    public function fail($errorMessage = null)
+    public function fail($message = null)
     {
-        $options = array('return_code' => self::FAIL);
+        $options = array('return_code' => static::FAIL);
 
-        if( !is_null($errorMessage) ) {
-            $options['return_msg'] = $errorMessage;
+        if( !is_null($message) ) {
+            $options['return_msg'] = $message;
         }
 
         $this->xmlResponse($options);
@@ -97,8 +66,8 @@ class RequestContext extends ArrayCollection
             'mch_id'        => $unifiedorder['mch_id'],
             'prepay_id'     => $response['prepay_id'],
             'nonce_str'     => Util::getRandomString(),
-            'return_code'   => self::SUCCESS,
-            'result_code'   => self::SUCCESS
+            'return_code'   => static::SUCCESS,
+            'result_code'   => static::SUCCESS
         );
 
         // 按 ASCII 码排序
@@ -115,9 +84,12 @@ class RequestContext extends ArrayCollection
     /**
      * 响应 Xml
      */
-    private function xmlResponse(array $options)
+    protected function xmlResponse(array $options)
     {
-        $response = new XmlResponse($options);
+        $content = Serializer::xmlEncode($options);
+        $headers = array('Content-Type'=>'application/xml');
+
+        $response = new Response($content, 200, $headers);
         $response->send();
     }
 }

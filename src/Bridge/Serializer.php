@@ -60,6 +60,22 @@ class Serializer
     }
 
     /**
+     * xml/json to array collection
+     */
+    public static function parse($string)
+    {
+        if( static::isJSON($string) ) {
+            $result = static::jsonDecode($string);
+        } elseif( static::isXML($string) ) {
+            $result = static::xmlDecode($string);
+        } else {
+            throw new \InvalidArgumentException(sprintf('Unable to parse: %s', (string) $string));
+        }
+
+        return (array) $result;
+    }
+
+    /**
      * check is json string
      */
     public static function isJSON($data)
