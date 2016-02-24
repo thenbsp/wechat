@@ -123,7 +123,7 @@ class Client
             throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
-        return new AccessToken($this->appid, $response);
+        return new AccessToken($this->appid, $response->toArray());
     }
 
     /**

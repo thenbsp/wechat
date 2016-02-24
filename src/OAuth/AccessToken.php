@@ -25,11 +25,11 @@ class AccessToken extends ArrayCollection
     /**
      * 构造方法
      */
-    public function __construct($appid, ArrayCollection $options)
+    public function __construct($appid, array $options)
     {
         $this->appid = $appid;
 
-        parent::__construct($options->toArray());
+        parent::__construct($options);
     }
 
     /**
