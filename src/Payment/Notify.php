@@ -3,8 +3,8 @@
 namespace Thenbsp\Wechat\Payment;
 
 use Thenbsp\Wechat\Bridge\Serializer;
+use Thenbsp\Wechat\Bridge\XmlResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Notify extends ArrayCollection
@@ -69,10 +69,7 @@ class Notify extends ArrayCollection
      */
     protected function xmlResponse(array $options)
     {
-        $content = Serializer::xmlEncode($options);
-        $headers = array('Content-Type'=>'application/xml');
-
-        $response = new Response($content, 200, $headers);
+        $response = new XmlResponse($options);
         $response->send();
     }
 }

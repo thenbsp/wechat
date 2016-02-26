@@ -4,9 +4,9 @@ namespace Thenbsp\Wechat\Payment\Qrcode;
 
 use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\Serializer;
+use Thenbsp\Wechat\Bridge\XmlResponse;
 use Thenbsp\Wechat\Payment\Unifiedorder;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class ForeverCallback extends ArrayCollection
@@ -86,10 +86,7 @@ class ForeverCallback extends ArrayCollection
      */
     protected function xmlResponse(array $options)
     {
-        $content = Serializer::xmlEncode($options);
-        $headers = array('Content-Type'=>'application/xml');
-
-        $response = new Response($content, 200, $headers);
+        $response = new XmlResponse($options);
         $response->send();
     }
 }
