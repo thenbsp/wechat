@@ -4,10 +4,11 @@ namespace Thenbsp\Wechat\Event\Entity;
 
 use Thenbsp\Wechat\Event\Entity;
 
-class Shortvideo extends Entity
+class EventLocation extends Entity
 {
     public function isValid()
     {
-        return (strtolower($this['MsgType']) === 'shortvideo');
+        return ($this['MsgType'] === 'event')
+            && ($this['Event'] === 'LOCATION');
     }
 }
