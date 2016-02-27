@@ -7,7 +7,7 @@ interface EventListenerInterface
     /**
      * trigger event
      */
-    public function trigger($handler, Entity $entity);
+    public function trigger($handler, Event $entity);
 
     /**
      * add listener

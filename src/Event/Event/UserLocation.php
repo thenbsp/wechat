@@ -1,10 +1,10 @@
 <?php
 
-namespace Thenbsp\Wechat\Event\Entity;
+namespace Thenbsp\Wechat\Event\Event;
 
-use Thenbsp\Wechat\Event\Entity;
+use Thenbsp\Wechat\Event\Event;
 
-class EventLocation extends Entity
+class UserLocation extends Event
 {
     public function isValid()
     {

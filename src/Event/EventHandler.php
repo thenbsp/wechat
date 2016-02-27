@@ -19,19 +19,27 @@ class EventHandler implements EventHandlerInterface
     {
         $request = $request ?: Request::createFromGlobals();
 
-        $this->fromRequest($request);
+        $this->setRequest($request);
     }
 
     /**
-     * set from request
+     * set request
      */
-    public function fromRequest(Request $request)
+    public function setRequest(Request $request)
     {
         $this->request = $request;
     }
 
     /**
-     * handle event
+     * get request
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * handle event via request
      */
     public function handle(EventListenerInterface $listener)
     {
@@ -48,12 +56,9 @@ class EventHandler implements EventHandlerInterface
         }
 
         foreach( $listener->getListeners() as $namespace => $callable ) {
-            $handler = new $namespace($options);
-            if( $handler->isValid() ) {
-                $callback = $listener->trigger($namespace, $handler);
-                if( $callback instanceof Entity ) {
-                    $callback->send();
-                }
+            $event = new $namespace($options);
+            if( $event->isValid() ) {
+                $listener->trigger($namespace, $event);
                 break;
             }
         }

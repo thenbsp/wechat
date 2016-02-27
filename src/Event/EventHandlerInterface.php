@@ -7,12 +7,17 @@ use Symfony\Component\HttpFoundation\Request;
 interface EventHandlerInterface
 {
     /**
-     * set from request
+     * set request
      */
-    public function fromRequest(Request $request);
+    public function setRequest(Request $request);
 
     /**
-     * handle event
+     * get request
+     */
+    public function getRequest();
+
+    /**
+     * handle event via request
      */
     public function handle(EventListenerInterface $listener);
 }

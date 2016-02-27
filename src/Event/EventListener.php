@@ -12,10 +12,10 @@ class EventListener implements EventListenerInterface
     /**
      * trigger event
      */
-    public function trigger($handler, Entity $entity)
+    public function trigger($handler, Event $event)
     {
         if( $listener = $this->getListener($handler) ) {
-            return call_user_func_array($listener, array($entity));
+            return call_user_func_array($listener, array($event));
         }
     }
 
@@ -28,9 +28,9 @@ class EventListener implements EventListenerInterface
             throw new \InvalidArgumentException(sprintf('Invlaid Handler "%s"', $handler));
         }
 
-        if( !is_subclass_of($handler, Entity::class) ) {
+        if( !is_subclass_of($handler, Event::class) ) {
             throw new \InvalidArgumentException(sprintf(
-                'The Handler "%s" must be extends "%s"', $handler, Entity::class));
+                'The Handler "%s" must be extends "%s"', $handler, Event::class));
         }
 
         $this->listeners[$handler] = $callable;

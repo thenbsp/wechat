@@ -2,23 +2,15 @@
 
 namespace Thenbsp\Wechat\Message;
 
-use Thenbsp\Wechat\Bridge\Util;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-abstract class Entity extends ArrayCollection
+abstract class Entity
 {
-    protected $event;
-
-    public function __construct(Event $event = null)
-    {
-        if( !is_null($event) ) {
-            $this->set('ToUserName',    $event['ToUserName']);
-            $this->set('FromUserName',  $event['FromUserName']);
-        }
-
-        $this->set('CreateTime', Util::getTimestamp());
-    }
-
+    /**
+     * 消息类型
+     */
     abstract public function getType();
+
+    /**
+     * 消息内容
+     */
+    abstract public function getBody();
 }

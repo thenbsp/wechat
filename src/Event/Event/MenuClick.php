@@ -1,10 +1,10 @@
 <?php
 
-namespace Thenbsp\Wechat\Event\Entity;
+namespace Thenbsp\Wechat\Event\Event;
 
-use Thenbsp\Wechat\Event\Entity;
+use Thenbsp\Wechat\Event\Event;
 
-class EventMenuClick extends Entity
+class MenuClick extends Event
 {
     public function isValid()
     {
