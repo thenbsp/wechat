@@ -10,8 +10,8 @@
             "email": "thenbsp@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
+        "php": ">=5.5.9",
         "guzzlehttp/guzzle": "^6.1",
         "doctrine/cache": "^1.6",
         "doctrine/collections": "^1.3",
@@ -23,5 +23,6 @@
     },
     "autoload": {
         "psr-4": { "Thenbsp\\Wechat\\": "./src" }
-    }
+    },
+    "minimum-stability": "stable"
 }
