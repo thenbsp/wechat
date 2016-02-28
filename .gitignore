@@ -1,5 +1,3 @@
 vendor/*
-example/example.php
-example/cache/*
-example/logs/*
+example/*
 composer.lock
