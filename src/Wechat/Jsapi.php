@@ -126,6 +126,14 @@ class Jsapi
     /**
      * Jsapi Ticket 对象
      */
+    public function setTicket(Ticket $ticket)
+    {
+        $this->ticket = $ticket;
+    }
+
+    /**
+     * Jsapi Ticket 对象
+     */
     public function getTicket()
     {
         return $this->ticket;
