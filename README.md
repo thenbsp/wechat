@@ -1,6 +1,7 @@
 # 简介
 
 微信公众平台第三方 SDK 开发包，优雅、健壮，可扩展，遵循 [PSR](http://www.php-fig.org/) 开发规范。
+
 # 安装
 
 ```
@@ -37,11 +38,3 @@ composer require thenbsp/wechat
     - 事件监听器
     - 事件处理
     - 被动回复消息
-
-# 作者
-
-[thenbsp@gmail.com](thenbsp@gmail.com)
-
-欢迎举报 BUG 和 提供建议或意见！
-
-另外，我还要上班，因此时间不是很充裕，大家需要的新功能，我会在接下来有限的时间内逐步加上的，表急。。。
