@@ -11,7 +11,7 @@ composer require thenbsp/wechat
 # 功能
 
 - 基础支持
-    - [数据缓存] (wechat_cache)
+    - [数据缓存] (/wiki/wechat_cache)
     - [日志](wechat_logger)
     - [全局 AccessToken](wechat_access_token)
     - [生成 Jsapi 配置](wechat_jsapi)
