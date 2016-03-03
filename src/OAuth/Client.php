@@ -19,11 +19,6 @@ class Client
     const ACCESS_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/access_token';
 
     /**
-     * 网页授权获取用户信息
-     */
-    const USERINFO = 'https://api.weixin.qq.com/sns/userinfo';
-
-    /**
      * scope
      */
     const SNSAPI_BASE       = 'snsapi_base';
@@ -124,31 +119,5 @@ class Client
         }
 
         return new AccessToken($this->appid, $response->toArray());
-    }
-
-    /**
-     * 通过网页授权获取的 AccessToken 获取用户信息
-     */
-    public function getUserinfo(AccessToken $accessToken, $lang = 'zh_CN')
-    {
-        if( !$accessToken->isValid() ) {
-            $accessToken->refresh();
-        }
-
-        $query = array(
-            'access_token'  => $accessToken['access_token'],
-            'openid'        => $accessToken['openid'],
-            'lang'          => $lang
-        );
-
-        $response = Http::request('GET', static::USERINFO)
-            ->withQuery($query)
-            ->send();
-
-        if( $response['errcode'] != 0 ) {
-            throw new \Exception($response['errmsg'], $response['errcode']);
-        }
-
-        return $response;
     }
 }

@@ -52,4 +52,18 @@ class Util
 
         return substr(str_shuffle(str_repeat($pool, ceil($length / strlen($pool)))), 0, $length);
     }
+
+    /**
+     * 过滤微信昵称中的表情（不过滤 HTML 符号）
+     */
+    public static function filterNickname($nickname)
+    {
+        $nickname = preg_replace('/[\x{1F600}-\x{1F64F}]/u', '', $nickname);
+        $nickname = preg_replace('/[\x{1F300}-\x{1F5FF}]/u', '', $nickname);
+        $nickname = preg_replace('/[\x{1F680}-\x{1F6FF}]/u', '', $nickname);
+        $nickname = preg_replace('/[\x{2600}-\x{26FF}]/u', '', $nickname);
+        $nickname = preg_replace('/[\x{2700}-\x{27BF}]/u', '', $nickname);
+
+        return trim($nickname);
+    }
 }

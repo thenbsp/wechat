@@ -18,6 +18,11 @@ class AccessToken extends ArrayCollection
     const IS_VALID = 'https://api.weixin.qq.com/sns/auth';
 
     /**
+     * 网页授权获取用户信息
+     */
+    const USERINFO = 'https://api.weixin.qq.com/sns/userinfo';
+
+    /**
      * 用户 access_token 和公众号是一一对应的
      */
     protected $appid;
@@ -38,6 +43,32 @@ class AccessToken extends ArrayCollection
     public function getAppid()
     {
         return $this->appid;
+    }
+
+    /**
+     * 获取用户信息
+     */
+    public function getUser($lang = 'zh_CN')
+    {
+        if( !$this->isValid() ) {
+            $this->refresh();
+        }
+
+        $query = array(
+            'access_token'  => $this['access_token'],
+            'openid'        => $this['openid'],
+            'lang'          => $lang
+        );
+
+        $response = Http::request('GET', static::USERINFO)
+            ->withQuery($query)
+            ->send();
+
+        if( $response['errcode'] != 0 ) {
+            throw new \Exception($response['errmsg'], $response['errcode']);
+        }
+
+        return $response;
     }
 
     /**

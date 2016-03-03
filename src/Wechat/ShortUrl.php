@@ -34,7 +34,7 @@ class ShortUrl
     /**
      * 获取短链接
      */
-    public function getShortUrl($longUrl, $cacheLifeTime = 86400)
+    public function toShort($longUrl, $cacheLifeTime = 86400)
     {
         $cacheId = md5($longUrl);
 
