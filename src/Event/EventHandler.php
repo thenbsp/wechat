@@ -2,17 +2,11 @@
 
 namespace Thenbsp\Wechat\Event;
 
-use Psr\Log\LoggerAwareTrait;
 use Thenbsp\Wechat\Bridge\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 
 class EventHandler implements EventHandlerInterface
 {
-    /**
-     * use Logger Trait
-     */
-    use LoggerAwareTrait;
-
     /**
      * Symfony\Component\HttpFoundation\Request
      */
@@ -23,25 +17,7 @@ class EventHandler implements EventHandlerInterface
      */
     public function __construct(Request $request = null)
     {
-        $request = $request ?: Request::createFromGlobals();
-
-        $this->setRequest($request);
-    }
-
-    /**
-     * set request
-     */
-    public function setRequest(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * get request
-     */
-    public function getRequest()
-    {
-        return $this->request;
+        $this->request = $request ?: Request::createFromGlobals();
     }
 
     /**
@@ -59,10 +35,6 @@ class EventHandler implements EventHandlerInterface
             $options = Serializer::parse($content);
         } catch (\InvalidArgumentException $e) {
             $options = array();
-        }
-
-        if( $this->logger ) {
-            $this->logger->debug($content);
         }
 
         foreach( $listener->getListeners() as $namespace => $callable ) {
