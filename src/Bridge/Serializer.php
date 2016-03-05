@@ -60,7 +60,7 @@ class Serializer
     }
 
     /**
-     * xml/json to array collection
+     * xml/json to array
      */
     public static function parse($string)
     {

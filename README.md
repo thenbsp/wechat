@@ -37,6 +37,5 @@ composer require thenbsp/wechat
     - [消息实体](https://github.com/thenbsp/wechat/wiki/message_entity)
     - [模板消息](https://github.com/thenbsp/wechat/wiki/message_template)
 - 事件系统
-    - [事件监听器](https://github.com/thenbsp/wechat/wiki/event_listener)
-    - [事件处理](https://github.com/thenbsp/wechat/wiki/event_handler)
+    - [事件监听](https://github.com/thenbsp/wechat/wiki/event_system)
     - [被动回复消息](https://github.com/thenbsp/wechat/wiki/event_response)
