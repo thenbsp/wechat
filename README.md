@@ -10,4 +10,4 @@ composer require thenbsp/wechat
 
 ### 文档
 
-快速使用请查看 [项目 WIKI](https://github.com/thenbsp/wechat/wiki)
+文档请移步 [项目 WIKI](https://github.com/thenbsp/wechat/wiki) ，使用前建议先看文档！
