@@ -4,6 +4,7 @@ namespace Thenbsp\Wechat\User;
 
 use Thenbsp\Wechat\Bridge\Http;
 use Thenbsp\Wechat\Wechat\AccessToken;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class User
 {
@@ -33,7 +34,7 @@ class User
     /**
      * 获取用户信息
      */
-    public function getByOpenid($openid, $lang = 'zh_CN')
+    public function get($openid, $lang = 'zh_CN')
     {
         $query = array(
             'openid'    => $openid,
@@ -50,5 +51,29 @@ class User
         }
 
         return $response;
+    }
+
+    /**
+     * 批量获取用户信息
+     */
+    public function getBetch(array $openid, $lang = 'zh_CN')
+    {
+        $body = array();
+
+        foreach($openid as $key=>$value) {
+            $body['user_list'][$key]['openid'] = $value;
+            $body['user_list'][$key]['lang']   = $lang;
+        }
+
+        $response = Http::request('POST', static::BETCH)
+            ->withAccessToken($this->accessToken)
+            ->withBody($body)
+            ->send();
+
+        if( $response['errcode'] != 0 ) {
+            throw new \Exception($response['errmsg'], $response['errcode']);
+        }
+
+        return new ArrayCollection($response['user_info_list']);
     }
 }
