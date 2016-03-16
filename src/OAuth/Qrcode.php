@@ -2,14 +2,14 @@
 
 namespace Thenbsp\Wechat\OAuth;
 
-class Client extends AbstractClient
+class Qrcode extends AbstractClient
 {
     /**
      * 授权接口地址
      */
     public function resolveAuthorizeUrl()
     {
-        return 'https://open.weixin.qq.com/connect/oauth2/authorize';
+        return 'https://open.weixin.qq.com/connect/qrconnect';
     }
 
     /**
@@ -17,6 +17,6 @@ class Client extends AbstractClient
      */
     public function resolveScope()
     {
-        return $this->scope ?: 'snsapi_base';
+        return $this->scope ?: 'snsapi_login';
     }
 }
