@@ -19,6 +19,11 @@ class User
     const BETCH = 'https://api.weixin.qq.com/cgi-bin/user/info/batchget';
 
     /**
+     * 获取用户列表
+     */
+    const LISTS = 'https://api.weixin.qq.com/cgi-bin/user/get';
+
+    /**
      * Thenbsp\Wechat\Wechat\AccessToken
      */
     protected $accessToken;
@@ -29,6 +34,27 @@ class User
     public function __construct(AccessToken $accessToken)
     {
         $this->accessToken = $accessToken;
+    }
+
+    /**
+     * 查询用户列表
+     */
+    public function lists($nextOpenid = null)
+    {
+        $query = is_null($nextOpenid)
+            ? array()
+            : array('next_openid'=>$nextOpenid);
+
+        $response = Http::request('GET', static::LISTS)
+            ->withAccessToken($this->accessToken)
+            ->withQuery($query)
+            ->send();
+
+        if( $response['errcode'] != 0 ) {
+            throw new \Exception($response['errmsg'], $response['errcode']);
+        }
+
+        return $response;
     }
 
     /**
