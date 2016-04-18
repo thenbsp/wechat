@@ -21,11 +21,6 @@ class Jsapi
     protected $accessToken;
 
     /**
-     * Thenbsp\Wechat\Wechat\Jsapi\Ticket
-     */
-    protected $ticket;
-
-    /**
      * 是否开起调试
      */
     protected $debug = false;
@@ -53,14 +48,7 @@ class Jsapi
      */
     public function __construct(AccessToken $accessToken)
     {
-        $ticket = new Ticket($accessToken);
-
-        if( $this->cache ) {
-            $ticket->setCache($this->cache);
-        }
-
-        $this->ticket       = $ticket;
-        $this->accessToken  = $accessToken;
+        $this->accessToken = $accessToken;
     }
 
     /**
@@ -100,14 +88,19 @@ class Jsapi
      */
     public function getConfig($asArray = false)
     {
+        $ticket = new Ticket($this->accessToken);
+
+        if( $this->cache ) {
+            $ticket->setCache($this->cache);
+        }
+
         $options = array(
-            'jsapi_ticket'  => $this->ticket->getTicketString(),
+            'jsapi_ticket'  => $ticket->getTicketString(),
             'timestamp'     => Util::getTimestamp(),
             'url'           => Util::getCurrentUrl(),
             'noncestr'      => Util::getRandomString(),
         );
 
-        // 按 ASCII 码排序
         ksort($options);
 
         $signature = sha1(urldecode(http_build_query($options)));
@@ -121,22 +114,6 @@ class Jsapi
         );
 
         return $asArray ? $configure : Serializer::jsonEncode($configure);
-    }
-
-    /**
-     * Jsapi Ticket 对象
-     */
-    public function setTicket(Ticket $ticket)
-    {
-        $this->ticket = $ticket;
-    }
-
-    /**
-     * Jsapi Ticket 对象
-     */
-    public function getTicket()
-    {
-        return $this->ticket;
     }
 
     /**
