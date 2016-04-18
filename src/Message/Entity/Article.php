@@ -30,7 +30,11 @@ class Article extends Entity
             $body['item'][] = $item->getBody();
         }
 
-        return array('Articles' => $body);
+        $count = isset($body['item'])
+            ? count($body['item'])
+            : 0;
+
+        return array('Articles' => $body, 'ArticleCount' => $count);
     }
 
     /**
