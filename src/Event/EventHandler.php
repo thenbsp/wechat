@@ -17,7 +17,25 @@ class EventHandler implements EventHandlerInterface
      */
     public function __construct(Request $request = null)
     {
-        $this->request = $request ?: Request::createFromGlobals();
+        $request = $request ?: Request::createFromGlobals();
+
+        $this->setRequest($request);
+    }
+
+    /**
+     * set from request
+     */
+    public function setRequest(Request $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * get from rquest
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 
     /**

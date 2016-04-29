@@ -10,6 +10,6 @@ class Subscribe extends Event
     {
         return ($this['MsgType'] === 'event')
             && ($this['Event'] === 'subscribe')
-            && !$this->containsKey('EventKey');
+            && empty($this['EventKey']);
     }
 }

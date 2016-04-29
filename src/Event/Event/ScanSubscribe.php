@@ -13,10 +13,6 @@ class ScanSubscribe extends Event
      */
     public function __construct(array $options = array())
     {
-        if( array_key_exists('EventKey', $options) ) {
-            $options['EventKeyValue'] = mb_substr($options['EventKey'], 8);
-        }
-
         parent::__construct($options);
     }
 
@@ -24,6 +20,6 @@ class ScanSubscribe extends Event
     {
         return ($this['MsgType'] === 'event')
             && ($this['Event'] === 'subscribe')
-            && $this->containsKey('EventKey');
+            && !empty($this['EventKey']);
     }
 }

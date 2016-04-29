@@ -13,17 +13,12 @@ class ScanSubscribed extends Event
      */
     public function __construct(array $options = array())
     {
-        if( array_key_exists('EventKey', $options) ) {
-            $options['EventKeyValue'] = mb_substr($options['EventKey'], 6);
-        }
-
         parent::__construct($options);
     }
 
     public function isValid()
     {
         return ($this['MsgType'] === 'event')
-            && ($this['Event'] === 'SCAN')
-            && $this->containsKey('EventKey');
+            && ($this['Event'] === 'SCAN');
     }
 }
