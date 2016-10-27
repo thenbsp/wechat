@@ -38,12 +38,18 @@ abstract class AbstractClient
     protected $redirectUri;
 
     /**
+     * state manager
+     */
+    protected $stateManager;
+
+    /**
      * 构造方法
      */
     public function __construct($appid, $appsecret)
     {
         $this->appid        = $appid;
         $this->appsecret    = $appsecret;
+        $this->stateManager = new StateManager;
     }
 
     /**
@@ -75,6 +81,12 @@ abstract class AbstractClient
      */
     public function getAuthorizeUrl()
     {
+        if (null === $this->state) {
+            $this->state = Util::getRandomString(16);
+        }
+
+        $this->stateManager->setState($this->state);
+
         $query = array(
             'appid'         => $this->appid,
             'redirect_uri'  => $this->redirectUri ?: Util::getCurrentUrl(),
@@ -89,8 +101,18 @@ abstract class AbstractClient
     /**
      * 通过 code 换取 AccessToken
      */
-    public function getAccessToken($code)
+    public function getAccessToken($code, $state = null)
     {
+        if (null === $state && !isset($_GET['state'])) {
+            throw new \Exception('Invalid Request');
+        }
+
+        // http://www.twobotechnologies.com/blog/2014/02/importance-of-state-in-oauth2.html
+        $state = $state ?: $_GET['state'];
+        if (!$this->stateManager->isValid($state)) {
+            throw new \Exception(sprintf('Invalid Authentication State "%s"', $state));
+        }
+
         $query = array(
             'appid'         => $this->appid,
             'secret'        => $this->appsecret,
