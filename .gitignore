@@ -1,3 +1,2 @@
 vendor/*
-.php_cs.dist
-composer.lock
+.php_cs.cache
