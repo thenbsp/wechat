@@ -13,12 +13,12 @@ class Delete
     const DELETE_URL = 'https://api.weixin.qq.com/cgi-bin/menu/delete';
 
     /**
-     * Thenbsp\Wechat\Wechat\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken.
      */
     protected $accessToken;
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(AccessToken $accessToken)
     {
@@ -26,7 +26,7 @@ class Delete
     }
 
     /**
-     * 获取响应
+     * 获取响应.
      */
     public function doDelete()
     {
@@ -34,7 +34,7 @@ class Delete
             ->withAccessToken($this->accessToken)
             ->send();
 
-        if( $response['errcode'] != 0 ) {
+        if (0 != $response['errcode']) {
             throw new \Exception($response['errmsg'], $response['errcode']);
         }
 

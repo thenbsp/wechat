@@ -8,39 +8,39 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class AccessToken extends ArrayCollection
 {
-    /**
+    /*
      * Cache Trait
      */
     use CacheTrait;
 
     /**
-     * http://mp.weixin.qq.com/wiki/14/9f9c82c1af308e3b14ba9b973f99a8ba.html
+     * http://mp.weixin.qq.com/wiki/14/9f9c82c1af308e3b14ba9b973f99a8ba.html.
      */
     const ACCESS_TOKEN = 'https://api.weixin.qq.com/cgi-bin/token';
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct($appid, $appsecret)
     {
-        $this->set('appid',     $appid);
+        $this->set('appid', $appid);
         $this->set('appsecret', $appsecret);
     }
 
     /**
-     * 获取 AccessToken（调用缓存，返回 String）
+     * 获取 AccessToken（调用缓存，返回 String）.
      */
     public function getTokenString()
     {
         $cacheId = $this->getCacheId();
 
-        if( $this->cache && $data = $this->cache->fetch($cacheId) ) {
+        if ($this->cache && $data = $this->cache->fetch($cacheId)) {
             return $data['access_token'];
         }
 
         $response = $this->getTokenResponse();
 
-        if( $this->cache ) {
+        if ($this->cache) {
             $this->cache->save($cacheId, $response, $response['expires_in']);
         }
 
@@ -48,21 +48,21 @@ class AccessToken extends ArrayCollection
     }
 
     /**
-     * 获取 AccessToken（不缓存，返回原始数据）
+     * 获取 AccessToken（不缓存，返回原始数据）.
      */
     public function getTokenResponse()
     {
-        $query = array(
-            'grant_type'    => 'client_credential',
-            'appid'         => $this['appid'],
-            'secret'        => $this['appsecret']
-        );
+        $query = [
+            'grant_type' => 'client_credential',
+            'appid' => $this['appid'],
+            'secret' => $this['appsecret'],
+        ];
 
         $response = Http::request('GET', static::ACCESS_TOKEN)
             ->withQuery($query)
             ->send();
 
-        if( $response->containsKey('errcode') ) {
+        if ($response->containsKey('errcode')) {
             throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
@@ -70,7 +70,7 @@ class AccessToken extends ArrayCollection
     }
 
     /**
-     * 从缓存中清除
+     * 从缓存中清除.
      */
     public function clearFromCache()
     {
@@ -80,7 +80,7 @@ class AccessToken extends ArrayCollection
     }
 
     /**
-     * 获取缓存 ID
+     * 获取缓存 ID.
      */
     public function getCacheId()
     {

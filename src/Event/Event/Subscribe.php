@@ -8,8 +8,8 @@ class Subscribe extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'event')
-            && ($this['Event'] === 'subscribe')
+        return ('event' === $this['MsgType'])
+            && ('subscribe' === $this['Event'])
             && empty($this['EventKey']);
     }
 }

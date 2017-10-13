@@ -15,54 +15,54 @@ class Cash extends ArrayCollection
     const COUPON_CASH = 'https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack';
 
     /**
-     * 商户 KEY
+     * 商户 KEY.
      */
     protected $key;
 
     /**
-     * SSL 证书
+     * SSL 证书.
      */
     protected $sslCert;
     protected $sslKey;
 
     /**
-     * 全部选项（不包括 sign）
+     * 全部选项（不包括 sign）.
      */
-    protected $required = array(
+    protected $required = [
         'nonce_str', 'mch_billno', 'mch_id', 'wxappid', 'send_name', 're_openid',
-        'total_amount', 'total_num', 'wishing', 'client_ip', 'act_name', 'remark'
-    );
+        'total_amount', 'total_num', 'wishing', 'client_ip', 'act_name', 'remark',
+    ];
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct($appid, $mchid, $key)
     {
         $this->key = $key;
 
-        $this->set('wxappid',   $appid);
-        $this->set('mch_id',    $mchid);
+        $this->set('wxappid', $appid);
+        $this->set('mch_id', $mchid);
     }
 
     /**
-     * 调置 SSL 证书
+     * 调置 SSL 证书.
      */
     public function setSSLCert($sslCert, $sslKey)
     {
-        if( !file_exists($sslCert) ) {
+        if (!file_exists($sslCert)) {
             throw new \InvalidArgumentException(sprintf('File "%s" Not Found', $sslCert));
         }
 
-        if( !file_exists($sslKey) ) {
+        if (!file_exists($sslKey)) {
             throw new \InvalidArgumentException(sprintf('File "%s" Not Found', $sslKey));
         }
 
         $this->sslCert = $sslCert;
-        $this->sslKey  = $sslKey;
+        $this->sslKey = $sslKey;
     }
 
     /**
-     * 获取响应结果
+     * 获取响应结果.
      */
     public function getResponse()
     {
@@ -81,11 +81,11 @@ class Cash extends ArrayCollection
             ->withXmlBody($options)
             ->send();
 
-        if( $response['return_code'] === 'FAIL' ) {
+        if ('FAIL' === $response['return_code']) {
             throw new \Exception($response['return_msg']);
         }
 
-        if( $response['result_code'] === 'FAIL' ) {
+        if ('FAIL' === $response['result_code']) {
             throw new \Exception($response['err_code_des']);
         }
 
@@ -93,14 +93,14 @@ class Cash extends ArrayCollection
     }
 
     /**
-     * 合并和校验参数
+     * 合并和校验参数.
      */
     public function resolveOptions()
     {
-        $defaults = array(
+        $defaults = [
             'nonce_str' => Util::getRandomString(),
-            'client_ip' => Util::getClientIp()
-        );
+            'client_ip' => Util::getClientIp(),
+        ];
 
         $resolver = new OptionsResolver();
         $resolver

@@ -8,52 +8,52 @@ use Thenbsp\Wechat\Bridge\Http;
 abstract class AbstractClient
 {
     /**
-     * AccessToken URL
+     * AccessToken URL.
      */
     const ACCESS_TOKEN = 'https://api.weixin.qq.com/sns/oauth2/access_token';
 
     /**
-     * 公众号 Appid
+     * 公众号 Appid.
      */
     protected $appid;
 
     /**
-     * 公众号 AppSecret
+     * 公众号 AppSecret.
      */
     protected $appsecret;
 
     /**
-     * scope
+     * scope.
      */
     protected $scope;
 
     /**
-     * state
+     * state.
      */
     protected $state;
 
     /**
-     * redirect url
+     * redirect url.
      */
     protected $redirectUri;
 
     /**
-     * state manager
+     * state manager.
      */
     protected $stateManager;
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct($appid, $appsecret)
     {
-        $this->appid        = $appid;
-        $this->appsecret    = $appsecret;
-        $this->stateManager = new StateManager;
+        $this->appid = $appid;
+        $this->appsecret = $appsecret;
+        $this->stateManager = new StateManager();
     }
 
     /**
-     * 设置 scope
+     * 设置 scope.
      */
     public function setScope($scope)
     {
@@ -61,7 +61,7 @@ abstract class AbstractClient
     }
 
     /**
-     * 设置 state
+     * 设置 state.
      */
     public function setState($state)
     {
@@ -69,7 +69,7 @@ abstract class AbstractClient
     }
 
     /**
-     * 设置 redirect uri
+     * 设置 redirect uri.
      */
     public function setRedirectUri($redirectUri)
     {
@@ -77,7 +77,7 @@ abstract class AbstractClient
     }
 
     /**
-     * 获取授权 URL
+     * 获取授权 URL.
      */
     public function getAuthorizeUrl()
     {
@@ -87,19 +87,19 @@ abstract class AbstractClient
 
         $this->stateManager->setState($this->state);
 
-        $query = array(
-            'appid'         => $this->appid,
-            'redirect_uri'  => $this->redirectUri ?: Util::getCurrentUrl(),
+        $query = [
+            'appid' => $this->appid,
+            'redirect_uri' => $this->redirectUri ?: Util::getCurrentUrl(),
             'response_type' => 'code',
-            'scope'         => $this->resolveScope(),
-            'state'         => $this->state
-        );
+            'scope' => $this->resolveScope(),
+            'state' => $this->state,
+        ];
 
         return $this->resolveAuthorizeUrl().'?'.http_build_query($query);
     }
 
     /**
-     * 通过 code 换取 AccessToken
+     * 通过 code 换取 AccessToken.
      */
     public function getAccessToken($code, $state = null)
     {
@@ -113,18 +113,18 @@ abstract class AbstractClient
             throw new \Exception(sprintf('Invalid Authentication State "%s"', $state));
         }
 
-        $query = array(
-            'appid'         => $this->appid,
-            'secret'        => $this->appsecret,
-            'code'          => $code,
-            'grant_type'    => 'authorization_code'
-        );
+        $query = [
+            'appid' => $this->appid,
+            'secret' => $this->appsecret,
+            'code' => $code,
+            'grant_type' => 'authorization_code',
+        ];
 
         $response = Http::request('GET', static::ACCESS_TOKEN)
             ->withQuery($query)
             ->send();
 
-        if( $response['errcode'] != 0 ) {
+        if (0 != $response['errcode']) {
             throw new \Exception($response['errmsg'], $response['errcode']);
         }
 

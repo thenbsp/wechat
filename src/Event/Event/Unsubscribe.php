@@ -8,7 +8,7 @@ class Unsubscribe extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'event')
-            && ($this['Event'] === 'unsubscribe');
+        return ('event' === $this['MsgType'])
+            && ('unsubscribe' === $this['Event']);
     }
 }

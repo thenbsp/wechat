@@ -13,12 +13,12 @@ class Query
     const QUERY_URL = 'https://api.weixin.qq.com/cgi-bin/menu/get';
 
     /**
-     * Thenbsp\Wechat\Wechat\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken.
      */
     protected $accessToken;
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(AccessToken $accessToken)
     {
@@ -26,7 +26,7 @@ class Query
     }
 
     /**
-     * 获取响应结果
+     * 获取响应结果.
      */
     public function doQuery()
     {
@@ -34,7 +34,7 @@ class Query
             ->withAccessToken($this->accessToken)
             ->send();
 
-        if( $response['errcode'] != 0 ) {
+        if (0 != $response['errcode']) {
             throw new \Exception($response['errmsg'], $response['errcode']);
         }
 

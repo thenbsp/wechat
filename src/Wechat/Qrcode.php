@@ -3,12 +3,11 @@
 namespace Thenbsp\Wechat\Wechat;
 
 use Thenbsp\Wechat\Bridge\CacheTrait;
-use Thenbsp\Wechat\Wechat\AccessToken;
 use Thenbsp\Wechat\Wechat\Qrcode\Ticket;
 
 class Qrcode
 {
-    /**
+    /*
      * Cache Trait
      */
     use CacheTrait;
@@ -19,12 +18,12 @@ class Qrcode
     const QRCODE_URL = 'https://mp.weixin.qq.com/cgi-bin/showqrcode';
 
     /**
-     * Thenbsp\Wechat\Wechat\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken.
      */
     protected $accessToken;
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(AccessToken $accessToken)
     {
@@ -38,7 +37,7 @@ class Qrcode
     {
         $ticket = new Ticket($this->accessToken, Ticket::QR_SCENE, $scene, $expire);
 
-        if( $this->cache ) {
+        if ($this->cache) {
             $ticket->setCache($this->cache);
         }
 
@@ -55,8 +54,8 @@ class Qrcode
             : Ticket::QR_LIMIT_STR_SCENE;
 
         $ticket = new Ticket($this->accessToken, $type, $scene);
-        
-        if( $this->cache ) {
+
+        if ($this->cache) {
             $ticket->setCache($this->cache);
         }
 
@@ -64,11 +63,11 @@ class Qrcode
     }
 
     /**
-     * 根据 Ticket 创建二维码资源链接
+     * 根据 Ticket 创建二维码资源链接.
      */
     public function getResourceUrl(Ticket $ticket)
     {
-        $query = array('ticket' => $ticket->getTicketString());
+        $query = ['ticket' => $ticket->getTicketString()];
 
         return static::QRCODE_URL.'?'.http_build_query($query);
     }

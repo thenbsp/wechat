@@ -7,12 +7,12 @@ use Thenbsp\Wechat\Payment\Unifiedorder;
 class Temporary
 {
     /**
-     * Thenbsp\Wechat\Payment\Unifiedorder
+     * Thenbsp\Wechat\Payment\Unifiedorder.
      */
     protected $unifiedorder;
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(Unifiedorder $unifiedorder)
     {
@@ -22,13 +22,13 @@ class Temporary
     }
 
     /**
-     * 获取支付链接
+     * 获取支付链接.
      */
     public function getPayurl()
     {
         $response = $this->unifiedorder->getResponse();
 
-        if( !$response->containsKey('code_url') ) {
+        if (!$response->containsKey('code_url')) {
             throw new \Exception('Invalid Unifiedorder Response');
         }
 

@@ -6,81 +6,79 @@ use Thenbsp\Wechat\Bridge\Util;
 use Thenbsp\Wechat\Bridge\CacheTrait;
 use Thenbsp\Wechat\Bridge\Serializer;
 use Thenbsp\Wechat\Wechat\Jsapi\Ticket;
-use Thenbsp\Wechat\Wechat\AccessToken;
 
 class Jsapi
 {
-    /**
+    /*
      * Cache Trait
      */
     use CacheTrait;
 
     /**
-     * Thenbsp\Wechat\Wechat\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken.
      */
     protected $accessToken;
 
     /**
-     * 是否开起调试
+     * 是否开起调试.
      */
     protected $debug = false;
 
     /**
-     * 接口列表
+     * 接口列表.
      */
-    protected $api = array();
+    protected $api = [];
 
     /**
-     * 签名路径
+     * 当前 URL 地址（签名参数）.
      */
-    protected $url = '';
+    protected $currentUrl;
 
     /**
-     * 全部接口
+     * 全部接口.
      */
-    protected $apiValids = array(
+    protected $apiValids = [
         'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo',
         'onMenuShareQZone', 'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice',
         'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'downloadVoice', 'chooseImage',
         'previewImage', 'uploadImage', 'downloadImage', 'translateVoice', 'getNetworkType',
         'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'hideMenuItems',
         'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'closeWindow',
-        'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'
-    );
+        'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard',
+    ];
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(AccessToken $accessToken)
     {
         $this->accessToken = $accessToken;
     }
+
     /**
      * 注入签名地址
      */
-    public function addUrl($url)
+    public function setCurrentUrl($url)
     {
-        $url = (string) $url;
-        if ($url){
-            $this->url = $url;
-        }
+        $this->currentUrl = $url;
 
         return $this;
     }
+
     /**
-     * 注入接口
+     * 注入接口.
      */
     public function addApi($apis)
     {
-        if( is_array($apis) ) {
-            foreach( $apis AS $api ) {
+        if (is_array($apis)) {
+            foreach ($apis as $api) {
                 $this->addApi($api);
             }
         }
 
         $apiName = (string) $apis;
 
-        if( !in_array($apiName, $this->apiValids, true) ) {
+        if (!in_array($apiName, $this->apiValids, true)) {
             throw new \InvalidArgumentException(sprintf('Invalid Api: %s', $apiName));
         }
 
@@ -90,7 +88,7 @@ class Jsapi
     }
 
     /**
-     * 启用调试模式
+     * 启用调试模式.
      */
     public function enableDebug()
     {
@@ -100,34 +98,34 @@ class Jsapi
     }
 
     /**
-     * 获取配置文件
+     * 获取配置文件.
      */
     public function getConfig($asArray = false)
     {
         $ticket = new Ticket($this->accessToken);
 
-        if( $this->cache ) {
+        if ($this->cache) {
             $ticket->setCache($this->cache);
         }
 
-        $options = array(
-            'jsapi_ticket'  => $ticket->getTicketString(),
-            'timestamp'     => Util::getTimestamp(),
-            'url'           => $this->url?$this->url:Util::getCurrentUrl(),
-            'noncestr'      => Util::getRandomString(),
-        );
+        $options = [
+            'jsapi_ticket' => $ticket->getTicketString(),
+            'timestamp' => Util::getTimestamp(),
+            'url' => $this->currentUrl ?: Util::getCurrentUrl(),
+            'noncestr' => Util::getRandomString(),
+        ];
 
         ksort($options);
 
         $signature = sha1(urldecode(http_build_query($options)));
-        $configure = array(
-            'appId'     => $this->accessToken['appid'],
-            'nonceStr'  => $options['noncestr'],
+        $configure = [
+            'appId' => $this->accessToken['appid'],
+            'nonceStr' => $options['noncestr'],
             'timestamp' => $options['timestamp'],
             'signature' => $signature,
             'jsApiList' => $this->api,
-            'debug'     => (bool) $this->debug
-        );
+            'debug' => (bool) $this->debug,
+        ];
 
         return $asArray ? $configure : Serializer::jsonEncode($configure);
     }
@@ -140,4 +138,3 @@ class Jsapi
         return $this->getConfig();
     }
 }
-

@@ -15,12 +15,12 @@ class Notify extends ArrayCollection
     const SUCCESS = 'SUCCESS';
 
     /**
-     * 失败
+     * 失败.
      */
     const FAIL = 'FAIL';
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(Request $request = null)
     {
@@ -30,20 +30,20 @@ class Notify extends ArrayCollection
         try {
             $options = Serializer::parse($content);
         } catch (\InvalidArgumentException $e) {
-            $options = array();
+            $options = [];
         }
 
         parent::__construct($options);
     }
 
     /**
-     * 错误响应
+     * 错误响应.
      */
     public function fail($message = null)
     {
-        $options = array('return_code' => self::FAIL);
+        $options = ['return_code' => self::FAIL];
 
-        if( !is_null($message) ) {
+        if (null !== $message) {
             $options['return_msg'] = $message;
         }
 
@@ -51,13 +51,13 @@ class Notify extends ArrayCollection
     }
 
     /**
-     * 成功响应
+     * 成功响应.
      */
     public function success($message = null)
     {
-        $options = array('return_code' => self::SUCCESS);
+        $options = ['return_code' => self::SUCCESS];
 
-        if( !is_null($message) ) {
+        if (null !== $message) {
             $options['return_msg'] = $message;
         }
 
@@ -65,7 +65,7 @@ class Notify extends ArrayCollection
     }
 
     /**
-     * 响应 Xml
+     * 响应 Xml.
      */
     protected function xmlResponse(array $options)
     {

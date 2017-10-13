@@ -8,6 +8,6 @@ class Image extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'image');
+        return 'image' === $this['MsgType'];
     }
 }

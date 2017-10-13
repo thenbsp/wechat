@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 class EventHandler implements EventHandlerInterface
 {
     /**
-     * Symfony\Component\HttpFoundation\Request
+     * Symfony\Component\HttpFoundation\Request.
      */
     protected $request;
 
     /**
-     * initialize request
+     * initialize request.
      */
     public function __construct(Request $request = null)
     {
@@ -23,7 +23,7 @@ class EventHandler implements EventHandlerInterface
     }
 
     /**
-     * set from request
+     * set from request.
      */
     public function setRequest(Request $request)
     {
@@ -31,7 +31,7 @@ class EventHandler implements EventHandlerInterface
     }
 
     /**
-     * get from rquest
+     * get from rquest.
      */
     public function getRequest()
     {
@@ -39,11 +39,11 @@ class EventHandler implements EventHandlerInterface
     }
 
     /**
-     * handle event via request
+     * handle event via request.
      */
     public function handle(EventListenerInterface $listener)
     {
-        if( !$listener->getListeners() ) {
+        if (!$listener->getListeners()) {
             return;
         }
 
@@ -52,12 +52,12 @@ class EventHandler implements EventHandlerInterface
         try {
             $options = Serializer::parse($content);
         } catch (\InvalidArgumentException $e) {
-            $options = array();
+            $options = [];
         }
 
-        foreach( $listener->getListeners() as $namespace => $callable ) {
+        foreach ($listener->getListeners() as $namespace => $callable) {
             $event = new $namespace($options);
-            if( $event->isValid() ) {
+            if ($event->isValid()) {
                 $listener->trigger($namespace, $event);
                 break;
             }

@@ -8,23 +8,23 @@ use Thenbsp\Wechat\Wechat\AccessToken;
 
 class Ticket
 {
-    /**
+    /*
      * Cache Trait
      */
     use CacheTrait;
 
     /**
-     * http://mp.weixin.qq.com/wiki/11/74ad127cc054f6b80759c40f77ec03db.html（附录 1）
+     * http://mp.weixin.qq.com/wiki/11/74ad127cc054f6b80759c40f77ec03db.html（附录 1）.
      */
     const JSAPI_TICKET = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket';
 
     /**
-     * Thenbsp\Wechat\Wechat\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken.
      */
     protected $accessToken;
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(AccessToken $accessToken)
     {
@@ -32,7 +32,7 @@ class Ticket
     }
 
     /**
-     * 获取 AccessToken
+     * 获取 AccessToken.
      */
     public function getAccessToken()
     {
@@ -40,19 +40,19 @@ class Ticket
     }
 
     /**
-     * 获取 Jsapi 票据（调用缓存，返回 String）
+     * 获取 Jsapi 票据（调用缓存，返回 String）.
      */
     public function getTicketString()
     {
         $cacheId = $this->getCacheId();
 
-        if( $this->cache && $data = $this->cache->fetch($cacheId) ) {
+        if ($this->cache && $data = $this->cache->fetch($cacheId)) {
             return $data['ticket'];
         }
 
         $response = $this->getTicketResponse();
 
-        if( $this->cache ) {
+        if ($this->cache) {
             $this->cache->save($cacheId, $response, $response['expires_in']);
         }
 
@@ -60,16 +60,16 @@ class Ticket
     }
 
     /**
-     * 获取 Jsapi 票据（不缓存，返回原始数据）
+     * 获取 Jsapi 票据（不缓存，返回原始数据）.
      */
     public function getTicketResponse()
     {
         $response = Http::request('GET', static::JSAPI_TICKET)
             ->withAccessToken($this->accessToken)
-            ->withQuery(array('type'=>'jsapi'))
+            ->withQuery(['type' => 'jsapi'])
             ->send();
 
-        if( $response['errcode'] != 0 ) {
+        if (0 != $response['errcode']) {
             throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
@@ -77,7 +77,7 @@ class Ticket
     }
 
     /**
-     * 从缓存中清除
+     * 从缓存中清除.
      */
     public function clearFromCache()
     {
@@ -87,7 +87,7 @@ class Ticket
     }
 
     /**
-     * 获取缓存 ID
+     * 获取缓存 ID.
      */
     public function getCacheId()
     {

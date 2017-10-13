@@ -8,7 +8,7 @@ class UserLocation extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'event')
-            && ($this['Event'] === 'LOCATION');
+        return ('event' === $this['MsgType'])
+            && ('LOCATION' === $this['Event']);
     }
 }

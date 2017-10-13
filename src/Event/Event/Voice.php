@@ -8,6 +8,6 @@ class Voice extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'voice');
+        return 'voice' === $this['MsgType'];
     }
 }

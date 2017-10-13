@@ -7,12 +7,12 @@ use Thenbsp\Wechat\Message\Entity;
 class Voice extends Entity
 {
     /**
-     * 通过上传多媒体文件，得到的id
+     * 通过上传多媒体文件，得到的id.
      */
     protected $mediaId;
 
     /**
-     * 通过上传多媒体文件，得到的id
+     * 通过上传多媒体文件，得到的id.
      */
     public function setMediaId($mediaId)
     {
@@ -20,17 +20,17 @@ class Voice extends Entity
     }
 
     /**
-     * 消息内容
+     * 消息内容.
      */
     public function getBody()
     {
-        $body = array('MediaId'=>$this->mediaId);
+        $body = ['MediaId' => $this->mediaId];
 
-        return array('Voice'=>$body);
+        return ['Voice' => $body];
     }
 
     /**
-     * 消息类型
+     * 消息类型.
      */
     public function getType()
     {

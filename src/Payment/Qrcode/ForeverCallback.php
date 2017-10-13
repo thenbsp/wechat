@@ -17,12 +17,12 @@ class ForeverCallback extends ArrayCollection
     const SUCCESS = 'SUCCESS';
 
     /**
-     * 失败
+     * 失败.
      */
     const FAIL = 'FAIL';
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(Request $request = null)
     {
@@ -32,20 +32,20 @@ class ForeverCallback extends ArrayCollection
         try {
             $options = Serializer::parse($content);
         } catch (\InvalidArgumentException $e) {
-            $options = array();
+            $options = [];
         }
 
         parent::__construct($options);
     }
 
     /**
-     * 错误响应
+     * 错误响应.
      */
     public function fail($message = null)
     {
-        $options = array('return_code' => static::FAIL);
+        $options = ['return_code' => static::FAIL];
 
-        if( !is_null($message) ) {
+        if (null !== $message) {
             $options['return_msg'] = $message;
         }
 
@@ -53,7 +53,7 @@ class ForeverCallback extends ArrayCollection
     }
 
     /**
-     * 成功响应
+     * 成功响应.
      */
     public function success(Unifiedorder $unifiedorder)
     {
@@ -61,14 +61,14 @@ class ForeverCallback extends ArrayCollection
 
         $response = $unifiedorder->getResponse();
 
-        $options = array(
-            'appid'         => $unifiedorder['appid'],
-            'mch_id'        => $unifiedorder['mch_id'],
-            'prepay_id'     => $response['prepay_id'],
-            'nonce_str'     => Util::getRandomString(),
-            'return_code'   => static::SUCCESS,
-            'result_code'   => static::SUCCESS
-        );
+        $options = [
+            'appid' => $unifiedorder['appid'],
+            'mch_id' => $unifiedorder['mch_id'],
+            'prepay_id' => $response['prepay_id'],
+            'nonce_str' => Util::getRandomString(),
+            'return_code' => static::SUCCESS,
+            'result_code' => static::SUCCESS,
+        ];
 
         // 按 ASCII 码排序
         ksort($options);
@@ -82,7 +82,7 @@ class ForeverCallback extends ArrayCollection
     }
 
     /**
-     * 响应 Xml
+     * 响应 Xml.
      */
     protected function xmlResponse(array $options)
     {

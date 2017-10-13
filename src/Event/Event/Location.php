@@ -8,6 +8,6 @@ class Location extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'location');
+        return 'location' === $this['MsgType'];
     }
 }

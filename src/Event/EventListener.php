@@ -5,30 +5,30 @@ namespace Thenbsp\Wechat\Event;
 class EventListener implements EventListenerInterface
 {
     /**
-     * list of listeners
+     * list of listeners.
      */
-    protected $listeners = array();
+    protected $listeners = [];
 
     /**
-     * trigger event
+     * trigger event.
      */
     public function trigger($handler, Event $event)
     {
-        if( $listener = $this->getListener($handler) ) {
-            return call_user_func_array($listener, array($event));
+        if ($listener = $this->getListener($handler)) {
+            return call_user_func_array($listener, [$event]);
         }
     }
 
     /**
-     * add listener
+     * add listener.
      */
     public function addListener($handler, callable $callable)
     {
-        if( !class_exists($handler) ) {
+        if (!class_exists($handler)) {
             throw new \InvalidArgumentException(sprintf('Invlaid Handler "%s"', $handler));
         }
 
-        if( !is_subclass_of($handler, Event::class) ) {
+        if (!is_subclass_of($handler, Event::class)) {
             throw new \InvalidArgumentException(sprintf(
                 'The Handler "%s" must be extends "%s"', $handler, Event::class));
         }
@@ -39,17 +39,17 @@ class EventListener implements EventListenerInterface
     }
 
     /**
-     * get listener
+     * get listener.
      */
     public function getListener($handler)
     {
-        if( $this->hasListener($handler) ) {
+        if ($this->hasListener($handler)) {
             return $this->listeners[$handler];
         }
     }
 
     /**
-     * has listener
+     * has listener.
      */
     public function hasListener($handler)
     {
@@ -57,17 +57,17 @@ class EventListener implements EventListenerInterface
     }
 
     /**
-     * remove listener
+     * remove listener.
      */
     public function removeListener($handler)
     {
-        if( $this->hasListener($handler) ) {
+        if ($this->hasListener($handler)) {
             unset($this->listeners[$handler]);
         }
     }
 
     /**
-     * get listeners
+     * get listeners.
      */
     public function getListeners()
     {

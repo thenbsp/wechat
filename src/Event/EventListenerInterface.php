@@ -5,32 +5,32 @@ namespace Thenbsp\Wechat\Event;
 interface EventListenerInterface
 {
     /**
-     * trigger event
+     * trigger event.
      */
     public function trigger($handler, Event $entity);
 
     /**
-     * add listener
+     * add listener.
      */
     public function addListener($handler, callable $callable);
 
     /**
-     * get listener
+     * get listener.
      */
     public function getListener($handler);
 
     /**
-     * has listener
+     * has listener.
      */
     public function hasListener($handler);
 
     /**
-     * remove listener
+     * remove listener.
      */
     public function removeListener($handler);
 
     /**
-     * get listeners
+     * get listeners.
      */
     public function getListeners();
 }

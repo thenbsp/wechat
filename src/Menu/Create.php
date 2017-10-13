@@ -13,22 +13,22 @@ class Create
     const CREATE_URL = 'https://api.weixin.qq.com/cgi-bin/menu/create';
 
     /**
-     * 一级菜单不能超过 3 个
+     * 一级菜单不能超过 3 个.
      */
     const MAX_COUNT = 3;
 
     /**
-     * Thenbsp\Wechat\Wechat\AccessToken
+     * Thenbsp\Wechat\Wechat\AccessToken.
      */
     protected $accessToken;
 
     /**
-     * 按钮集合
+     * 按钮集合.
      */
-    protected $buttons = array();
+    protected $buttons = [];
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct(AccessToken $accessToken)
     {
@@ -36,17 +36,17 @@ class Create
     }
 
     /**
-     * 添加按钮
+     * 添加按钮.
      */
     public function add(ButtonInterface $button)
     {
-        if( $button instanceof ButtonCollectionInterface ) {
-            if( !$button->getChild() ) {
+        if ($button instanceof ButtonCollectionInterface) {
+            if (!$button->getChild()) {
                 throw new \InvalidArgumentException('一级菜单不能为空');
             }
         }
 
-        if( count($this->buttons) > (static::MAX_COUNT - 1) ) {
+        if (count($this->buttons) > (static::MAX_COUNT - 1)) {
             throw new \InvalidArgumentException(sprintf(
                 '一级菜单不能超过 %d 个', static::MAX_COUNT
             ));
@@ -56,7 +56,7 @@ class Create
     }
 
     /**
-     * 发布菜单
+     * 发布菜单.
      */
     public function doCreate()
     {
@@ -65,7 +65,7 @@ class Create
             ->withBody($this->getRequestBody())
             ->send();
 
-        if( $response['errcode'] != 0 ) {
+        if (0 != $response['errcode']) {
             throw new \Exception($response['errmsg'], $response['errcode']);
         }
 
@@ -73,13 +73,13 @@ class Create
     }
 
     /**
-     * 获取数据
+     * 获取数据.
      */
     public function getRequestBody()
     {
-        $data = array();
+        $data = [];
 
-        foreach( $this->buttons AS $k=>$v ) {
+        foreach ($this->buttons as $k => $v) {
             $data['button'][$k] = $v->getData();
         }
 

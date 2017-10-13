@@ -9,7 +9,7 @@ class Util
      */
     public static function isWechat()
     {
-        return (false === strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger'));
+        return false === strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger');
     }
 
     /**
@@ -21,18 +21,18 @@ class Util
     }
 
     /**
-     * 获取当前 URL
+     * 获取当前 URL.
      */
     public static function getCurrentUrl()
     {
-        $protocol = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443))
+        $protocol = (isset($_SERVER['HTTPS']) && ('off' !== $_SERVER['HTTPS'] || 443 == $_SERVER['SERVER_PORT']))
             ? 'https://' : 'http://';
 
         return $protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     }
 
     /**
-     * 获取客户端 IP
+     * 获取客户端 IP.
      */
     public static function getClientIp()
     {
@@ -44,7 +44,7 @@ class Util
     }
 
     /**
-     * 获取随机字符
+     * 获取随机字符.
      */
     public static function getRandomString($length = 10)
     {
@@ -54,11 +54,11 @@ class Util
     }
 
     /**
-     * 过滤微信昵称中的表情（不过滤 HTML 符号）
+     * 过滤微信昵称中的表情（不过滤 HTML 符号）.
      */
     public static function filterNickname($nickname)
     {
-        $pattern = array(
+        $pattern = [
             '/\xEE[\x80-\xBF][\x80-\xBF]/',
             '/\xEF[\x81-\x83][\x80-\xBF]/',
             '/[\x{1F600}-\x{1F64F}]/u',
@@ -66,8 +66,8 @@ class Util
             '/[\x{1F680}-\x{1F6FF}]/u',
             '/[\x{2600}-\x{26FF}]/u',
             '/[\x{2700}-\x{27BF}]/u',
-            '/[\x{20E3}]/u'
-        );
+            '/[\x{20E3}]/u',
+        ];
 
         $nickname = preg_replace($pattern, '', $nickname);
 

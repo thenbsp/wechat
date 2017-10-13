@@ -8,6 +8,6 @@ class Link extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'link');
+        return 'link' === $this['MsgType'];
     }
 }

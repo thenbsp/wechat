@@ -60,7 +60,7 @@ class StateManager
             return false;
         }
 
-        return ($state === $this->getState());
+        return $state === $this->getState();
     }
 
     private function startSession()

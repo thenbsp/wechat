@@ -8,7 +8,7 @@ class MenuView extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'event')
-            && ($this['Event'] === 'VIEW');
+        return ('event' === $this['MsgType'])
+            && ('VIEW' === $this['Event']);
     }
 }

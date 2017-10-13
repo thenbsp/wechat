@@ -8,6 +8,6 @@ class Text extends Event
 {
     public function isValid()
     {
-        return ($this['MsgType'] === 'text');
+        return 'text' === $this['MsgType'];
     }
 }

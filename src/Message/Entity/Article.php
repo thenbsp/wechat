@@ -7,12 +7,12 @@ use Thenbsp\Wechat\Message\Entity;
 class Article extends Entity
 {
     /**
-     * 图文列表
+     * 图文列表.
      */
-    protected $items = array();
+    protected $items = [];
 
     /**
-     * 添加图文
+     * 添加图文.
      */
     public function addItem(ArticleItem $item)
     {
@@ -20,13 +20,13 @@ class Article extends Entity
     }
 
     /**
-     * 消息内容
+     * 消息内容.
      */
     public function getBody()
     {
-        $body = array();
+        $body = [];
 
-        foreach( $this->items as $item ) {
+        foreach ($this->items as $item) {
             $body['item'][] = $item->getBody();
         }
 
@@ -34,11 +34,11 @@ class Article extends Entity
             ? count($body['item'])
             : 0;
 
-        return array('Articles' => $body, 'ArticleCount' => $count);
+        return ['Articles' => $body, 'ArticleCount' => $count];
     }
 
     /**
-     * 消息类型
+     * 消息类型.
      */
     public function getType()
     {

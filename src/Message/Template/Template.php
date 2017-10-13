@@ -5,27 +5,27 @@ namespace Thenbsp\Wechat\Message\Template;
 class Template implements TemplateInterface
 {
     /**
-     * 模板 ID
+     * 模板 ID.
      */
     protected $id;
 
     /**
-     * 跳转链接
+     * 跳转链接.
      */
     protected $url;
 
     /**
-     * 用户 Openid
+     * 用户 Openid.
      */
     protected $openid;
 
     /**
-     * 模板参数
+     * 模板参数.
      */
     protected $options;
 
     /**
-     * 构造方法
+     * 构造方法.
      */
     public function __construct($id)
     {
@@ -33,7 +33,7 @@ class Template implements TemplateInterface
     }
 
     /**
-     * 获取模板 ID
+     * 获取模板 ID.
      */
     public function getId()
     {
@@ -43,7 +43,7 @@ class Template implements TemplateInterface
     }
 
     /**
-     * 设置链接
+     * 设置链接.
      */
     public function setUrl($url)
     {
@@ -53,7 +53,7 @@ class Template implements TemplateInterface
     }
 
     /**
-     * 获取逻接
+     * 获取逻接.
      */
     public function getUrl()
     {
@@ -61,7 +61,7 @@ class Template implements TemplateInterface
     }
 
     /**
-     * 设置用户 Openid
+     * 设置用户 Openid.
      */
     public function setOpenid($openid)
     {
@@ -71,7 +71,7 @@ class Template implements TemplateInterface
     }
 
     /**
-     * 获取用户 Openid
+     * 获取用户 Openid.
      */
     public function getOpenid()
     {
@@ -79,13 +79,13 @@ class Template implements TemplateInterface
     }
 
     /**
-     * 添加模板参数
+     * 添加模板参数.
      */
     public function add($key, $value, $color = null)
     {
-        $array = array('value' => $value);
+        $array = ['value' => $value];
 
-        if( !is_null($color) ) {
+        if (null !== $color) {
             $array['color'] = $color;
         }
 
@@ -95,11 +95,11 @@ class Template implements TemplateInterface
     }
 
     /**
-     * 移除模板参数
+     * 移除模板参数.
      */
     public function remove($key)
     {
-        if( isset($this->options[$key]) ) {
+        if (isset($this->options[$key])) {
             unset($this->options[$key]);
         }
 
@@ -107,15 +107,15 @@ class Template implements TemplateInterface
     }
 
     /**
-     * 获取请求内容
+     * 获取请求内容.
      */
     public function getRequestBody()
     {
-        return array(
-            'template_id'   => $this->id,
-            'touser'        => $this->openid,
-            'url'           => $this->url,
-            'data'          => $this->options
-        );
+        return [
+            'template_id' => $this->id,
+            'touser' => $this->openid,
+            'url' => $this->url,
+            'data' => $this->options,
+        ];
     }
 }

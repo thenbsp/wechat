@@ -7,32 +7,32 @@ use Thenbsp\Wechat\Message\Entity;
 class Music extends Entity
 {
     /**
-     * 音乐标题
+     * 音乐标题.
      */
     protected $title;
 
     /**
-     * 音乐描述
+     * 音乐描述.
      */
     protected $description;
 
     /**
-     * 音乐链接
+     * 音乐链接.
      */
     protected $musicUrl;
 
     /**
-     * 高质量音乐链接
+     * 高质量音乐链接.
      */
     protected $HQMusicUrl;
 
     /**
-     * 缩略图的媒体id
+     * 缩略图的媒体id.
      */
     protected $thumbMediaId;
 
     /**
-     * 音乐标题
+     * 音乐标题.
      */
     public function setTitle($title)
     {
@@ -40,7 +40,7 @@ class Music extends Entity
     }
 
     /**
-     * 音乐描述
+     * 音乐描述.
      */
     public function setDescription($description)
     {
@@ -48,7 +48,7 @@ class Music extends Entity
     }
 
     /**
-     * 音乐链接
+     * 音乐链接.
      */
     public function setMusicUrl($musicUrl)
     {
@@ -56,7 +56,7 @@ class Music extends Entity
     }
 
     /**
-     * 高质量音乐链接
+     * 高质量音乐链接.
      */
     public function setHQMusicUrl($HQMusicUrl)
     {
@@ -64,7 +64,7 @@ class Music extends Entity
     }
 
     /**
-     * 缩略图的媒体id
+     * 缩略图的媒体id.
      */
     public function setThumbMediaId($thumbMediaId)
     {
@@ -72,23 +72,23 @@ class Music extends Entity
     }
 
     /**
-     * 消息内容
+     * 消息内容.
      */
     public function getBody()
     {
-        $body = array(
-            'Title'         => $this->title,
-            'Description'   => $this->description,
-            'MusicUrl'      => $this->musicUrl,
-            'HQMusicUrl'    => $this->HQMusicUrl,
-            'ThumbMediaId'  => $this->thumbMediaId
-        );
+        $body = [
+            'Title' => $this->title,
+            'Description' => $this->description,
+            'MusicUrl' => $this->musicUrl,
+            'HQMusicUrl' => $this->HQMusicUrl,
+            'ThumbMediaId' => $this->thumbMediaId,
+        ];
 
-        return array('Music'=>$body);
+        return ['Music' => $body];
     }
 
     /**
-     * 消息类型
+     * 消息类型.
      */
     public function getType()
     {

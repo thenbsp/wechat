@@ -7,12 +7,12 @@ use Thenbsp\Wechat\Message\Entity;
 class Text extends Entity
 {
     /**
-     * 回复的消息内容
+     * 回复的消息内容.
      */
     protected $content;
 
     /**
-     * 回复的消息内容
+     * 回复的消息内容.
      */
     public function setContent($content)
     {
@@ -20,15 +20,15 @@ class Text extends Entity
     }
 
     /**
-     * 消息内容
+     * 消息内容.
      */
     public function getBody()
     {
-        return array('Content'=>$this->content);
+        return ['Content' => $this->content];
     }
 
     /**
-     * 消息类型
+     * 消息类型.
      */
     public function getType()
     {

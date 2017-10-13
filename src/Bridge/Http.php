@@ -3,54 +3,53 @@
 namespace Thenbsp\Wechat\Bridge;
 
 use GuzzleHttp\Client;
-use Thenbsp\Wechat\Bridge\Serializer;
 use Thenbsp\Wechat\Wechat\AccessToken;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Http
 {
     /**
-     * Request Url
+     * Request Url.
      */
     protected $uri;
 
     /**
-     * Request Method
+     * Request Method.
      */
     protected $method;
 
     /**
-     * Request Body
+     * Request Body.
      */
     protected $body;
 
     /**
-     * Request Query
+     * Request Query.
      */
-    protected $query = array();
+    protected $query = [];
 
     /**
-     * Query With AccessToken
+     * Query With AccessToken.
      */
     protected $accessToken;
 
     /**
-     * SSL 证书
+     * SSL 证书.
      */
     protected $sslCert;
     protected $sslKey;
 
     /**
-     * initialize
+     * initialize.
      */
     public function __construct($method, $uri)
     {
-        $this->uri      = $uri;
-        $this->method   = strtoupper($method);
+        $this->uri = $uri;
+        $this->method = strtoupper($method);
     }
 
     /**
-     * Create Client Factory
+     * Create Client Factory.
      */
     public static function request($method, $uri)
     {
@@ -58,7 +57,7 @@ class Http
     }
 
     /**
-     * Request Query
+     * Request Query.
      */
     public function withQuery(array $query)
     {
@@ -68,7 +67,7 @@ class Http
     }
 
     /**
-     * Request Json Body
+     * Request Json Body.
      */
     public function withBody(array $body)
     {
@@ -78,7 +77,7 @@ class Http
     }
 
     /**
-     * Request Xml Body
+     * Request Xml Body.
      */
     public function withXmlBody(array $body)
     {
@@ -88,7 +87,7 @@ class Http
     }
 
     /**
-     * Query With AccessToken
+     * Query With AccessToken.
      */
     public function withAccessToken(AccessToken $accessToken)
     {
@@ -98,43 +97,43 @@ class Http
     }
 
     /**
-     * Request SSL Cert
+     * Request SSL Cert.
      */
     public function withSSLCert($sslCert, $sslKey)
     {
         $this->sslCert = $sslCert;
-        $this->sslKey  = $sslKey;
+        $this->sslKey = $sslKey;
 
         return $this;
     }
 
     /**
-     * Send Request
+     * Send Request.
      */
     public function send($asArray = true)
     {
-        $options = array();
+        $options = [];
 
         // query
-        if( !empty($this->query) ) {
+        if (!empty($this->query)) {
             $options['query'] = $this->query;
         }
 
         // body
-        if( !empty($this->body) ) {
+        if (!empty($this->body)) {
             $options['body'] = $this->body;
         }
 
         // ssl cert
-        if( $this->sslCert && $this->sslKey ) {
-            $options['cert']    = $this->sslCert;
+        if ($this->sslCert && $this->sslKey) {
+            $options['cert'] = $this->sslCert;
             $options['ssl_key'] = $this->sslKey;
         }
 
-        $response = (new Client)->request($this->method, $this->uri, $options);
+        $response = (new Client())->request($this->method, $this->uri, $options);
         $contents = $response->getBody()->getContents();
 
-        if( !$asArray ) {
+        if (!$asArray) {
             return $contents;
         }
 
