@@ -31,6 +31,11 @@ class Jsapi
     protected $api = array();
 
     /**
+     * 签名路径
+     */
+    protected $url = '';
+
+    /**
      * 全部接口
      */
     protected $apiValids = array(
@@ -50,7 +55,18 @@ class Jsapi
     {
         $this->accessToken = $accessToken;
     }
+    /**
+     * 注入签名地址
+     */
+    public function addUrl($url)
+    {
+        $url = (string) $url;
+        if ($url){
+            $this->url = $url;
+        }
 
+        return $this;
+    }
     /**
      * 注入接口
      */
@@ -97,7 +113,7 @@ class Jsapi
         $options = array(
             'jsapi_ticket'  => $ticket->getTicketString(),
             'timestamp'     => Util::getTimestamp(),
-            'url'           => Util::getCurrentUrl(),
+            'url'           => $this->url?$this->url:Util::getCurrentUrl(),
             'noncestr'      => Util::getRandomString(),
         );
 
@@ -124,3 +140,4 @@ class Jsapi
         return $this->getConfig();
     }
 }
+
