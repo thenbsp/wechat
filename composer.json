@@ -25,6 +25,5 @@
     },
     "autoload": {
         "psr-4": { "Thenbsp\\Wechat\\": "./src" }
-    },
-    "minimum-stability": "dev"
+    }
 }
