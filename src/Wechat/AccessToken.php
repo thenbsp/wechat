@@ -14,7 +14,7 @@ class AccessToken extends ArrayCollection
     use CacheTrait;
 
     /**
-     * http://mp.weixin.qq.com/wiki/14/9f9c82c1af308e3b14ba9b973f99a8ba.html.
+     * @see http://mp.weixin.qq.com/wiki/14/9f9c82c1af308e3b14ba9b973f99a8ba.html.
      */
     const ACCESS_TOKEN = 'https://api.weixin.qq.com/cgi-bin/token';
 

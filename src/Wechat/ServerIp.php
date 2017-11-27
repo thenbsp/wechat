@@ -13,7 +13,7 @@ class ServerIp
     use CacheTrait;
 
     /**
-     * http://mp.weixin.qq.com/wiki/4/41ef0843d6e108cf6b5649480207561c.html.
+     * @see http://mp.weixin.qq.com/wiki/4/41ef0843d6e108cf6b5649480207561c.html.
      */
     const SERVER_IP = 'https://api.weixin.qq.com/cgi-bin/getcallbackip';
 

@@ -13,7 +13,7 @@ class ShortUrl
     use CacheTrait;
 
     /**
-     * http://mp.weixin.qq.com/wiki/6/856aaeb492026466277ea39233dc23ee.html.
+     * @see http://mp.weixin.qq.com/wiki/6/856aaeb492026466277ea39233dc23ee.html.
      */
     const SHORT_URL = 'https://api.weixin.qq.com/cgi-bin/shorturl';
 

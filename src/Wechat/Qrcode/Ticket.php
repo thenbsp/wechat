@@ -14,7 +14,7 @@ class Ticket
     use CacheTrait;
 
     /**
-     * http://mp.weixin.qq.com/wiki/18/167e7d94df85d8389df6c94a7a8f78ba.html.
+     * @see http://mp.weixin.qq.com/wiki/18/167e7d94df85d8389df6c94a7a8f78ba.html.
      */
     const TICKET_URL = 'https://api.weixin.qq.com/cgi-bin/qrcode/create';
 

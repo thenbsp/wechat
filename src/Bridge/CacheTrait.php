@@ -2,6 +2,8 @@
 
 namespace Thenbsp\Wechat\Bridge;
 
+use Doctrine\Common\Cache\Cache;
+
 trait CacheTrait
 {
     /**
@@ -12,7 +14,7 @@ trait CacheTrait
     /**
      * 设置缓存驱动.
      */
-    public function setCache(\Doctrine\Common\Cache\Cache $cache)
+    public function setCache(Cache $cache)
     {
         $this->cache = $cache;
     }
